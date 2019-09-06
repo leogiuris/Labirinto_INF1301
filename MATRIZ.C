@@ -20,12 +20,12 @@
 *
 ***************************************************************************/
 
-#include   <malloc.h>
-#include   <stdio.h>
+#include	<malloc.h>
+#include	<stdio.h>
 
-#define ARVORE_OWN
-#include "ARVORE.H"
-#undef ARVORE_OWN
+#define MATRIZ_OWN
+#include "MATRIZ.H"
+#undef MATRIZ_OWN
 
 /***********************************************************************
 *
@@ -37,40 +37,21 @@
 *
 ***********************************************************************/
 
-   typedef struct tgNoMatriz {
+typedef struct tgNoMatriz {
 
-         struct tgNoMatriz * pNoN ; 
-		 struct tgNoMatriz * pNoNE ;
-		 struct tgNoMatriz * pNoL ;
-		 struct tgNoMatriz * pNoSE ;
-		 struct tgNoMatriz * pNoS ;
-		 struct tgNoMatriz * pNoSO ;
-		 struct tgNoMatriz * pNoO ;
-		 struct tgNoMatriz * pNoNO ;
+	struct tgNoMatriz * pNorte ; 
+	struct tgNoMatriz * pNordeste ;
+	struct tgNoMatriz * pLeste ;
+	struct tgNoMatriz * pSudeste ;
+	struct tgNoMatriz * pSul ;
+	struct tgNoMatriz * pSudoeste ;
+	struct tgNoMatriz * pOeste ;
+	struct tgNoMatriz * pNoroeste ;
 
-               /* Ponteiro para pai
-               *
-               *$EED Assertivas estruturais
-               *   É NULL sse o nó é raiz
-               *   Se não for raiz, um de pNoEsq ou pNoDir de pNoPai do nó
-               *   corrente apontam para o nó corrente */
+    void * Valor ;
+    /* Valor do nó */
 
-         struct tgNoArvore * pNoEsq ;
-               /* Ponteiro para filho à esquerda
-               *
-               *$EED Assertivas estruturais
-               *   se pNoEsq do nó X != NULL então pNoPai de pNoEsq aponta para o nó X */
-
-         struct tgNoArvore * pNoDir ;
-               /* Ponteiro para filho à direita
-               *
-               *$EED Assertivas estruturais
-               *   se pNoDir do nó X != NULL então pNoPai de pNoDir aponta para o nó X */
-
-         char Valor ;
-               /* Valor do nó */
-
-   } tpNoArvore ;
+} tpNoMatriz ;
 
 /***********************************************************************
 *
@@ -85,28 +66,31 @@
 *
 ***********************************************************************/
 
-   typedef struct tgArvore {
+typedef struct tgMatriz {
 
-         tpNoArvore * pNoRaiz ;
+	tpNoMatriz * pNoOrigem ;
                /* Ponteiro para a raiz da árvore */
 
-         tpNoArvore * pNoCorr ;
+    tpNoMatriz * pNoCorr ;
                /* Ponteiro para o nó corrente da árvore */
 
-   } tpArvore ;
+	int fileiras;
+	int colunas;
+
+} tpMatriz ;
 
 /*****  Dados encapsulados no módulo  *****/
 
-      static tpArvore * pArvore = NULL ;
-            /* Ponteiro para a cabe‡a da árvore */
+tpNoMatriz ** mat;
 
 /***** Protótipos das funções encapuladas no módulo *****/
 
-   static tpNoArvore * CriarNo( char ValorParm ) ;
+void imprimeMat( tpNoMatriz ** mat, int fil, int col);
 
-   static ARV_tpCondRet CriarNoRaiz( char ValorParm ) ;
+void DestroiMatriz( tpNoMatriz ** mat );
 
-   static void DestroiArvore( tpNoArvore * pNo ) ;
+void ExcluiNoLista(void * elem);
+
 
 /*****  Código das funções exportadas pelo módulo  *****/
 
@@ -115,46 +99,106 @@
 *  Função: ARV Criar árvore
 *  ****/
 
-   ARV_tpCondRet ARV_CriarArvore( void )
-   {
+MAT_tpCondRet MAT_CriarMatriz(tpMatriz ** pMat, int fil, int col)
+{
+	
+	int i,j;
+	printf("a\n");
+	*pMat = ( tpMatriz * ) malloc( sizeof( tpMatriz )) ;
+	
 
-      if ( pArvore != NULL )
-      {
-         ARV_DestruirArvore( ) ;
-      } /* if */
+	printf("\n[CriarMatriz]\n");  
+  //  if ( pMatriz != NULL )
+  //  {
+		//printf("funcionou!\n");
+  //      MAT_DestruirMatriz( ) ;
+  //  } /* if */
 
-      pArvore = ( tpArvore * ) malloc( sizeof( tpArvore )) ;
-      if ( pArvore == NULL )
-      {
-         return ARV_CondRetFaltouMemoria ;
-      } /* if */
+    if ( *pMat == NULL )
+    {
+		return MAT_CondRetFaltouMemoria ;
+    } /* if */
 
-      pArvore->pNoRaiz = NULL ;
-      pArvore->pNoCorr = NULL ;
+	mat = (tpNoMatriz**)malloc(fil*sizeof(tpNoMatriz*));
+	for(i=0; i<fil ;i++)
+	{
+		mat[i] = (tpNoMatriz*)malloc(col*sizeof(tpNoMatriz));
+		for(j=0; j<col; j++)
+		{
+			mat[i][j].Valor = NULL;
+			mat[i][j].pNorte = NULL;
+			mat[i][j].pNordeste = NULL;
+			mat[i][j].pNoroeste = NULL;
+			mat[i][j].pLeste = NULL;
+			mat[i][j].pOeste = NULL;
+			mat[i][j].pSudeste = NULL;
+			mat[i][j].pSul = NULL;
+			mat[i][j].pSudoeste = NULL;
+		}
+	}
 
-      return ARV_CondRetOK ;
+	for(i=0; i<fil ;i++){
+		for(j=0; j<col; j++){
+			mat[i][j].Valor = (void*)('a' +(i*col) + j);
+			if(i>0)
+			{
+				mat[i][j].pNorte = &mat[i-1][j];
+				if(j>0)
+					mat[i][j].pNoroeste = &mat[i-1][j-1];
+				if(j<col)
+					mat[i][j].pNordeste = &mat[i-1][j+1];
+			}
+			if(i<fil-1)
+			{
+				mat[i][j].pSul = &mat[i+1][j];
+				if(j>0)
+					mat[i][j].pSudoeste = &mat[i+1][j-1];
+				if(j<col)
+					mat[i][j].pSudeste = &mat[i+1][j+1];
+			}
+			if(j>0)
+			{
+				mat[i][j].pOeste = &mat[i][j-1];
+			}
+			if(j<col-1)
+			{
+				mat[i][j].pLeste = &mat[i][j+1];
+			}
+		}// end for j
+	}// end for i
 
-   } /* Fim função: ARV Criar árvore */
+	
+    (*pMat)->pNoOrigem = &mat[0][0] ;
+	(*pMat)->pNoCorr = (*pMat)->pNoOrigem ;
+	(*pMat)->fileiras = fil;
+	(*pMat)->colunas = col;
+	
+     return MAT_CondRetOK ;
+
+}/* Fim função: ARV Destruir árvore */
+
 
 /***************************************************************************
 *
 *  Função: ARV Destruir árvore
 *  ****/
 
-   void ARV_DestruirArvore( void )
-   {
-
-      if ( pArvore != NULL )
-      {
-         if ( pArvore->pNoRaiz != NULL )
+void MAT_DestruirMatriz( void )
+{
+	printf("\n[DestruirMatriz]\n");
+    if ( pMatriz != NULL )
+	{
+         if ( pMatriz->pNoOrigem != NULL )
          {
-            DestroiArvore( pArvore->pNoRaiz ) ;
+            DestroiMatriz( mat ) ;
          } /* if */
-         free( pArvore ) ;
-         pArvore = NULL ;
-      } /* if */
 
-   } /* Fim função: ARV Destruir árvore */
+
+         free( pMatriz ) ;
+         pMatriz = NULL ;
+	} /* if */
+	
+} /* Fim função: ARV Destruir árvore */
 
 /***************************************************************************
 *
@@ -204,82 +248,6 @@
          return ARV_CondRetNaoEhFolha ;
 
    } /* Fim função: ARV Adicionar filho à esquerda */
-
-/***************************************************************************
-*
-*  Função: ARV Adicionar filho à direita
-*  ****/
-
-   ARV_tpCondRet ARV_InserirDireita( char ValorParm )
-   {
-
-      ARV_tpCondRet CondRet ;
-
-      tpNoArvore * pCorr ;
-      tpNoArvore * pNo ;
-
-      /* Tratar vazio, direita */
-
-         CondRet = CriarNoRaiz( ValorParm ) ;
-         if ( CondRet != ARV_CondRetNaoCriouRaiz )
-         {
-            return CondRet ;
-         } /* if */
-
-      /* Criar nó à direita de folha */
-
-         pCorr = pArvore->pNoCorr ;
-         if ( pCorr == NULL )
-         {
-            return ARV_CondRetErroEstrutura ;
-         } /* if */
-
-         if ( pCorr->pNoDir == NULL )
-         {
-            pNo = CriarNo( ValorParm ) ;
-            if ( pNo == NULL )
-            {
-               return ARV_CondRetFaltouMemoria ;
-            } /* if */
-            pNo->pNoPai      = pCorr ;
-            pCorr->pNoDir    = pNo ;
-            pArvore->pNoCorr = pNo ;
-
-            return ARV_CondRetOK ;
-         } /* if */
-
-      /* Tratar não folha à direita */
-
-         return ARV_CondRetNaoEhFolha ;
-
-   } /* Fim função: ARV Adicionar filho à direita */
-
-/***************************************************************************
-*
-*  Função: ARV Ir para nó pai
-*  ****/
-
-   ARV_tpCondRet ARV_IrPai( void )
-   {
-
-      if ( pArvore == NULL )
-      {
-         return ARV_CondRetArvoreNaoExiste ;
-      } /* if */
-      if ( pArvore->pNoCorr == NULL )
-      {
-         return ARV_CondRetArvoreVazia ;
-      } /* if */
-
-      if ( pArvore->pNoCorr->pNoPai != NULL )
-      {
-         pArvore->pNoCorr = pArvore->pNoCorr->pNoPai ;
-         return ARV_CondRetOK ;
-      } else {
-         return ARV_CondRetNohEhRaiz ;
-      } /* if */
-
-   } /* Fim função: ARV Ir para nó pai */
 
 /***************************************************************************
 *
@@ -363,82 +331,6 @@
 /*****  Código das funções encapsuladas no módulo  *****/
 
 
-/***********************************************************************
-*
-*  $FC Função: ARV Criar nó da árvore
-*
-*  $FV Valor retornado
-*     Ponteiro para o nó criado.
-*     Será NULL caso a memória tenha se esgotado.
-*     Os ponteiros do nó criado estarão nulos e o valor é igual ao do
-*     parâmetro.
-*
-***********************************************************************/
-
-   tpNoArvore * CriarNo( char ValorParm )
-   {
-
-      tpNoArvore * pNo ;
-
-      pNo = ( tpNoArvore * ) malloc( sizeof( tpNoArvore )) ;
-      if ( pNo == NULL )
-      {
-         return NULL ;
-      } /* if */
-
-      pNo->pNoPai = NULL ;
-      pNo->pNoEsq = NULL ;
-      pNo->pNoDir = NULL ;
-      pNo->Valor  = ValorParm ;
-      return pNo ;
-
-   } /* Fim função: ARV Criar nó da árvore */
-
-
-/***********************************************************************
-*
-*  $FC Função: ARV Criar nó raiz da árvore
-*
-*  $FV Valor retornado
-*     ARV_CondRetOK
-*     ARV_CondRetFaltouMemoria
-*     ARV_CondRetNaoCriouRaiz
-*
-***********************************************************************/
-
-   ARV_tpCondRet CriarNoRaiz( char ValorParm )
-   {
-
-      ARV_tpCondRet CondRet ;
-      tpNoArvore * pNo ;
-
-      if ( pArvore == NULL )
-      {
-         CondRet = ARV_CriarArvore( ) ;
-
-         if ( CondRet != ARV_CondRetOK )
-         {
-            return CondRet ;
-         } /* if */
-      } /* if */
-
-      if ( pArvore->pNoRaiz == NULL )
-      {
-         pNo = CriarNo( ValorParm ) ;
-         if ( pNo == NULL )
-         {
-            return ARV_CondRetFaltouMemoria ;
-         } /* if */
-         pArvore->pNoRaiz = pNo ;
-         pArvore->pNoCorr = pNo ;
-
-         return ARV_CondRetOK ;
-      } /* if */
-
-      return ARV_CondRetNaoCriouRaiz ;
-
-   } /* Fim função: ARV Criar nó raiz da árvore */
-
 
 /***********************************************************************
 *
@@ -449,22 +341,23 @@
 *
 ***********************************************************************/
 
-   void DestroiArvore( tpNoArvore * pNo )
-   {
+void DestroiMatriz( tpNoMatriz ** mat )
+{
+	int i;
+	
+	for(i=0; i<pMatriz->fileiras ;i++)
+	{
+		
+		free(mat[i]);
+		
+	}
+	
+	free(mat);
+	
+	return;
 
-      if ( pNo->pNoEsq != NULL )
-      {
-         DestroiArvore( pNo->pNoEsq ) ;
-      } /* if */
-
-      if ( pNo->pNoDir != NULL )
-      {
-         DestroiArvore( pNo->pNoDir ) ;
-      } /* if */
-
-      free( pNo ) ;
-
-   } /* Fim função: ARV Destruir a estrutura da árvore */
+	
+} /* Fim função: ARV Destruir a estrutura da árvore */
 
 /********** Fim do módulo de implementação: Módulo árvore **********/
 
