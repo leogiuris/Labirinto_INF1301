@@ -1,5 +1,5 @@
 /***************************************************************************
-*  $MCI Módulo de implementação: Módulo de teste específico
+*  $MCI MÃ³dulo de implementaÃ§Ã£o: MÃ³dulo de teste especÃ­fico
 *
 *  Arquivo gerado:              TESTARV.C
 *  Letras identificadoras:      TARV
@@ -11,36 +11,36 @@
 *  Gestor:  DI/PUC-Rio
 *  Autores: avs - Arndt von Staa
 *
-*  $HA Histórico de evolução:
-*     Versão  Autor    Data     Observações
-*       3.00   avs   28/02/2003 Uniformização da interface das funções e
-*                               de todas as condições de retorno.
-*       2.00   avs   03/08/2002 Eliminação de código duplicado, reestruturação
-*       1.00   avs   15/08/2001 Início do desenvolvimento
+*  $HA HistÃ³rico de evoluÃ§Ã£o:
+*     VersÃ£o  Autor    Data     ObservaÃ§Ãµes
+*       3.00   avs   28/02/2003 UniformizaÃ§Ã£o da interface das funÃ§Ãµes e
+*                               de todas as condiÃ§Ãµes de retorno.
+*       2.00   avs   03/08/2002 EliminaÃ§Ã£o de cÃ³digo duplicado, reestruturaÃ§Ã£o
+*       1.00   avs   15/08/2001 InÃ­cio do desenvolvimento
 *
-*  $ED Descrição do módulo
-*     Este mÇodulo contém as funções específicas para o teste do
-*     módulo árvore. Ilustra como redigir um interpretador de comandos
-*     de teste específicos utilizando o arcabouço de teste para C.
+*  $ED DescriÃ§Ã£o do mÃ³dulo
+*     Este mÃ‡odulo contÃ©m as funÃ§Ãµes especÃ­ficas para o teste do
+*     mÃ³dulo Ã¡rvore. Ilustra como redigir um interpretador de comandos
+*     de teste especÃ­ficos utilizando o arcabouÃ§o de teste para C.
 *
-*  $EIU Interface com o usuário pessoa
-*     Comandos de teste específicos para testar o módulo árvore:
+*  $EIU Interface com o usuÃ¡rio pessoa
+*     Comandos de teste especÃ­ficos para testar o mÃ³dulo Ã¡rvore:
 *
-*     =criar        - chama a função ARV_CriarArvore( )
+*     =criar        - chama a funÃ§Ã£o ARV_CriarArvore( )
 *     =insdir <Char>
-*                   - chama a função ARV_InserirDireita( <Char> )
-*                     Obs. notação: <Char>  é o valor do parâmetro
+*                   - chama a funÃ§Ã£o ARV_InserirDireita( <Char> )
+*                     Obs. notaÃ§Ã£o: <Char>  Ã© o valor do parÃ¢metro
 *                     que se encontra no comando de teste.
 *
 *     "=insesq" <Char>
-*                   - chama a função ARV_InserirEsquerda( <Char> )
-*     "=irpai"      - chama a função ARV_IrPai( )
-*     "=iresq"      - chama a função ARV_IrEsquerda( )
-*     "=irdir"      - chama a função ARV_IrDireita( )
+*                   - chama a funÃ§Ã£o ARV_InserirEsquerda( <Char> )
+*     "=irpai"      - chama a funÃ§Ã£o ARV_IrPai( )
+*     "=iresq"      - chama a funÃ§Ã£o ARV_IrEsquerda( )
+*     "=irdir"      - chama a funÃ§Ã£o ARV_IrDireita( )
 *     "=obter" <Char>
-*                   - chama a função ARV_ObterValorCorr( ) e compara
+*                   - chama a funÃ§Ã£o ARV_ObterValorCorr( ) e compara
 *                     o valor retornado com o valor <Char>
-*     "=destroi"    - chama a função ARV_DestruirArvore( )
+*     "=destroi"    - chama a funÃ§Ã£o ARV_DestruirArvore( )
 *
 ***************************************************************************/
 
@@ -54,33 +54,33 @@
 
 #include    "MATRIZ.H"
 
-/* Tabela dos nomes dos comandos de teste específicos */
+/* Tabela dos nomes dos comandos de teste especÃ­ficos */
 
 #define     CRIAR_MAT_CMD		"=criar"
 #define		INS_VAL_CMD			"=insval"
-#define     IR_OESTE_CMD        "=iroeste"
-#define     IR_LESTE_CMD        "=irleste"
+#define     IR_OESTE_CMD		"=iroeste"
+#define     IR_LESTE_CMD		"=irleste"
 #define		IR_NORTE_CMD		"=irnorte"
 #define		IR_SUL_CMD			"=irsul"
 #define		IR_SULDESTE_CMD		"=irsuldeste"
 #define		IR_SUDOESTE_CMD		"=irsudoeste"
 #define		IR_NOROESTE_CMD		"=irnoroeste"
 #define		IR_NORDESTE_CMD		"=irnordeeste"
-#define     OBTER_VAL_CMD       "=obter"
-#define     DESTROI_CMD         "=destruir"
+#define     OBTER_VAL_CMD		"=obter"
+#define     DESTROI_CMD			"=destruir"
 
-/*****  Código das funções exportadas pelo módulo  *****/
+/*****  CÃ³digo das funÃ§Ãµes exportadas pelo mÃ³dulo  *****/
 
 
 /***********************************************************************
 *
-*  $FC Função: TARV Efetuar operações de teste específicas para árvore
+*  $FC FunÃ§Ã£o: TARV Efetuar operaÃ§Ãµes de teste especÃ­ficas para Ã¡rvore
 *
-*  $ED Descrição da função
-*     Efetua os diversos comandos de teste específicos para o módulo
-*     árvore sendo testado.
+*  $ED DescriÃ§Ã£o da funÃ§Ã£o
+*     Efetua os diversos comandos de teste especÃ­ficos para o mÃ³dulo
+*     Ã¡rvore sendo testado.
 *
-*  $EP Parâmetros
+*  $EP ParÃ¢metros
 *     $P ComandoTeste - String contendo o comando
 *
 *  $FV Valor retornado
@@ -94,9 +94,16 @@
       ARV_tpCondRet CondRetEsperada = ARV_CondRetFaltouMemoria ;
                                       /* inicializa para qualquer coisa */
 
+
+	  //----------------------------
       char ValorEsperado = '?'  ;
       char ValorObtido   = '!'  ;
       char ValorDado     = '\0' ;
+	  //---------------------------
+
+	  int ValorColuna = 3;
+	  int ValorLinha = 3;
+	  tpMatriz * pontMat;
 
       int  NumLidos = -1 ;
 
@@ -114,13 +121,14 @@
                return TST_CondRetParm ;
             } /* if */
 
-            CondRetObtido = MAT_CriarMatriz() ; //<--------------------------- modificar
+            CondRetObtido = MAT_CriarMatriz(&pontMat, ValorLinha, ValorColuna);
 
             return TST_CompararInt( CondRetEsperada , CondRetObtido ,
                                     "Retorno errado ao criar matriz
-         } /* fim ativa: Testar MAT Criar matriz */
+         
+		 } /* fim ativa: Testar MAT Criar matriz */
 
-      /* Testar MAT Ir para nó à esquerda */
+      /* Testar MAT Ir para nÃ³ Ã  esquerda */
 
          else if ( strcmp( ComandoTeste , IR_OESTE_CMD ) == 0 )
          {
@@ -132,14 +140,14 @@
                return TST_CondRetParm ;
             } /* if */
 
-            CondRetObtido = ARV_IrNoEsquerda( ) ; //<---------------------------- modificar
+            CondRetObtido = MAT_IrNoEsquerda( );
 
             return TST_CompararInt( CondRetEsperada , CondRetObtido ,
                                     "Retorno errado ao ir para esquerda." );
 
-         } /* fim ativa: Testar MAT Ir para nó à esquerda */
+         } /* fim ativa: Testar MAT Ir para nÃ³ Ã  esquerda */
 
-      /* Testar ARV Ir para nó à direita */
+      /* Testar ARV Ir para nÃ³ Ã  direita */
 
          else if ( strcmp( ComandoTeste , IR_LESTE_CMD ) == 0 )
          {
@@ -151,12 +159,12 @@
                return TST_CondRetParm ;
             } /* if */
 
-            CondRetObtido = ARV_IrNoDireita( ) ; //<-------------------------- modificar
+            CondRetObtido = MAT_IrNoDireita( );
 
             return TST_CompararInt( CondRetEsperada , CondRetObtido ,
                                     "Retorno errado ao ir para direita." );
 
-         } /* fim ativa: Testar MAT Ir para nó à direita */
+         } /* fim ativa: Testar MAT Ir para nÃ³ Ã  direita */
 
       /* Testar MAT Obter valor corrente */
 
@@ -181,7 +189,7 @@
             } /* if */
 
             return TST_CompararChar( ValorEsperado , ValorObtido ,
-                                     "Conteúdo do nó está errado." ) ;
+                                     "ConteÃºdo do nÃ³ estÃ¡ errado." ) ;
 
          } /* fim ativa: Testar MAT Obter valor corrente */
 
@@ -194,11 +202,11 @@
 
             return TST_CondRetOK ;
 
-         } /* fim ativa: Testar ARV Destruir árvore */
+         } /* fim ativa: Testar ARV Destruir Ã¡rvore */
 
       return TST_CondRetNaoConhec ;
 
-   } /* Fim função: TARV Efetuar operações de teste específicas para árvore */
+   } /* Fim funÃ§Ã£o: TARV Efetuar operaÃ§Ãµes de teste especÃ­ficas para Ã¡rvore */
 
-/********** Fim do módulo de implementação: Módulo de teste específico **********/
+/********** Fim do mÃ³dulo de implementaÃ§Ã£o: MÃ³dulo de teste especÃ­fico **********/
 
