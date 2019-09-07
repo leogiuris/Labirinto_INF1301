@@ -103,16 +103,16 @@ MAT_tpCondRet MAT_CriarMatriz(tpMatriz ** pMat, int fil, int col)
 {
 	
 	int i,j;
-	printf("a\n");
+	//printf("a\n");
 	*pMat = ( tpMatriz * ) malloc( sizeof( tpMatriz )) ;
 	
 
-	printf("\n[CriarMatriz]\n");  
-  //  if ( pMatriz != NULL )
-  //  {
+	//printf("\n[CriarMatriz]\n");  
+    if ( *pMat != NULL )
+    {
 		//printf("funcionou!\n");
-  //      MAT_DestruirMatriz( ) ;
-  //  } /* if */
+        MAT_DestruirMatriz( pMat ) ;
+    } /* if */
 
     if ( *pMat == NULL )
     {
@@ -185,20 +185,21 @@ MAT_tpCondRet MAT_CriarMatriz(tpMatriz ** pMat, int fil, int col)
 
 void MAT_DestruirMatriz( tpMatriz ** pMat )
 {
-	printf("\n[DestruirMatriz]\n");
+	//printf("\n[DestruirMatriz]\n");
     if ( *pMat != NULL )
 	{
          if ( (*pMat)->pNoOrigem != NULL )
          {
-			printf("a\n");
+			//printf("a\n");
             DestroiMatriz( mat ) ;
          } /* if */
 
-		 printf("b\n");
+		 //printf("b\n");
          free( *pMat ) ;
          pMat = NULL ;
 	} /* if */
-	printf("foi krl\n");
+
+	//printf("foi krl\n");
 } /* Fim função: ARV Destruir árvore */
 
 /***************************************************************************
@@ -206,127 +207,127 @@ void MAT_DestruirMatriz( tpMatriz ** pMat )
 *  Função: ARV Adicionar filho à esquerda
 *  ****/
 
-   ARV_tpCondRet ARV_InserirEsquerda( char ValorParm )
-   {
+   //ARV_tpCondRet ARV_InserirEsquerda( char ValorParm )
+   //{
 
-      ARV_tpCondRet CondRet ;
+   //   ARV_tpCondRet CondRet ;
 
-      tpNoArvore * pCorr ;
-      tpNoArvore * pNo ;
+   //   tpNoArvore * pCorr ;
+   //   tpNoArvore * pNo ;
 
-      /* Tratar vazio, esquerda */
+   //   /* Tratar vazio, esquerda */
 
-         CondRet = CriarNoRaiz( ValorParm ) ;
-         if ( CondRet != ARV_CondRetNaoCriouRaiz )
-         {
-            return CondRet ;
-         } /* if */
+   //      CondRet = CriarNoRaiz( ValorParm ) ;
+   //      if ( CondRet != ARV_CondRetNaoCriouRaiz )
+   //      {
+   //         return CondRet ;
+   //      } /* if */
 
-      /* Criar nó à esquerda de folha */
+   //   /* Criar nó à esquerda de folha */
 
-         pCorr = pArvore->pNoCorr ;
-         if ( pCorr == NULL )
-         {
-            return ARV_CondRetErroEstrutura ;
-         } /* if */
-               
-         if ( pCorr->pNoEsq == NULL )
-         {
-            pNo = CriarNo( ValorParm ) ;
-            if ( pNo == NULL )
-            {
-               return ARV_CondRetFaltouMemoria ;
-            } /* if */
-            pNo->pNoPai      = pCorr ;
-            pCorr->pNoEsq    = pNo ;
-            pArvore->pNoCorr = pNo ;
+   //      pCorr = pArvore->pNoCorr ;
+   //      if ( pCorr == NULL )
+   //      {
+   //         return ARV_CondRetErroEstrutura ;
+   //      } /* if */
+   //            
+   //      if ( pCorr->pNoEsq == NULL )
+   //      {
+   //         pNo = CriarNo( ValorParm ) ;
+   //         if ( pNo == NULL )
+   //         {
+   //            return ARV_CondRetFaltouMemoria ;
+   //         } /* if */
+   //         pNo->pNoPai      = pCorr ;
+   //         pCorr->pNoEsq    = pNo ;
+   //         pArvore->pNoCorr = pNo ;
 
-            return ARV_CondRetOK ;
-         } /* if */
+   //         return ARV_CondRetOK ;
+   //      } /* if */
 
-      /* Tratar não folha à esquerda */
+   //   /* Tratar não folha à esquerda */
 
-         return ARV_CondRetNaoEhFolha ;
+   //      return ARV_CondRetNaoEhFolha ;
 
-   } /* Fim função: ARV Adicionar filho à esquerda */
+   //} /* Fim função: ARV Adicionar filho à esquerda */
 
 /***************************************************************************
 *
 *  Função: ARV Ir para nó à esquerda
 *  ****/
 
-   ARV_tpCondRet ARV_IrNoEsquerda( void )
-   {
+   //ARV_tpCondRet ARV_IrNoEsquerda( void )
+   //{
 
-      if ( pArvore == NULL )
-      {
-         return ARV_CondRetArvoreNaoExiste ;
-      } /* if */
+   //   if ( pArvore == NULL )
+   //   {
+   //      return ARV_CondRetArvoreNaoExiste ;
+   //   } /* if */
 
-      if ( pArvore->pNoCorr == NULL )
-      {
-         return ARV_CondRetArvoreVazia ;
-      } /* if */
+   //   if ( pArvore->pNoCorr == NULL )
+   //   {
+   //      return ARV_CondRetArvoreVazia ;
+   //   } /* if */
 
-      if ( pArvore->pNoCorr->pNoEsq == NULL )
-      {
-         return ARV_CondRetNaoPossuiFilho ;
-      } /* if */
+   //   if ( pArvore->pNoCorr->pNoEsq == NULL )
+   //   {
+   //      return ARV_CondRetNaoPossuiFilho ;
+   //   } /* if */
 
-      pArvore->pNoCorr = pArvore->pNoCorr->pNoEsq ;
-      return ARV_CondRetOK ;
+   //   pArvore->pNoCorr = pArvore->pNoCorr->pNoEsq ;
+   //   return ARV_CondRetOK ;
 
-   } /* Fim função: ARV Ir para nó à esquerda */
+   //} /* Fim função: ARV Ir para nó à esquerda */
 
 /***************************************************************************
 *
 *  Função: ARV Ir para nó à direita
 *  ****/
 
-   ARV_tpCondRet ARV_IrNoDireita( void )
-   {
+   //ARV_tpCondRet ARV_IrNoDireita( void )
+   //{
 
-      if ( pArvore == NULL )
-      {
-         return ARV_CondRetArvoreNaoExiste ;
-      } /* if */
+   //   if ( pArvore == NULL )
+   //   {
+   //      return ARV_CondRetArvoreNaoExiste ;
+   //   } /* if */
 
-      if ( pArvore->pNoCorr == NULL )
-      {
-         return ARV_CondRetArvoreVazia ;
-      } /* if */
+   //   if ( pArvore->pNoCorr == NULL )
+   //   {
+   //      return ARV_CondRetArvoreVazia ;
+   //   } /* if */
 
-      if ( pArvore->pNoCorr->pNoDir == NULL )
-      {
-         return ARV_CondRetNaoPossuiFilho ;
-      } /* if */
+   //   if ( pArvore->pNoCorr->pNoDir == NULL )
+   //   {
+   //      return ARV_CondRetNaoPossuiFilho ;
+   //   } /* if */
 
-      pArvore->pNoCorr = pArvore->pNoCorr->pNoDir ;
-      return ARV_CondRetOK ;
+   //   pArvore->pNoCorr = pArvore->pNoCorr->pNoDir ;
+   //   return ARV_CondRetOK ;
 
-   } /* Fim função: ARV Ir para nó à direita */
+   //} /* Fim função: ARV Ir para nó à direita */
 
 /***************************************************************************
 *
 *  Função: ARV Obter valor corrente
 *  ****/
 
-   ARV_tpCondRet ARV_ObterValorCorr( char * ValorParm )
-   {
+   //ARV_tpCondRet ARV_ObterValorCorr( char * ValorParm )
+   //{
 
-      if ( pArvore == NULL )
-      {
-         return ARV_CondRetArvoreNaoExiste ;
-      } /* if */
-      if ( pArvore->pNoCorr == NULL )
-      {
-         return ARV_CondRetArvoreVazia ;
-      } /* if */
-      * ValorParm = pArvore->pNoCorr->Valor ;
+   //   if ( pArvore == NULL )
+   //   {
+   //      return ARV_CondRetArvoreNaoExiste ;
+   //   } /* if */
+   //   if ( pArvore->pNoCorr == NULL )
+   //   {
+   //      return ARV_CondRetArvoreVazia ;
+   //   } /* if */
+   //   * ValorParm = pArvore->pNoCorr->Valor ;
 
-      return ARV_CondRetOK ;
+   //   return ARV_CondRetOK ;
 
-   } /* Fim função: ARV Obter valor corrente */
+   //} /* Fim função: ARV Obter valor corrente */
 
 
 /*****  Código das funções encapsuladas no módulo  *****/

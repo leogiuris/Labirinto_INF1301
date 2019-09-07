@@ -58,11 +58,12 @@
 
 #define     CRIAR_MAT_CMD		"=criar"
 #define		INS_VAL_CMD			"=insval"
+#define		RET_VAL_CMD			"=retval"
 #define     IR_OESTE_CMD		"=iroeste"
 #define     IR_LESTE_CMD		"=irleste"
 #define		IR_NORTE_CMD		"=irnorte"
 #define		IR_SUL_CMD			"=irsul"
-#define		IR_SULDESTE_CMD		"=irsuldeste"
+#define		IR_SUDESTE_CMD		"=irsudeste"
 #define		IR_SUDOESTE_CMD		"=irsudoeste"
 #define		IR_NOROESTE_CMD		"=irnoroeste"
 #define		IR_NORDESTE_CMD		"=irnordeeste"
@@ -90,8 +91,8 @@
    TST_tpCondRet TST_EfetuarComando( char * ComandoTeste )
    {
 
-      ARV_tpCondRet CondRetObtido   = ARV_CondRetOK ;
-      ARV_tpCondRet CondRetEsperada = ARV_CondRetFaltouMemoria ;
+      MAT_tpCondRet CondRetObtido   = MAT_CondRetOK ;
+      MAT_tpCondRet CondRetEsperada = MAT_CondRetFaltouMemoria ;
                                       /* inicializa para qualquer coisa */
 
 
@@ -101,8 +102,8 @@
       char ValorDado     = '\0' ;
 	  //---------------------------
 
-	  int ValorColuna = 3;
-	  int ValorLinha = 3;
+	  int valorColuna = 3;
+	  int valorLinha = 3;
 	  tpMatriz * pontMat;
 
       int  NumLidos = -1 ;
@@ -114,91 +115,91 @@
          if ( strcmp( ComandoTeste , CRIAR_MAT_CMD ) == 0 )
          {
 
-            NumLidos = LER_LerParametros( "i" ,
-                               &CondRetEsperada ) ;
-            if ( NumLidos != 1 )
+            NumLidos = LER_LerParametros( "iii" ,
+                               &CondRetEsperada,&valorLinha,&valorColuna ) ;
+            if ( NumLidos != 3 )
             {
                return TST_CondRetParm ;
             } /* if */
 
-            CondRetObtido = MAT_CriarMatriz(&pontMat, ValorLinha, ValorColuna);
+            CondRetObtido = MAT_CriarMatriz(&pontMat, valorLinha, valorColuna);
 
             return TST_CompararInt( CondRetEsperada , CondRetObtido ,
-                                    "Retorno errado ao criar matriz
+                                    "Retorno errado ao criar matriz" );
          
 		 } /* fim ativa: Testar MAT Criar matriz */
 
       /* Testar MAT Ir para nó à esquerda */
 
-         else if ( strcmp( ComandoTeste , IR_OESTE_CMD ) == 0 )
-         {
+         //else if ( strcmp( ComandoTeste , IR_OESTE_CMD ) == 0 )
+         //{
 
-            NumLidos = LER_LerParametros( "i" ,
-                               &CondRetEsperada ) ;
-            if ( NumLidos != 1 )
-            {
-               return TST_CondRetParm ;
-            } /* if */
+         //   NumLidos = LER_LerParametros( "i" ,
+         //                      &CondRetEsperada ) ;
+         //   if ( NumLidos != 1 )
+         //   {
+         //      return TST_CondRetParm ;
+         //   } /* if */
 
-            CondRetObtido = MAT_IrNoEsquerda( );
+         //   CondRetObtido = MAT_IrNoEsquerda( );
 
-            return TST_CompararInt( CondRetEsperada , CondRetObtido ,
-                                    "Retorno errado ao ir para esquerda." );
+         //   return TST_CompararInt( CondRetEsperada , CondRetObtido ,
+         //                           "Retorno errado ao ir para esquerda." );
 
-         } /* fim ativa: Testar MAT Ir para nó à esquerda */
+         //} /* fim ativa: Testar MAT Ir para nó à esquerda */
 
       /* Testar ARV Ir para nó à direita */
 
-         else if ( strcmp( ComandoTeste , IR_LESTE_CMD ) == 0 )
-         {
+         //else if ( strcmp( ComandoTeste , IR_LESTE_CMD ) == 0 )
+         //{
 
-            NumLidos = LER_LerParametros( "i" ,
-                               &CondRetEsperada ) ;
-            if ( NumLidos != 1 )
-            {
-               return TST_CondRetParm ;
-            } /* if */
+         //   NumLidos = LER_LerParametros( "i" ,
+         //                      &CondRetEsperada ) ;
+         //   if ( NumLidos != 1 )
+         //   {
+         //      return TST_CondRetParm ;
+         //   } /* if */
 
-            CondRetObtido = MAT_IrNoDireita( );
+         //   CondRetObtido = MAT_IrNoDireita( );
 
-            return TST_CompararInt( CondRetEsperada , CondRetObtido ,
-                                    "Retorno errado ao ir para direita." );
+         //   return TST_CompararInt( CondRetEsperada , CondRetObtido ,
+         //                           "Retorno errado ao ir para direita." );
 
-         } /* fim ativa: Testar MAT Ir para nó à direita */
+         //} /* fim ativa: Testar MAT Ir para nó à direita */
 
       /* Testar MAT Obter valor corrente */
 
-         else if ( strcmp( ComandoTeste , OBTER_VAL_CMD ) == 0 )
-         {
+         //else if ( strcmp( ComandoTeste , OBTER_VAL_CMD ) == 0 )
+         //{
 
-            NumLidos = LER_LerParametros( "ci" ,
-                               &ValorEsperado , &CondRetEsperada ) ;
-            if ( NumLidos != 2 )
-            {
-               return TST_CondRetParm ;
-            } /* if */
+         //   NumLidos = LER_LerParametros( "ci" ,
+         //                      &ValorEsperado , &CondRetEsperada ) ;
+         //   if ( NumLidos != 2 )
+         //   {
+         //      return TST_CondRetParm ;
+         //   } /* if */
 
-            CondRetObtido = ARV_ObterValorCorr( &ValorObtido ) ;//<-------------------- modificar
+         //   CondRetObtido = ARV_ObterValorCorr( &ValorObtido ) ;//<-------------------- modificar
 
-            Ret = TST_CompararInt( CondRetEsperada , CondRetObtido ,
-                                   "Retorno errado ao obter valor corrente." );
+         //   Ret = TST_CompararInt( CondRetEsperada , CondRetObtido ,
+         //                          "Retorno errado ao obter valor corrente." );
 
-            if ( Ret != TST_CondRetOK )
-            {
-               return Ret ;
-            } /* if */
+         //   if ( Ret != TST_CondRetOK )
+         //   {
+         //      return Ret ;
+         //   } /* if */
 
-            return TST_CompararChar( ValorEsperado , ValorObtido ,
-                                     "Conteúdo do nó está errado." ) ;
+         //   return TST_CompararChar( ValorEsperado , ValorObtido ,
+         //                            "Conteúdo do nó está errado." ) ;
 
-         } /* fim ativa: Testar MAT Obter valor corrente */
+         //} /* fim ativa: Testar MAT Obter valor corrente */
 
       /* Testar MAT Destruir matriz */
 
          else if ( strcmp( ComandoTeste , DESTROI_CMD ) == 0 )
          {
 
-            ARV_DestruirArvore( ) ;
+            MAT_DestruirMatriz( &pontMat ) ;
 
             return TST_CondRetOK ;
 
