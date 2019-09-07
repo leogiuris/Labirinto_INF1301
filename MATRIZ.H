@@ -97,7 +97,7 @@
 *
 ***********************************************************************/
 
-   MAT_tpCondRet MAT_CriarMatriz(tpMatriz * pMat, int fil, int col);
+   MAT_tpCondRet MAT_CriarMatriz(tpMatriz ** pMat, int fil, int col);
 
 
 /***********************************************************************
@@ -110,7 +110,7 @@
 *
 ***********************************************************************/
 
-   void MAT_DestruirMatriz( void ) ;
+   void MAT_DestruirMatriz( tpMatriz ** pMat ) ;
 
 
 /***********************************************************************
