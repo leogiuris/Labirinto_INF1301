@@ -58,7 +58,7 @@
 
 #define     CRIAR_MAT_CMD		"=criar"
 #define		INS_VAL_CMD			"=insval"
-#define		RET_VAL_CMD			"=retval"
+#define		RET_VAL_CMD			"=retval" //<------------------ pq tem esse comando se já existe o "obbter valor"??? 
 #define     IR_OESTE_CMD		"=iroeste"
 #define     IR_LESTE_CMD		"=irleste"
 #define		IR_NORTE_CMD		"=irnorte"
@@ -129,7 +129,7 @@
          
 		 } /* fim ativa: Testar MAT Criar matriz */
 
-      /* Testar MAT Ir para nó oeste */
+      /* Testar MAT Ir para nó oeste */ //<------------ todos os comandos de movimento precisam ser atualizados pra como o Rafael fizer
 
          else if ( strcmp( ComandoTeste , IR_OESTE_CMD ) == 0 )
          {
