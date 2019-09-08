@@ -1,0 +1,85 @@
+// Script:    TestaMatrizMod.script
+// Autor:     Daniel Peralta, Leonardo Giuri, Rafael Serpa
+// Data:      a confirmar...
+// Propósito: Testa a construção de uma matriz usando parâmetros literais
+//            Verifica se as operações modificaram corretamente as referências
+//
+
+== Verificar assertivas de entrada de irleste
+=irleste      4
+
+== Verificar comando recuperar
+=irleste      0
+=recuperar 
+
+== Verificar ObterValorCorr relativo a matriz inexistente
+// O interpretador de teste inicializa o valor a ser obtido com '!'. Consequentemente,
+// esse será o valor "obtido" caso a função ObterValor retorne condição de erro,
+// uma vez que, nesse caso, a função não altera o valor a ser "retornado".
+=obter  '!'   4
+
+== Verificar recuperar de ObterValorCorr relativo a uma matriz inexistente
+=obter  '!'   0
+=recuperar
+=obter  'z'   4
+=recuperar
+
+== Criar matriz 3x3
+=criar    0    3    3
+
+== Verificar se matriz criada está vazia
+=irleste      5
+=iroeste      5
+=irnorte      5
+=irsul        5
+=irsuldeste   5
+=irsudoeste   5
+=irnordeste   5
+//modificar =irpai
+=irpai      5
+//
+=obter      '!'   5
+
+== Inserir à leste
+=insdir     'a'   0
+
+== Inserir à oeste
+//=necessita inserir comandos
+
+== Inserir à norte
+//=necessita inserir comandos
+
+== Inserir à sul
+//=necessita inserir comandos
+
+== Inserir à sudeste
+//=necessita inserir comandos
+
+== Inserir à sudoeste
+//=necessita inserir comandos
+
+== Inserir à noroeste
+//=necessita inserir comandos
+
+== Inserir à nordeste
+//=necessita inserir comandos
+
+== Obter o valor inserido
+=obter      'a'   0
+
+== Verificar valor obtido diferente do esperado
+=obter      '!'   0
+=recuperar
+
+== Obter o valor inserido
+=obter      'b'   0
+
+== Destroi a arvore
+=destruir
+=irleste      4
+
+== Cria a arvore
+=criar      0
+=irdir      5
+
+// fim
