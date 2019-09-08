@@ -1,0 +1,428 @@
+/***************************************************************************
+*  $MCI Módulo de implementação: Módulo árvore
+*
+*  Arquivo gerado:              ARVORE.C
+*  Letras identificadoras:      ARV
+*
+*  Nome da base de software:    Exemplo de teste automatizado
+*  Arquivo da base de software: D:\AUTOTEST\PROJETOS\SIMPLES.BSW
+*
+*  Projeto: Disciplinas INF 1628 / 1301
+*  Gestor:  DI/PUC-Rio
+*  Autores: avs - Arndt von Staa
+*
+*  $HA Histórico de evolução:
+*     Versão  Autor    Data     Observações
+*       3.00   avs   28/02/2003 Uniformização da interface das funções e
+*                               de todas as condições de retorno.
+*       2.00   avs   03/08/2002 Eliminação de código duplicado, reestruturação
+*       1.00   avs   15/08/2001 Início do desenvolvimento
+*
+***************************************************************************/
+
+#include	<stdlib.h>
+#include	<stdio.h>
+
+#define MATRIZ_OWN
+#include "MATRIZ.H"
+#undef MATRIZ_OWN
+
+/***********************************************************************
+*
+*  $TC Tipo de dados: ARV Descritor do nó da árvore
+*
+*
+*  $ED Descrição do tipo
+*     Descreve a organização do nó
+*
+***********************************************************************/
+
+typedef struct tgNoMatriz {
+
+	struct tgNoMatriz * pNorte ; 
+	struct tgNoMatriz * pNordeste ;
+	struct tgNoMatriz * pLeste ;
+	struct tgNoMatriz * pSudeste ;
+	struct tgNoMatriz * pSul ;
+	struct tgNoMatriz * pSudoeste ;
+	struct tgNoMatriz * pOeste ;
+	struct tgNoMatriz * pNoroeste ;
+
+    void * Valor ;
+    /* Valor do nó */
+
+} tpNoMatriz ;
+
+/***********************************************************************
+*
+*  $TC Tipo de dados: ARV Descritor da cabeça de uma árvore
+*
+*
+*  $ED Descrição do tipo
+*     A cabe‡a da árvore é o ponto de acesso para uma determinada árvore.
+*     Por intermédio da referência para o nó corrente e do ponteiro
+*     pai pode-se navegar a árvore sem necessitar de uma pilha.
+*     Pode-se, inclusive, operar com a árvore em forma de co-rotina.
+*
+***********************************************************************/
+
+typedef struct tgMatriz {
+
+	tpNoMatriz * pNoOrigem ;
+               /* Ponteiro para a raiz da árvore */
+
+    tpNoMatriz * pNoCorr ;
+               /* Ponteiro para o nó corrente da árvore */
+
+	int fileiras;
+	int colunas;
+
+} tpMatriz ;
+
+/*****  Dados encapsulados no módulo  *****/
+
+static tpMatriz *pMatriz = NULL;
+
+/***** Protótipos das funções encapuladas no módulo *****/
+
+void imprimeMat( tpNoMatriz ** mat, int fil, int col);
+
+void DestroiMatriz( tpNoMatriz ** mat );
+
+void ExcluiNoLista(void * elem);
+
+
+/*****  Código das funções exportadas pelo módulo  *****/
+
+/***************************************************************************
+*
+*  Função: ARV Criar árvore
+*  ****/
+MAT_tpCondRet MAT_CriarMatriz(int fil, int col)
+{
+	
+	int i,j;
+	//printf("\n[CriarMatriz]\n");  
+    if ( pMatriz != NULL )
+    {
+		//printf("funcionou!\n");
+        MAT_DestruirMatriz( pMatriz ) ;
+    } /* if */
+    pMatriz = ( tpMatriz * ) malloc( sizeof( tpMatriz )) ;
+    if ( pMatriz == NULL )
+    {
+		return MAT_CondRetFaltouMemoria ;
+    } /* if */
+ 
+	tpNoMatriz **mat = (tpNoMatriz**)malloc(fil*sizeof(tpNoMatriz*));
+	for(i=0; i<fil ;i++)
+	{
+		mat[i] = (tpNoMatriz*)malloc(col*sizeof(tpNoMatriz));
+		for(j=0; j<col; j++)
+		{
+			mat[i][j].Valor = NULL;
+			mat[i][j].pNorte = NULL;
+			mat[i][j].pNordeste = NULL;
+			mat[i][j].pNoroeste = NULL;
+			mat[i][j].pLeste = NULL;
+			mat[i][j].pOeste = NULL;
+			mat[i][j].pSudeste = NULL;
+			mat[i][j].pSul = NULL;
+			mat[i][j].pSudoeste = NULL;
+		}
+	}
+ 
+	for(i=0; i<fil ;i++){
+		for(j=0; j<col; j++){
+			mat[i][j].Valor = (void*)('a' +(i*col) + j);
+			if(i>0)
+			{
+				mat[i][j].pNorte = &mat[i-1][j];
+				if(j>0)
+					mat[i][j].pNoroeste = &mat[i-1][j-1];
+				if(j<col)
+					mat[i][j].pNordeste = &mat[i-1][j+1];
+			}
+			if(i<fil-1)
+			{
+				mat[i][j].pSul = &mat[i+1][j];
+				if(j>0)
+					mat[i][j].pSudoeste = &mat[i+1][j-1];
+				if(j<col)
+					mat[i][j].pSudeste = &mat[i+1][j+1];
+			}
+			if(j>0)
+			{
+				mat[i][j].pOeste = &mat[i][j-1];
+			}
+			if(j<col-1)
+			{
+				mat[i][j].pLeste = &mat[i][j+1];
+			}
+		}// end for j
+	}// end for i
+
+	
+    pMatriz->pNoOrigem = &mat[0][0] ;
+	pMatriz->pNoCorr = &mat[0][0];
+	pMatriz->fil = fil;
+	pMatriz->col = col;
+	
+     return MAT_CondRetOK ;
+
+}/* Fim função: ARV Destruir árvore */
+
+
+/***************************************************************************
+*
+*  Função: ARV Destruir árvore
+*  ****/
+
+void MAT_DestruirMatriz( void )
+{
+	//printf("\n[DestruirMatriz]\n");
+    if ( pMatriz != NULL )
+	{
+         if ( pMatriz->pNoOrigem != NULL)
+         {
+			//printf("a\n");
+            DestroiMatriz( pMatriz->pNoOrigem) ;
+         } /* if */
+
+		 //printf("b\n");
+         free( pMatriz ) ;
+         pMatriz = NULL ;
+	} /* if */
+
+	//printf("foi krl\n");
+} /* Fim função: ARV Destruir árvore */
+void DestroiMatriz( tpNoMatriz * mat )
+{
+  tpNoMatriz **Matriz = (tpNoMatriz**) mat;
+  int i,j;
+  printf("c\n");
+  for(i=0; &Matriz[i]!=NULL ;i++)
+  {
+    for(j=0;&Matriz[i][j]!=NULL;j++)
+    {
+      printf("i");
+      free(&mat[i][j]);
+    }
+  
+  }
+  free(Matriz);
+  
+  return;
+}
+
+MAT_tpCondRet mo
+
+MAT_tpCondRet InsereMatriz(void * Valor)
+{
+  
+  //tratar matriz nao existente
+
+  if(pMatriz->pNoOrigem==NULL)
+  {
+    return MAT_CondRetMatrizNaoExiste;
+  }
+  /*tratar falha no nó corrente*/
+  if(pMatriz->pNoCorr==NULL)
+  {
+    return MAT_CondRetErroEstrutura;
+  }
+  pMatriz->pNoCorr->Valor = Valor;
+  return MAT_CondRetOK;
+}
+MAT_tpCondRet RetiraMatriz(void )
+{
+  //tratar matriz nao existente
+   if(pMatriz->pNoOrigem==NULL)
+  {
+    return MAT_CondRetMatrizNaoExiste;
+  }
+  /*tratar falha no nó corrente*/
+  if(pMatriz->pNoCorr==NULL)
+  {
+    return MAT_CondRetErroEstrutura;
+  }
+  pMatriz->pNoCorr->Valor = NULL;
+  return MAT_CondRetOK;
+}
+
+MAT_tpCondRet MoveLeste(void)
+{
+  //tratar matriz nao existente
+   if(pMatriz->pNoOrigem==NULL)
+  {
+    return MAT_CondRetMatrizNaoExiste;
+  }
+  /*tratar falha no nó corrente*/
+  if(pMatriz->pNoCorr==NULL)
+  {
+    return MAT_CondRetErroEstrutura;
+  }
+  /*tratar Leste não existente*/
+  if(pMatriz->pNoCorr->pLeste ==NULL)
+  {
+    return MAT_CondRetNaoPossuiVizinho;
+  }
+  pMatriz->pNoCorr = pMatriz->pNoCorr->pLeste;
+  return MAT_CondRetOK;
+}
+MAT_tpCondRet MoveOeste(void)
+{
+  //tratar matriz nao existente
+   if(pMatriz->pNoOrigem==NULL)
+  {
+    return MAT_CondRetMatrizNaoExiste;
+  }
+  /*tratar falha no nó corrente*/
+  if(pMatriz->pNoCorr==NULL)
+  {
+    return MAT_CondRetErroEstrutura;
+  }
+  /*tratar Leste não existente*/
+  if(pMatriz->pNoCorr->pOeste ==NULL)
+  {
+    return MAT_CondRetNaoPossuiVizinho;
+  }
+  pMatriz->pNoCorr = pMatriz->pNoCorr->pOeste;
+  return MAT_CondRetOK;
+}
+MAT_tpCondRet MoveNorte(void)
+{
+  //tratar matriz nao existente
+   if(pMatriz->pNoOrigem==NULL)
+  {
+    return MAT_CondRetMatrizNaoExiste;
+  }
+  /*tratar falha no nó corrente*/
+  if(pMatriz->pNoCorr==NULL)
+  {
+    return MAT_CondRetErroEstrutura;
+  }
+  /*tratar Leste não existente*/
+  if(pMatriz->pNoCorr->pNorte ==NULL)
+  {
+    return MAT_CondRetNaoPossuiVizinho;
+  }
+  pMatriz->pNoCorr = pMatriz->pNoCorr->pNorte;
+  return MAT_CondRetOK;
+}
+MAT_tpCondRet MoveSul(void)
+{
+  //tratar matriz nao existente
+   if(pMatriz->pNoOrigem==NULL)
+  {
+    return MAT_CondRetMatrizNaoExiste;
+  }
+  /*tratar falha no nó corrente*/
+  if(pMatriz->pNoCorr==NULL)
+  {
+    return MAT_CondRetErroEstrutura;
+  }
+  /*tratar Leste não existente*/
+  if(pMatriz->pNoCorr->pSul ==NULL)
+  {
+    return MAT_CondRetNaoPossuiVizinho;
+  }
+  pMatriz->pNoCorr = pMatriz->pNoCorr->pSul;
+  return MAT_CondRetOK;
+}
+MAT_tpCondRet MoveSudeste(void)
+{
+  //tratar matriz nao existente
+   if(pMatriz->pNoOrigem==NULL)
+  {
+    return MAT_CondRetMatrizNaoExiste;
+  }
+  /*tratar falha no nó corrente*/
+  if(pMatriz->pNoCorr==NULL)
+  {
+    return MAT_CondRetErroEstrutura;
+  }
+  /*tratar Leste não existente*/
+  if(pMatriz->pNoCorr->pSudeste ==NULL)
+  {
+    return MAT_CondRetNaoPossuiVizinho;
+  }
+  pMatriz->pNoCorr = pMatriz->pNoCorr->pSudeste;
+  return MAT_CondRetOK;
+}
+MAT_tpCondRet MoveSudoeste(void)
+{
+  //tratar matriz nao existente
+   if(pMatriz->pNoOrigem==NULL)
+  {
+    return MAT_CondRetMatrizNaoExiste;
+  }
+  /*tratar falha no nó corrente*/
+  if(pMatriz->pNoCorr==NULL)
+  {
+    return MAT_CondRetErroEstrutura;
+  }
+  /*tratar Leste não existente*/
+  if(pMatriz->pNoCorr->pSudoeste ==NULL)
+  {
+    return MAT_CondRetNaoPossuiVizinho;
+  }
+  pMatriz->pNoCorr = pMatriz->pNoCorr->pSudoeste;
+  return MAT_CondRetOK;
+}
+MAT_tpCondRet MoveNordeste(void)
+{
+  //tratar matriz nao existente
+   if(pMatriz->pNoOrigem==NULL)
+  {
+    return MAT_CondRetMatrizNaoExiste;
+  }
+  /*tratar falha no nó corrente*/
+  if(pMatriz->pNoCorr==NULL)
+  {
+    return MAT_CondRetErroEstrutura;
+  }
+  /*tratar Leste não existente*/
+  if(pMatriz->pNoCorr->pNordeste ==NULL)
+  {
+    return MAT_CondRetNaoPossuiVizinho;
+  }
+  pMatriz->pNoCorr = pMatriz->pNoCorr->pNordeste;
+  return MAT_CondRetOK;
+}
+MAT_tpCondRet MoveNoroeste(void)
+{
+  //tratar matriz nao existente
+   if(pMatriz->pNoOrigem==NULL)
+  {
+    return MAT_CondRetMatrizNaoExiste;
+  }
+  /*tratar falha no nó corrente*/
+  if(pMatriz->pNoCorr==NULL)
+  {
+    return MAT_CondRetErroEstrutura;
+  }
+  /*tratar Leste não existente*/
+  if(pMatriz->pNoCorr->pNoroeste ==NULL)
+  {
+    return MAT_CondRetNaoPossuiVizinho;
+  }
+  pMatriz->pNoCorr = pMatriz->pNoCorr->pNoroeste;
+  return MAT_CondRetOK;
+}
+
+MAT_tpCondRet ObtemCorrente(void *ValorCorrente)
+{
+  //tratar matriz nao existente
+  if(pMatriz->pNoOrigem==NULL)
+  {
+    return MAT_CondRetMatrizNaoExiste;
+  }
+  /*tratar falha no nó corrente*/
+  if(pMatriz->pNoCorr==NULL)
+  {
+    return MAT_CondRetErroEstrutura;
+  }
+  ValorCorrente = pMatriz->pNoCorr->Valor;
+  return MAT_CondRetOK;
+}
