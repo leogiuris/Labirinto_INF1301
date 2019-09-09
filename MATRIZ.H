@@ -71,7 +71,7 @@
          MAT_CondRetNohEhRaiz = 6 ,
                /* Nó corrente é raiz */
 
-         MAT_CondRetNaoPossuiFilho = 7 ,
+         MAT_CondRetNaoPossuiVizinho = 7 ,
                /* Nó corrente não possui filho na direção desejada */
 
          MAT_CondRetFaltouMemoria = 8
@@ -110,7 +110,7 @@
 *
 ***********************************************************************/
 
-   void MAT_DestruirMatriz( tpMatriz ** pMat ) ;
+   void MAT_DestruirMatriz( tpMatriz * pMat ) ;
 
 
 /***********************************************************************
