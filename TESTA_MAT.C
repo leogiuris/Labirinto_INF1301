@@ -52,23 +52,18 @@
 #include    "generico.h"
 #include    "lerparm.h"
 
-#include    "MATRIZ.H"
+#include    "arvore.h"
 
 /* Tabela dos nomes dos comandos de teste específicos */
 
-#define     CRIAR_MAT_CMD		"=criar"
-#define		INS_VAL_CMD			"=insval"
-#define		RET_VAL_CMD			"=retval" //<------------------ pq tem esse comando se já existe o "obbter valor"??? 
-#define     IR_OESTE_CMD		"=iroeste"
-#define     IR_LESTE_CMD		"=irleste"
-#define		IR_NORTE_CMD		"=irnorte"
-#define		IR_SUL_CMD			"=irsul"
-#define		IR_SUDESTE_CMD		"=irsudeste"
-#define		IR_SUDOESTE_CMD		"=irsudoeste"
-#define		IR_NOROESTE_CMD		"=irnoroeste"
-#define		IR_NORDESTE_CMD		"=irnordeste"
-#define     OBTER_VAL_CMD		"=obter"
-#define     DESTROI_CMD			"=destruir"
+#define     CRIAR_ARV_CMD       "=criar"
+#define     INS_DIR_CMD         "=insdir"
+#define     INS_ESQ_CMD         "=insesq"
+#define     IR_PAI_CMD          "=irpai"
+#define     IR_ESQ_CMD          "=iresq"
+#define     IR_DIR_CMD          "=irdir"
+#define     OBTER_VAL_CMD       "=obter"
+#define     DESTROI_CMD         "=destruir"
 
 /*****  Código das funções exportadas pelo módulo  *****/
 
@@ -88,100 +83,151 @@
 *     Ver TST_tpCondRet definido em TST_ESPC.H
 *
 ***********************************************************************/
+
    TST_tpCondRet TST_EfetuarComando( char * ComandoTeste )
    {
 
-      MAT_tpCondRet CondRetObtido   = MAT_CondRetOK ;
-      MAT_tpCondRet CondRetEsperada = MAT_CondRetFaltouMemoria ;
+      ARV_tpCondRet CondRetObtido   = ARV_CondRetOK ;
+      ARV_tpCondRet CondRetEsperada = ARV_CondRetFaltouMemoria ;
                                       /* inicializa para qualquer coisa */
 
-
-	  //----------------------------
       char ValorEsperado = '?'  ;
       char ValorObtido   = '!'  ;
       char ValorDado     = '\0' ;
-	  //---------------------------
-
-	  int valorColuna = 3;
-	  int valorLinha = 3;
-	  tpMatriz * pontMat;
 
       int  NumLidos = -1 ;
 
       TST_tpCondRet Ret ;
 
-      /* Testar MAT Criar matriz */
+      /* Testar ARV Criar árvore */
 
-         if ( strcmp( ComandoTeste , CRIAR_MAT_CMD ) == 0 )
+         if ( strcmp( ComandoTeste , CRIAR_ARV_CMD ) == 0 )
          {
 
-            NumLidos = LER_LerParametros( "iii" ,
-                               &CondRetEsperada,&valorLinha,&valorColuna ) ;
-            if ( NumLidos != 3 )
+            NumLidos = LER_LerParametros( "i" ,
+                               &CondRetEsperada ) ;
+            if ( NumLidos != 1 )
             {
                return TST_CondRetParm ;
             } /* if */
 
-            CondRetObtido = MAT_CriarMatriz(&pontMat, valorLinha, valorColuna);
+            CondRetObtido = ARV_CriarArvore( ) ;
 
             return TST_CompararInt( CondRetEsperada , CondRetObtido ,
-                                    "Retorno errado ao criar matriz" );
-         
-		 } /* fim ativa: Testar MAT Criar matriz */
+                                    "Retorno errado ao criar árvore." );
 
-      /* Testar MAT Ir para nó oeste */ //<------------ todos os comandos de movimento precisam ser atualizados pra como o Rafael fizer
+         } /* fim ativa: Testar ARV Criar árvore */
 
-         else if ( strcmp( ComandoTeste , IR_OESTE_CMD ) == 0 )
-         {
+      /* Testar ARV Adicionar filho à direita */
 
-            NumLidos = LER_LerParametros("iii" ,
-                               &CondRetEsperada,&valorLinha,&valorColuna);
-            if ( NumLidos != 3 )
-            {
-               return TST_CondRetParm ;
-            } /* if */
-
-            CondRetObtido = MAT_IrNoEsquerda(&pontMat, valorLinha, valorColuna);
-
-            return TST_CompararInt( CondRetEsperada , CondRetObtido ,
-                                    "Retorno errado ao ir para oeste." );
-
-         } /* fim ativa: Testar MAT Ir para nó oeste */
-
-      /* Testar ARV Ir para nó leste */
-
-         else if ( strcmp( ComandoTeste , IR_LESTE_CMD ) == 0 )
-         {
-
-            NumLidos = LER_LerParametros("iii" ,
-                               &CondRetEsperada,&valorLinha,&valorColuna) ;
-            if ( NumLidos != 3 )
-            {
-               return TST_CondRetParm ;
-            } /* if */
-
-            CondRetObtido = MAT_IrNoDireita(&pontMat, valorLinha, valorColuna);
-
-            return TST_CompararInt( CondRetEsperada , CondRetObtido ,
-                                    "Retorno errado ao ir para leste." );
-
-         } /* fim ativa: Testar MAT Ir para nó leste */
-
-      /* Testar MAT Obter valor corrente */
-
-         else if ( strcmp( ComandoTeste , OBTER_VAL_CMD ) == 0 )
+         else if ( strcmp( ComandoTeste , INS_DIR_CMD ) == 0 )
          {
 
             NumLidos = LER_LerParametros( "ci" ,
-                               &ValorEsperado , &CondRetEsperada );
+                               &ValorDado , &CondRetEsperada ) ;
             if ( NumLidos != 2 )
             {
                return TST_CondRetParm ;
             } /* if */
 
-            CondRetObtido = MAT_ObterValorCorr( &ValorObtido );
+            CondRetObtido = ARV_InserirDireita( ValorDado ) ;
 
-         Ret = TST_CompararInt( CondRetEsperada , CondRetObtido ,
+            return TST_CompararInt( CondRetEsperada , CondRetObtido ,
+                                    "Retorno errado inserir àa direita." );
+
+         } /* fim ativa: Testar ARV Adicionar filho à direita */
+
+      /* Testar ARV Adicionar filho à esquerda */
+
+         else if ( strcmp( ComandoTeste , INS_ESQ_CMD ) == 0 )
+         {
+
+            NumLidos = LER_LerParametros( "ci" ,
+                               &ValorDado , &CondRetEsperada ) ;
+            if ( NumLidos != 2 )
+            {
+               return TST_CondRetParm ;
+            } /* if */
+
+            CondRetObtido = ARV_InserirEsquerda( ValorDado ) ;
+
+            return TST_CompararInt( CondRetEsperada , CondRetObtido ,
+                                    "Retorno errado ao inserir à esquerda." );
+
+         } /* fim ativa: Testar ARV Adicionar filho à esquerda */
+
+      /* Testar ARV Ir para nó pai */
+
+         else if ( strcmp( ComandoTeste , IR_PAI_CMD ) == 0 )
+         {
+
+            NumLidos = LER_LerParametros( "i" ,
+                               &CondRetEsperada ) ;
+            if ( NumLidos != 1 )
+            {
+               return TST_CondRetParm ;
+            } /* if */
+
+            CondRetObtido = ARV_IrPai( ) ;
+
+            return TST_CompararInt( CondRetEsperada , CondRetObtido ,
+                                    "Retorno errado ao ir para pai." );
+
+         } /* fim ativa: Testar ARV Ir para nó pai */
+
+      /* Testar ARV Ir para nó à esquerda */
+
+         else if ( strcmp( ComandoTeste , IR_ESQ_CMD ) == 0 )
+         {
+
+            NumLidos = LER_LerParametros( "i" ,
+                               &CondRetEsperada ) ;
+            if ( NumLidos != 1 )
+            {
+               return TST_CondRetParm ;
+            } /* if */
+
+            CondRetObtido = ARV_IrNoEsquerda( ) ;
+
+            return TST_CompararInt( CondRetEsperada , CondRetObtido ,
+                                    "Retorno errado ao ir para esquerda." );
+
+         } /* fim ativa: Testar ARV Ir para nó à esquerda */
+
+      /* Testar ARV Ir para nó à direita */
+
+         else if ( strcmp( ComandoTeste , IR_DIR_CMD ) == 0 )
+         {
+
+            NumLidos = LER_LerParametros( "i" ,
+                               &CondRetEsperada ) ;
+            if ( NumLidos != 1 )
+            {
+               return TST_CondRetParm ;
+            } /* if */
+
+            CondRetObtido = ARV_IrNoDireita( ) ;
+
+            return TST_CompararInt( CondRetEsperada , CondRetObtido ,
+                                    "Retorno errado ao ir para direita." );
+
+         } /* fim ativa: Testar ARV Ir para nó à direita */
+
+      /* Testar ARV Obter valor corrente */
+
+         else if ( strcmp( ComandoTeste , OBTER_VAL_CMD ) == 0 )
+         {
+
+            NumLidos = LER_LerParametros( "ci" ,
+                               &ValorEsperado , &CondRetEsperada ) ;
+            if ( NumLidos != 2 )
+            {
+               return TST_CondRetParm ;
+            } /* if */
+
+            CondRetObtido = ARV_ObterValorCorr( &ValorObtido ) ;
+
+            Ret = TST_CompararInt( CondRetEsperada , CondRetObtido ,
                                    "Retorno errado ao obter valor corrente." );
 
             if ( Ret != TST_CondRetOK )
@@ -190,16 +236,16 @@
             } /* if */
 
             return TST_CompararChar( ValorEsperado , ValorObtido ,
-                                     "Conteúdo do nó está errado." );
+                                     "Conteúdo do nó está errado." ) ;
 
-         } /* fim ativa: Testar MAT Obter valor corrente */
+         } /* fim ativa: Testar ARV Obter valor corrente */
 
-      /* Testar MAT Destruir matriz */
+      /* Testar ARV Destruir árvore */
 
          else if ( strcmp( ComandoTeste , DESTROI_CMD ) == 0 )
          {
 
-            MAT_DestruirMatriz( &pontMat ) ;
+            ARV_DestruirArvore( ) ;
 
             return TST_CondRetOK ;
 
