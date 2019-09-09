@@ -1,6 +1,6 @@
 #include	<malloc.h>
 #include	<stdio.h>
-#include	"LISTA.H"
+
 
 #define MATRIZ_OWN
 #include "MATRIZ.H"
@@ -37,47 +37,47 @@ typedef struct tgMatriz {
 
 } tpMatriz ;
 
+/////////////
+void ImprimeMat( tpMatriz * pMat);
 
-
-tpMatriz * pMatriz = NULL ;
-
-static tpNoMatriz ** mat = NULL;
-
-void imprimeMat( tpNoMatriz ** mat, int fil, int col);
-
-void DestroiMatriz( tpNoMatriz ** mat );
+void DestroiMatriz( tpNoMatriz * pMat );
 
 void ExcluiNoLista(void * elem);
 
+void ResetaMat(tpMatriz * pMat);
 
-MAT_tpCondRet MAT_CriarMatriz(tpMatriz * pMat, int fil, int col)
+void ApagaNo(tpMatriz * pMat);
+
+void ResetaCorr(tpMatriz * pMat);
+///////////
+
+MAT_tpCondRet MAT_CriarMatriz(tpMatriz **pMat, int fil,int col)
 {
-	
 	int i,j;
+	tpNoMatriz ** mat;
 	printf("\n[CriarMatriz]\n");  
-  //  if ( pMatriz != NULL )
-  //  {
-		//printf("funcionou!\n");
-  //      MAT_DestruirMatriz( ) ;
-  //  } /* if */
-
-	
-    pMatriz = ( tpMatriz * ) malloc( sizeof( tpMatriz )) ;
-	//pMat = ( tpMatriz * ) malloc( sizeof( tpMatriz )) ;
-
-    if ( pMatriz == NULL )
+    if ( *pMat != NULL )
+    {
+		printf("\nah nao\n");
+        MAT_DestruirMatriz( *pMat ) ;
+    } /* if */
+	printf("aham\n");
+	*pMat = ( tpMatriz * ) malloc( sizeof( tpMatriz )) ;
+    if ( pMat == NULL )
     {
 		
 		return MAT_CondRetFaltouMemoria ;
     } /* if */
-
+	printf("sei...\n");
 	mat = (tpNoMatriz**)malloc(fil*sizeof(tpNoMatriz*));
 	for(i=0; i<fil ;i++)
 	{
+		printf("i\n");
 		mat[i] = (tpNoMatriz*)malloc(col*sizeof(tpNoMatriz));
 		for(j=0; j<col; j++)
 		{
-			mat[i][j].Valor = NULL;
+			printf("j\n");
+			mat[i][j].Valor = (void*)('a'+i*col + j);
 			mat[i][j].pNorte = NULL;
 			mat[i][j].pNordeste = NULL;
 			mat[i][j].pNoroeste = NULL;
@@ -91,8 +91,10 @@ MAT_tpCondRet MAT_CriarMatriz(tpMatriz * pMat, int fil, int col)
 
 	for(i=0; i<fil ;i++){
 		for(j=0; j<col; j++){
+			mat[i][j].Valor = (void*)('a' +(i*col) + j);
 			if(i>0)
 			{
+				
 				mat[i][j].pNorte = &mat[i-1][j];
 				if(j>0)
 					mat[i][j].pNoroeste = &mat[i-1][j-1];
@@ -119,90 +121,338 @@ MAT_tpCondRet MAT_CriarMatriz(tpMatriz * pMat, int fil, int col)
 	}// end for i
 
 	
-    pMatriz->pNoOrigem = &mat[0][0] ;
-	pMatriz->pNoCorr = pMatriz->pNoOrigem ;
-	pMatriz->fileiras = fil;
-	pMatriz->colunas = col;
-
-	pMat = pMatriz;
-	imprimeMat(mat,fil,col);
+    (*pMat)->pNoOrigem = &mat[0][0] ;
+	(*pMat)->pNoCorr = &mat[0][0];
+	(*pMat)->fileiras = fil;
+	(*pMat)->colunas = col;
 	
+
+	//ImprimeMat(*pMat);
     return MAT_CondRetOK ;
 
-}
+}/* Fim função: ARV Destruir árvore */
 
-
-void MAT_DestruirMatriz( void )
-{
-	printf("\n[DestruirMatriz]\n");
-    if ( pMatriz != NULL )
-	{
-         if ( pMatriz->pNoOrigem != NULL )
-         {
-            DestroiMatriz( mat ) ;
-         } /* if */
-
-
-         free( pMatriz ) ;
-         pMatriz = NULL ;
-	} /* if */
+void MAT_DestruirMatriz( tpMatriz * pMat )
+{	
 	
+	int fil = pMat->fileiras;
+	int i = fil,j;
+	pMat->pNoCorr = pMat->pNoOrigem;
+	printf("\n[DestroiMatriz]\n"); 
+	while(fil>1)
+	{
+		for(i=fil;i>0;i--){
+			pMat->pNoCorr = pMat->pNoCorr->pSul;
+		}
+		DestroiMatriz(pMat->pNoCorr);
+		pMat->pNoCorr = pMat->pNoOrigem;
+		fil--;
+	}
+	DestroiMatriz(pMat->pNoCorr);
+	
+
+	free(pMat);
 } /* Fim função: ARV Destruir árvore */
 
 
-void DestroiMatriz( tpNoMatriz ** mat )
+
+void DestroiMatriz(tpNoMatriz * pMat )
 {
-	int i;
+	int i,cont = 0;
+	printf("la vai...");
+	free(pMat);
 	
-	for(i=0; i<pMatriz->fileiras ;i++)
-	{
-		
-		free(mat[i]);
-		
-	}
+	printf("foi krl\n");
 	
-	free(mat);
-	
-	return;
-
-	
-} /* Fim função: ARV Destruir a estrutura da árvore */
+}
 
 
-void imprimeMat(tpNoMatriz ** mat, int fil, int col)
+void ResetaMat(tpMatriz * pMat)
 {
-	int i,j;
-
+	int i,j,cont = 0;
+	int fil = pMat->fileiras;
+	int col = pMat->colunas;
 	for(i=0; i<fil; i++)
 	{
 		printf("\n");
+		pMat->pNoCorr = pMat->pNoOrigem;
+		while(cont!=i)
+		{
+			pMat->pNoCorr = pMat->pNoCorr->pSul;
+			cont++;
+		}cont = 0;
+
 		for(j=0; j<col; j++)
 		{
-			mat[i][j].Valor = (void*)('a' +(i*col) + j);
-			printf("%c	",mat[i][j].Valor);
+			pMat->pNoCorr->Valor = (void*)('a'+i*col + j);
+			if(j<col-1)
+				pMat->pNoCorr = pMat->pNoCorr->pLeste;
 		}
 	}
 
-	printf("valor corrente: %c\n", pMatriz->pNoCorr->Valor);
-	
 }
 
-void ExcluiNoLista(void * elem){
-	free(elem);
-}
-
-
-int main()
+void ImprimeMat(tpMatriz *pMat)
 {
-	tpMatriz * pMat1 = NULL;
-	MAT_tpCondRet condRet;
+	int i,j,cont = 0;
+	int fil = pMat->fileiras;
+	int col = pMat->colunas;
+	printf("\n[ImprimeMatriz]\n"); 
+	for(i=0; i<fil; i++)
+	{
+		printf("\n");
+		pMat->pNoCorr = pMat->pNoOrigem;
+		while(cont!=i)
+		{
+			pMat->pNoCorr = pMat->pNoCorr->pSul;
+			cont++;
+		}cont = 0;
 
-	condRet = MAT_CriarMatriz(pMat1,3,3);
-
-	printf("valor 0,0 pMat1: %c\n", pMat1->pNoOrigem->Valor);
-	MAT_DestruirMatriz();
-
-	return 0;
+		for(j=0; j<col; j++)
+		{
+			
+			printf("%c	",(char)pMat->pNoCorr->Valor);
+			if(j<col-1)
+				pMat->pNoCorr = pMat->pNoCorr->pLeste;
+		}
+	}
+	ResetaMat(pMat);
+	printf("\n");
 }
+
+
+void ApagaNo(tpMatriz * pMat)
+{
+	pMat->pNoCorr->Valor = NULL;
+	pMat->pNoCorr->pNorte = NULL;
+	pMat->pNoCorr->pNordeste = NULL;
+	pMat->pNoCorr->pNoroeste = NULL;
+	pMat->pNoCorr->pLeste = NULL;
+	pMat->pNoCorr->pOeste = NULL;
+	pMat->pNoCorr->pSudeste = NULL;
+	pMat->pNoCorr->pSul = NULL;
+	pMat->pNoCorr->pSudoeste = NULL;
+}
+
+void ResetaCorr(tpMatriz * pMat)
+{
+	pMat->pNoCorr = pMat->pNoOrigem;
+	return;
+}
+
+
+
+
+
+MAT_tpCondRet InsereMatriz(tpMatriz*pMatriz, void * Valor)
+{
+  
+  //tratar matriz nao existente
+
+  if(pMatriz->pNoOrigem==NULL)
+  {
+    return MAT_CondRetMatrizNaoExiste;
+  }
+  /*tratar falha no nó corrente*/
+  if(pMatriz->pNoCorr==NULL)
+  {
+    return MAT_CondRetErroEstrutura;
+  }
+  pMatriz->pNoCorr->Valor = Valor;
+  return MAT_CondRetOK;
+}
+MAT_tpCondRet RetiraMatriz(tpMatriz*pMatriz)
+{
+  //tratar matriz nao existente
+   if(pMatriz->pNoOrigem==NULL)
+  {
+    return MAT_CondRetMatrizNaoExiste;
+  }
+  /*tratar falha no nó corrente*/
+  if(pMatriz->pNoCorr==NULL)
+  {
+    return MAT_CondRetErroEstrutura;
+  }
+  pMatriz->pNoCorr->Valor = NULL;
+  return MAT_CondRetOK;
+}
+
+MAT_tpCondRet MoveLeste(tpMatriz*pMatriz)
+{
+  //tratar matriz nao existente
+   if(pMatriz->pNoOrigem==NULL)
+  {
+    return MAT_CondRetMatrizNaoExiste;
+  }
+  /*tratar falha no nó corrente*/
+  if(pMatriz->pNoCorr==NULL)
+  {
+    return MAT_CondRetErroEstrutura;
+  }
+  /*tratar Leste não existente*/
+  if(pMatriz->pNoCorr->pLeste ==NULL)
+  {
+    return MAT_CondRetNaoPossuiVizinho;
+  }
+  pMatriz->pNoCorr = pMatriz->pNoCorr->pLeste;
+  return MAT_CondRetOK;
+}
+MAT_tpCondRet MoveOeste(tpMatriz*pMatriz)
+{
+  //tratar matriz nao existente
+   if(pMatriz->pNoOrigem==NULL)
+  {
+    return MAT_CondRetMatrizNaoExiste;
+  }
+  /*tratar falha no nó corrente*/
+  if(pMatriz->pNoCorr==NULL)
+  {
+    return MAT_CondRetErroEstrutura;
+  }
+  /*tratar Leste não existente*/
+  if(pMatriz->pNoCorr->pOeste ==NULL)
+  {
+    return MAT_CondRetNaoPossuiVizinho;
+  }
+  pMatriz->pNoCorr = pMatriz->pNoCorr->pOeste;
+  return MAT_CondRetOK;
+}
+MAT_tpCondRet MoveNorte(tpMatriz*pMatriz)
+{
+  //tratar matriz nao existente
+   if(pMatriz->pNoOrigem==NULL)
+  {
+    return MAT_CondRetMatrizNaoExiste;
+  }
+  /*tratar falha no nó corrente*/
+  if(pMatriz->pNoCorr==NULL)
+  {
+    return MAT_CondRetErroEstrutura;
+  }
+  /*tratar Leste não existente*/
+  if(pMatriz->pNoCorr->pNorte ==NULL)
+  {
+    return MAT_CondRetNaoPossuiVizinho;
+  }
+  pMatriz->pNoCorr = pMatriz->pNoCorr->pNorte;
+  return MAT_CondRetOK;
+}
+MAT_tpCondRet MoveSul(tpMatriz*pMatriz)
+{
+  //tratar matriz nao existente
+   if(pMatriz->pNoOrigem==NULL)
+  {
+    return MAT_CondRetMatrizNaoExiste;
+  }
+  /*tratar falha no nó corrente*/
+  if(pMatriz->pNoCorr==NULL)
+  {
+    return MAT_CondRetErroEstrutura;
+  }
+  /*tratar Leste não existente*/
+  if(pMatriz->pNoCorr->pSul ==NULL)
+  {
+    return MAT_CondRetNaoPossuiVizinho;
+  }
+  pMatriz->pNoCorr = pMatriz->pNoCorr->pSul;
+  return MAT_CondRetOK;
+}
+MAT_tpCondRet MoveSudeste(tpMatriz*pMatriz)
+{
+  //tratar matriz nao existente
+   if(pMatriz->pNoOrigem==NULL)
+  {
+    return MAT_CondRetMatrizNaoExiste;
+  }
+  /*tratar falha no nó corrente*/
+  if(pMatriz->pNoCorr==NULL)
+  {
+    return MAT_CondRetErroEstrutura;
+  }
+  /*tratar Leste não existente*/
+  if(pMatriz->pNoCorr->pSudeste ==NULL)
+  {
+    return MAT_CondRetNaoPossuiVizinho;
+  }
+  pMatriz->pNoCorr = pMatriz->pNoCorr->pSudeste;
+  return MAT_CondRetOK;
+}
+MAT_tpCondRet MoveSudoeste(tpMatriz*pMatriz)
+{
+  //tratar matriz nao existente
+   if(pMatriz->pNoOrigem==NULL)
+  {
+    return MAT_CondRetMatrizNaoExiste;
+  }
+  /*tratar falha no nó corrente*/
+  if(pMatriz->pNoCorr==NULL)
+  {
+    return MAT_CondRetErroEstrutura;
+  }
+  /*tratar Leste não existente*/
+  if(pMatriz->pNoCorr->pSudoeste ==NULL)
+  {
+    return MAT_CondRetNaoPossuiVizinho;
+  }
+  pMatriz->pNoCorr = pMatriz->pNoCorr->pSudoeste;
+  return MAT_CondRetOK;
+}
+MAT_tpCondRet MoveNordeste(tpMatriz*pMatriz)
+{
+  //tratar matriz nao existente
+   if(pMatriz->pNoOrigem==NULL)
+  {
+    return MAT_CondRetMatrizNaoExiste;
+  }
+  /*tratar falha no nó corrente*/
+  if(pMatriz->pNoCorr==NULL)
+  {
+    return MAT_CondRetErroEstrutura;
+  }
+  /*tratar Leste não existente*/
+  if(pMatriz->pNoCorr->pNordeste ==NULL)
+  {
+    return MAT_CondRetNaoPossuiVizinho;
+  }
+  pMatriz->pNoCorr = pMatriz->pNoCorr->pNordeste;
+  return MAT_CondRetOK;
+}
+MAT_tpCondRet MoveNoroeste(tpMatriz*pMatriz)
+{
+  //tratar matriz nao existente
+   if(pMatriz->pNoOrigem==NULL)
+  {
+    return MAT_CondRetMatrizNaoExiste;
+  }
+  /*tratar falha no nó corrente*/
+  if(pMatriz->pNoCorr==NULL)
+  {
+    return MAT_CondRetErroEstrutura;
+  }
+  /*tratar Leste não existente*/
+  if(pMatriz->pNoCorr->pNoroeste ==NULL)
+  {
+    return MAT_CondRetNaoPossuiVizinho;
+  }
+  pMatriz->pNoCorr = pMatriz->pNoCorr->pNoroeste;
+  return MAT_CondRetOK;
+}
+
+MAT_tpCondRet ObterValor(tpMatriz*pMatriz, void *ValorCorrente)
+{
+  //tratar matriz nao existente
+  if(pMatriz->pNoOrigem==NULL)
+  {
+    return MAT_CondRetMatrizNaoExiste;
+  }
+  /*tratar falha no nó corrente*/
+  if(pMatriz->pNoCorr==NULL)
+  {
+    return MAT_CondRetErroEstrutura;
+  }
+  ValorCorrente = pMatriz->pNoCorr->Valor;
+  return MAT_CondRetOK;
+}
+
 
 
