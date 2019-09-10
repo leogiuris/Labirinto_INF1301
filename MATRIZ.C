@@ -229,9 +229,10 @@ void MAT_DestruirMatriz( tpMatriz * pMat )
 MAT_tpCondRet MAT_InsereValor(tpMatriz*pMatriz, void * Valor)
 { 
   //tratar matriz nao existente
-	printf("aaaaaaa\n");
-	if(&pMatriz==NULL)
+	//printf("aaaaaaa\n");
+	if(pMatriz==NULL)
 	{
+
 		return MAT_CondRetMatrizNaoExiste;
 	}
 	/*tratar falha no nó corrente*/

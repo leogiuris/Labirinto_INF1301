@@ -167,7 +167,7 @@ tpMatriz * pontMat [QTD_MAT];
 		 CondRetObtido = ObterValor(pontMat[0], l);
 
 			 printf("\n%s\n",frase);
-				ImprimeLista(lista);
+			ImprimeLista(lista);
 
             return TST_CompararInt( CondRetEsperada , CondRetObtido ,
                                     "Retorno errado ao criar matriz" );
@@ -182,7 +182,7 @@ tpMatriz * pontMat [QTD_MAT];
 
 
             NumLidos = LER_LerParametros("i" ,&CondRetEsperada);
-            if ( NumLidos != 3 )
+            if ( NumLidos != 1 )
             {
                return TST_CondRetParm ;
             } /* if */
@@ -203,7 +203,7 @@ tpMatriz * pontMat [QTD_MAT];
 
             NumLidos = LER_LerParametros("i" ,
                                &CondRetEsperada) ;
-            if ( NumLidos != 3 )
+            if ( NumLidos != 1 )
             {
                return TST_CondRetParm ;
             } /* if */
@@ -229,11 +229,11 @@ tpMatriz * pontMat [QTD_MAT];
                return TST_CondRetParm ;
             } /* if */
 
-			//printf("coe2\n");
+			printf("coe2\n");
 
             CondRetObtido = ObterValor( pontMat[0], l);
 
-			//printf("coe3\n");
+			printf("coe3\n");
          Ret = TST_CompararInt( CondRetEsperada , CondRetObtido ,
                                    "Retorno errado ao obter valor corrente." );
 
@@ -243,13 +243,19 @@ tpMatriz * pontMat [QTD_MAT];
                return Ret ;
             } /* if */
 
-			//printf("coe4\n");
-
+			printf("coe4\n");
+			ImprimeLista(lista);
+			ImprimeLista(l);
 			IrInicioLista(lista);
+			printf("coe5\n");
 			IrInicioLista(l);
-
+			printf("coe6\n");
+			printf("%c\n",*(LIS_tppLista*)LIS_ObterValor(lista));
+			printf("coe7\n");
+			printf("%c\n",*(LIS_tppLista*)LIS_ObterValor(l));
+			printf("bbbbbbbb\n");
 			return TST_CondRetOK;
-            return TST_CompararChar(  *(char*)LIS_ObterValor(lista) , *(char*)LIS_ObterValor(l) ,"Conteúdo do nó está errado." );
+            //return TST_CompararChar(  *(char*)LIS_ObterValor(lista) , *(char*)LIS_ObterValor(l) ,"Conteúdo do nó está errado." );
 
 
 
@@ -324,7 +330,7 @@ tpMatriz * pontMat [QTD_MAT];
 	   IrInicioLista(lista);
 	   //printf("ui ui\n");
 	   
-	  // printf("PRONTO??\n");
+	  printf("PRONTO??\n");
 		IrInicioLista(lista);
 
 	   while(ret != LIS_CondRetFimLista)
@@ -332,6 +338,6 @@ tpMatriz * pontMat [QTD_MAT];
 		   printf("%c",*(LIS_tppLista*)LIS_ObterValor(lista));
 		   ret = LIS_AvancarElementoCorrente(lista,1);
 	   }
-	  // printf("coe\n");
+	  printf("coe\n");
 
    }
