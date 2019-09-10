@@ -2,7 +2,7 @@
 #define Matriz_
 /***************************************************************************
 *
-*  $MCD Módulo de definição: Módulo árvore
+*  $MCD MÃ³dulo de definiÃ§Ã£o: MÃ³dulo Ã¡rvore
 *
 *  Arquivo gerado:              Matriz.H
 *  Letras identificadoras:      ARV
@@ -14,23 +14,23 @@
 *  Gestor:  DI/PUC-Rio
 *  Autores: avs - Arndt von Staa
 *
-*  $HA Histórico de evolução:
-*     Versão  Autor    Data     Observações
-*       3.00   avs   28/02/2003 Uniformização da interface das funções e
-*                               de todas as condições de retorno.
-*       2.00   avs   03/08/2002 Eliminação de código duplicado, reestruturação
-*       1.00   avs   15/08/2001 Início do desenvolvimento
+*  $HA HistÃ³rico de evoluÃ§Ã£o:
+*     VersÃ£o  Autor    Data     ObservaÃ§Ãµes
+*       3.00   avs   28/02/2003 UniformizaÃ§Ã£o da interface das funÃ§Ãµes e
+*                               de todas as condiÃ§Ãµes de retorno.
+*       2.00   avs   03/08/2002 EliminaÃ§Ã£o de cÃ³digo duplicado, reestruturaÃ§Ã£o
+*       1.00   avs   15/08/2001 InÃ­cio do desenvolvimento
 *
-*  $ED Descrição do módulo
-*     Este módulo implementa um conjunto simples de funções para criar e
-*     explorar árvores binárias.
-*     A árvore possui uma cabeça que contém uma referência para a raíz da
-*     árvore e outra para um nó corrente da árvore.
-*     A cada momento o módulo admite no máximo uma única árvore.
-*     Ao iniciar a execução do programa não existe árvore.
-*     A árvore poderá estar vazia. Neste caso a raiz e o nó corrente
-*     serão nulos, embora a cabeça esteja definida.
-*     O nó corrente será nulo se e somente se a árvore estiver vazia.
+*  $ED DescriÃ§Ã£o do mÃ³dulo
+*     Este mÃ³dulo implementa um conjunto simples de funÃ§Ãµes para criar e
+*     explorar matrizes.
+*     A matriz possui uma cabeÃ§a que contÃ©m uma referÃªncia para a raÃ­z da
+*     Ã¡rvore e outra para um nÃ³ corrente da Ã¡rvore.
+*     A cada momento o mÃ³dulo admite no mÃ¡ximo uma Ãºnica Ã¡rvore.
+*     Ao iniciar a execuÃ§Ã£o do programa nÃ£o existe Ã¡rvore.
+*     A Ã¡rvore poderÃ¡ estar vazia. Neste caso a raiz e o nÃ³ corrente
+*     serÃ£o nulos, embora a cabeÃ§a esteja definida.
+*     O nÃ³ corrente serÃ¡ nulo se e somente se a Ã¡rvore estiver vazia.
 *
 ***************************************************************************/
  
@@ -43,7 +43,7 @@
 
 /***********************************************************************
 *
-*  $TC Tipo de dados: ARV Condicoes de retorno
+*  $TC Tipo de dados: MAT Condicoes de retorno
 *
 *
 ***********************************************************************/
@@ -53,44 +53,34 @@
          MAT_CondRetOK = 0 ,
                /* Executou correto */
 
-         MAT_CondRetNaoCriouRaiz = 1 ,
-               /* Não criou nó raiz */
+		 MAT_CondRetErroEstrutura = 1 ,
+               /* Estrutura da matriz estÃ¡ errada */
 
-         MAT_CondRetErroEstrutura = 2 ,
-               /* Estrutura da árvore está errada */
+         MAT_CondRetMatrizNaoExiste = 2 ,
+               /* Matriz nÃ£o existe */
 
-         MAT_CondRetNaoEhFolha = 3 ,
-               /* Não é folha relativa à direção de inserção desejada */
+         MAT_CondRetMatrizVazia = 3 ,
+               /* Matriz estÃ¡ vazia */
 
-         MAT_CondRetMatrizNaoExiste = 4 ,
-               /* Árvore não existe */
+         MAT_CondRetNaoPossuiVizinho = 4 ,
+               /* NÃ³ corrente nÃ£o possui filho na direÃ§Ã£o desejada */
 
-         MAT_CondRetMatrizVazia = 5 ,
-               /* Árvore está vazia */
+         MAT_CondRetFaltouMemoria = 5,
+               /* Faltou memÃ³ria ao alocar dados */
 
-         MAT_CondRetNohEhRaiz = 6 ,
-               /* Nó corrente é raiz */
+		 MAT_CondRetTamanhoInvalido = 6,
+			   /*Tamanho nÃ£o Ã© grande o suficiente para se formar uma matriz */
 
-         MAT_CondRetNaoPossuiVizinho = 7 ,
-               /* Nó corrente não possui filho na direção desejada */
-
-         MAT_CondRetFaltouMemoria = 8,
-               /* Faltou memória ao alocar dados */
-
-		 MAT_CondRetTamanhoInvalido = 9
    } MAT_tpCondRet ;
-
-
-
 
    typedef struct tgMatriz tpMatriz;
 /***********************************************************************
 *
-*  $FC Função: ARV Criar matriz
+*  $FC FunÃ§Ã£o: MAT Criar matriz
 *
-*  $ED Descrição da função
-*     Cria uma nova árvore vazia.
-*     Caso já exista uma árvore, esta será destruída.
+*  $ED DescriÃ§Ã£o da funÃ§Ã£o
+*     Cria uma nova matriz vazia.
+*     Caso jÃ¡ exista uma matriz, esta serÃ¡ destruÃ­da.
 *
 *  $FV Valor retornado
 *     MAT_CondRetOK
@@ -103,92 +93,25 @@
 
 /***********************************************************************
 *
-*  $FC Função: ARV Destruir árvore
+*  $FC FunÃ§Ã£o: MAT Destruir matriz
 *
-*  $ED Descrição da função
-*     Destrói o corpo e a cabeça da árvore, anulando a árvore corrente.
-*     Faz nada caso a árvore corrente não exista.
+*  $ED DescriÃ§Ã£o da funÃ§Ã£o
+*     DestrÃ³i a matriz ao qual o ponteiro corrente da estrutura cabeÃ§a estiver apontando.
+*     Faz nada caso a matriz corrente nÃ£o exista.
 *
 ***********************************************************************/
 
    void MAT_DestruirMatriz( tpMatriz * pMat ) ;
 
-
 /***********************************************************************
 *
-*  $FC Função: ARV Adicionar filho à esquerda
-*
-*  $EP Parâmetros
-*     $P ValorParm - valor a ser inserido no novo nó.
-*
-*  $FV Valor retornado
-*     MAT_CondRetOK
-*     MAT_CondRetErroEstrutura
-*     MAT_CondRetFaltouMemoria
-*     MAT_CondRetNaoEhFolha     - caso não seja folha para a esquerda
-*
-***********************************************************************/
-
-	//MAT_tpCondRet MAT_InsereValorNo(int fil, int col, tpMatriz * pMatriz);
-
-
-/***********************************************************************
-*
-*  $FC Função: ARV Adicionar filho à direita
-*
-*  $EP Parâmetros
-*     $P ValorParm - valor a ser inserido no novo nó
-*
-*  $FV Valor retornado
-*     MAT_CondRetOK
-*     MAT_CondRetErroEstrutura
-*     MAT_CondRetFaltouMemoria
-*     MAT_CondRetNaoEhFolha     - caso não seja folha para a direita
-*
-***********************************************************************/
-
-   MAT_tpCondRet MAT_InserirDireita( char ValorParm ) ;
-
-
-/***********************************************************************
-*
-*  $FC Função: ARV Ir para nó pai
+*  $FC FunÃ§Ã£o: ARV Ir para nÃ³ Ã  direita
 *
 *  $FV Valor retornado
 *     MAT_CondRetOK
 *     MAT_CondRetMatrizNaoExiste
 *     MAT_CondRetMatrizVazia
-*     MAT_CondRetNoEhRaiz
-*
-***********************************************************************/
-
-   MAT_tpCondRet MAT_IrPai( void ) ;
-
-
-/***********************************************************************
-*
-*  $FC Função: ARV Ir para nó à esquerda
-*
-*  $FV Valor retornado
-*     MAT_CondRetOK
-*     MAT_CondRetMatrizNaoExiste
-*     MAT_CondRetMatrizVazia
-*     MAT_CondRetNaoPossuiFilho   - nó corrente não possui filho à esquerda
-*
-***********************************************************************/
-
-   MAT_tpCondRet MAT_IrNoEsquerda( void ) ;
-
-
-/***********************************************************************
-*
-*  $FC Função: ARV Ir para nó à direita
-*
-*  $FV Valor retornado
-*     MAT_CondRetOK
-*     MAT_CondRetMatrizNaoExiste
-*     MAT_CondRetMatrizVazia
-*     MAT_CondRetNaoPossuiFilho   - nó corrente não possui filho à direita
+*     MAT_CondRetNaoPossuiFilho   - nÃ³ corrente nÃ£o possui filho Ã  direita
 *
 ***********************************************************************/
 
@@ -197,11 +120,11 @@
 
 /***********************************************************************
 *
-*  $FC Função: ARV Obter valor corrente
+*  $FC FunÃ§Ã£o: ARV Obter valor corrente
 *
-*  $EP Parâmetros
-*     $P ValorParm - é o parâmetro que receberá o valor contido no nó.
-*                    Este parâmetro é passado por referência.
+*  $EP ParÃ¢metros
+*     $P ValorParm - Ã© o parÃ¢metro que receberÃ¡ o valor contido no nÃ³.
+*                    Este parÃ¢metro Ã© passado por referÃªncia.
 *
 *  $FV Valor retornado
 *     MAT_CondRetOK
@@ -214,7 +137,7 @@
 
 #undef Matriz_EXT
 
-/********** Fim do módulo de definição: Módulo árvore **********/
+/********** Fim do mÃ³dulo de definiÃ§Ã£o: MÃ³dulo Ã¡rvore **********/
 
 #else
 #endif
