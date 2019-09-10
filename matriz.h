@@ -2,10 +2,10 @@
 #define Matriz_
 /***************************************************************************
 *
-*  $MCD Módulo de definição: Módulo árvore
+*  $MCD Módulo de definição: Módulo matriz
 *
 *  Arquivo gerado:              Matriz.H
-*  Letras identificadoras:      ARV
+*  Letras identificadoras:      MAT
 *
 *  Nome da base de software:    Exemplo de teste automatizado
 *  Arquivo da base de software: D:\AUTOTEST\PROJETOS\SIMPLES.BSW
@@ -139,7 +139,7 @@ MAT_tpCondRet MoveOeste( void ) ;
 *     MAT_CondRetOK
 *     MAT_CondRetMatrizNaoExiste
 *     MAT_CondRetMatrizVazia
-*     MAT_CondRetNaoPossuiFilho   - nó corrente não possui filho ao norte
+*     MAT_CondRetNaoPossuiFilho   - nó corrente não possui vizinho ao norte
 *
 ***********************************************************************/
 
@@ -153,7 +153,7 @@ MAT_tpCondRet MoveNorte( void ) ;
 *     MAT_CondRetOK
 *     MAT_CondRetMatrizNaoExiste
 *     MAT_CondRetMatrizVazia
-*     MAT_CondRetNaoPossuiFilho   - nó corrente não possui filho ao sul
+*     MAT_CondRetNaoPossuiFilho   - nó corrente não possui vizinho ao sul
 *
 ***********************************************************************/
 
@@ -167,7 +167,7 @@ MAT_tpCondRet MoveSul( void ) ;
 *     MAT_CondRetOK
 *     MAT_CondRetMatrizNaoExiste
 *     MAT_CondRetMatrizVazia
-*     MAT_CondRetNaoPossuiFilho   - nó corrente não possui filho à sudeste
+*     MAT_CondRetNaoPossuiFilho   - nó corrente não possui vizinho à sudeste
 *
 ***********************************************************************/
 
@@ -181,7 +181,7 @@ MAT_tpCondRet MoveSudeste( void ) ;
 *     MAT_CondRetOK
 *     MAT_CondRetMatrizNaoExiste
 *     MAT_CondRetMatrizVazia
-*     MAT_CondRetNaoPossuiFilho   - nó corrente não possui filho à sudoeste
+*     MAT_CondRetNaoPossuiFilho   - nó corrente não possui vizinho à sudoeste
 *
 ***********************************************************************/
 
@@ -195,7 +195,7 @@ MAT_tpCondRet MoveSudoeste( void ) ;
 *     MAT_CondRetOK
 *     MAT_CondRetMatrizNaoExiste
 *     MAT_CondRetMatrizVazia
-*     MAT_CondRetNaoPossuiFilho   - nó corrente não possui filho à nordeste
+*     MAT_CondRetNaoPossuiFilho   - nó corrente não possui vizinho à nordeste
 *
 ***********************************************************************/
 
@@ -209,7 +209,7 @@ MAT_tpCondRet MoveNordeste( void ) ;
 *     MAT_CondRetOK
 *     MAT_CondRetMatrizNaoExiste
 *     MAT_CondRetMatrizVazia
-*     MAT_CondRetNaoPossuiFilho   - nó corrente não possui filho à noroeste
+*     MAT_CondRetNaoPossuiFilho   - nó corrente não possui vizinho à noroeste
 *
 ***********************************************************************/
 
