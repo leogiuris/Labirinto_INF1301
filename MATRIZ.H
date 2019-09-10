@@ -2,10 +2,10 @@
 #define Matriz_
 /***************************************************************************
 *
-*  $MCD Módulo de definição: Módulo árvore
+*  $MCD Módulo de definição: Módulo matriz
 *
 *  Arquivo gerado:              Matriz.H
-*  Letras identificadoras:      ARV
+*  Letras identificadoras:      MAT
 *
 *  Nome da base de software:    Exemplo de teste automatizado
 *  Arquivo da base de software: D:\AUTOTEST\PROJETOS\SIMPLES.BSW
@@ -24,12 +24,12 @@
 *  $ED Descrição do módulo
 *     Este módulo implementa um conjunto simples de funções para criar e
 *     explorar matrizes.
-*     A matriz possui uma cabeça que contém uma referência para a raíz da
-*     árvore e outra para um nó corrente da árvore.
-*     A cada momento o módulo admite no máximo uma única árvore.
-*     Ao iniciar a execução do programa não existe árvore.
-*     A árvore poderá estar vazia. Neste caso a raiz e o nó corrente
-*     serão nulos, embora a cabeça esteja definida.
+*     A matriz possui uma cabeça que contém uma referência para o elemento a[0][0],
+*     chamado de nó origem da matriz e outra para um nó corrente da árvore.
+*     O módulo permite diversas matrizes
+*     Ao iniciar a execução do programa não existe matriz.
+*     A matriz poderá estar vazia. Neste caso o nó origem e o nó corrente
+*     serão nulos, a cabeça também será nula.
 *     O nó corrente será nulo se e somente se a árvore estiver vazia.
 *
 ***************************************************************************/
@@ -105,18 +105,114 @@
 
 /***********************************************************************
 *
-*  $FC Função: ARV Ir para nó à direita
+*  $FC Função: ARV Ir para nó à leste
 *
 *  $FV Valor retornado
 *     MAT_CondRetOK
 *     MAT_CondRetMatrizNaoExiste
 *     MAT_CondRetMatrizVazia
-*     MAT_CondRetNaoPossuiFilho   - nó corrente não possui filho à direita
+*     MAT_CondRetNaoPossuiFilho   - nó corrente não possui vizinho à leste
 *
 ***********************************************************************/
 
-   MAT_tpCondRet MAT_IrNoDireita( void ) ;
+MAT_tpCondRet MoveLeste(tpMatriz*pMatriz);
 
+/***********************************************************************
+*
+*  $FC Função: ARV Ir para nó à oeste
+*
+*  $FV Valor retornado
+*     MAT_CondRetOK
+*     MAT_CondRetMatrizNaoExiste
+*     MAT_CondRetMatrizVazia
+*     MAT_CondRetNaoPossuiFilho   - nó corrente não possui vizinho à oeste
+*
+***********************************************************************/
+
+MAT_tpCondRet MoveOeste(tpMatriz*pMatriz);
+/***********************************************************************
+*
+*  $FC Função: ARV Ir para nó ao norte
+*
+*  $FV Valor retornado
+*     MAT_CondRetOK
+*     MAT_CondRetMatrizNaoExiste
+*     MAT_CondRetMatrizVazia
+*     MAT_CondRetNaoPossuiFilho   - nó corrente não possui vizinho ao norte
+*
+***********************************************************************/
+
+MAT_tpCondRet MoveNorte( tpMatriz*pMatriz ) ;
+
+/***********************************************************************
+*
+*  $FC Função: ARV Ir para nó ao sul
+*
+*  $FV Valor retornado
+*     MAT_CondRetOK
+*     MAT_CondRetMatrizNaoExiste
+*     MAT_CondRetMatrizVazia
+*     MAT_CondRetNaoPossuiFilho   - nó corrente não possui vizinho ao sul
+*
+***********************************************************************/
+
+MAT_tpCondRet MoveSul( tpMatriz*pMatriz ) ;
+
+/***********************************************************************
+*
+*  $FC Função: ARV Ir para nó à sudeste
+*
+*  $FV Valor retornado
+*     MAT_CondRetOK
+*     MAT_CondRetMatrizNaoExiste
+*     MAT_CondRetMatrizVazia
+*     MAT_CondRetNaoPossuiFilho   - nó corrente não possui vizinho à sudeste
+*
+***********************************************************************/
+
+MAT_tpCondRet MoveSudeste( tpMatriz*pMatriz ) ;
+
+/***********************************************************************
+*
+*  $FC Função: ARV Ir para nó à sudoeste
+*
+*  $FV Valor retornado
+*     MAT_CondRetOK
+*     MAT_CondRetMatrizNaoExiste
+*     MAT_CondRetMatrizVazia
+*     MAT_CondRetNaoPossuiFilho   - nó corrente não possui vizinho à sudoeste
+*
+***********************************************************************/
+
+MAT_tpCondRet MoveSudoeste( tpMatriz*pMatriz ) ;
+
+/***********************************************************************
+*
+*  $FC Função: ARV Ir para nó à nordeste
+*
+*  $FV Valor retornado
+*     MAT_CondRetOK
+*     MAT_CondRetMatrizNaoExiste
+*     MAT_CondRetMatrizVazia
+*     MAT_CondRetNaoPossuiFilho   - nó corrente não possui vizinho à nordeste
+*
+***********************************************************************/
+
+MAT_tpCondRet MoveNordeste( tpMatriz*pMatriz ) ;
+
+/***********************************************************************
+*
+*  $FC Função: ARV Ir para nó à noroeste
+*
+*  $FV Valor retornado
+*     MAT_CondRetOK
+*     MAT_CondRetMatrizNaoExiste
+*     MAT_CondRetMatrizVazia
+*     MAT_CondRetNaoPossuiFilho   - nó corrente não possui vizinho à noroeste
+*
+***********************************************************************/
+
+MAT_tpCondRet MoveNoroeste( tpMatriz*pMatriz ) ;
 
 /***********************************************************************
 *
@@ -133,7 +229,15 @@
 *
 ***********************************************************************/
 
-   MAT_tpCondRet MAT_ObterValorCorr( char * ValorParm ) ;
+MAT_tpCondRet MAT_InsereValor(tpMatriz*pMatriz, void * Valor);
+
+MAT_tpCondRet RetiraMatriz(tpMatriz*pMatriz);
+
+MAT_tpCondRet ObterValor(tpMatriz*pMatriz, void *ValorCorrente);
+
+
+
+
 
 #undef Matriz_EXT
 
@@ -141,3 +245,4 @@
 
 #else
 #endif
+

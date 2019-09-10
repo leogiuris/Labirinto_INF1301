@@ -92,6 +92,8 @@ void ExcluiNoLista(void * elem);
 
 void ResetaMat(tpMatriz * pMat);
 
+void RetornaOrigem(tpMatriz * pMat);
+
 /*****  Código das funções exportadas pelo módulo  *****/
 
 /***************************************************************************
@@ -103,7 +105,7 @@ MAT_tpCondRet MAT_CriarMatriz(tpMatriz **pMat, int tam)
 {
 	int i,j;
 	tpNoMatriz ** mat;
-	printf("\n[CriarMatriz]\n");  
+	//printf("[CriarMatriz]\n");  
 
 	if(tam<1)
 		return MAT_CondRetTamanhoInvalido;
@@ -178,7 +180,7 @@ MAT_tpCondRet MAT_CriarMatriz(tpMatriz **pMat, int tam)
 	(*pMat)->tamanho = tam;
 	
 	//printf("krl mano...\n");
-	ImprimeMat(*pMat);
+	//ImprimeMat(*pMat);
     return MAT_CondRetOK ;
 
 }/* Fim função: ARV Destruir árvore */
@@ -191,30 +193,31 @@ MAT_tpCondRet MAT_CriarMatriz(tpMatriz **pMat, int tam)
 
 void MAT_DestruirMatriz( tpMatriz * pMat )
 {	
-	
-	int fil = pMat->tamanho;
-	int i = fil;
-	pMat->pNoCorr = pMat->pNoOrigem;
-	printf("\n[DestroiMatriz]\n"); 
-	while(fil>1)
-	{
+	if(pMat!=NULL){
+		int fil = pMat->tamanho;
+		int i = fil;
+		RetornaOrigem(pMat);
+		//printf("\n[DestroiMatriz]\n"); 
+		while(fil>1)
+		{
 		
-		for(i=fil;i>0;i--){
-			//printf("i");
-			pMat->pNoCorr = pMat->pNoCorr->pSul;
+			for(i=fil;i>0;i--){
+				//printf("i");
+				  MoveSul(pMat);
+			}
+			//printf("\naaaaaa\n");
+			DestroiMatriz(pMat->pNoCorr);
+			//printf("opa\n");
+			RetornaOrigem(pMat);
+			fil--;
 		}
-		//printf("\naaaaaa\n");
+		//printf("foi?..\n");
 		DestroiMatriz(pMat->pNoCorr);
-		//printf("opa\n");
-		pMat->pNoCorr = pMat->pNoOrigem;
-		fil--;
-	}
-	//printf("foi?..\n");
-	DestroiMatriz(pMat->pNoCorr);
-	//printf("ae porra\n");
+		//printf("ae porra\n");
 
-	pMat=NULL;
-	free(pMat);
+		pMat=NULL;
+		free(pMat);
+	}
 } /* Fim função: ARV Destruir árvore */
 
 
@@ -223,12 +226,11 @@ void MAT_DestruirMatriz( tpMatriz * pMat )
 *  Função: ARV Destruir árvore
 *  ****/
 
-MAT_tpCondRet InsereMatriz(tpMatriz*pMatriz, void * Valor)
-{
-  
+MAT_tpCondRet MAT_InsereValor(tpMatriz*pMatriz, void * Valor)
+{ 
   //tratar matriz nao existente
-
-	if(pMatriz->pNoOrigem==NULL)
+	printf("aaaaaaa\n");
+	if(&pMatriz==NULL)
 	{
 		return MAT_CondRetMatrizNaoExiste;
 	}
@@ -266,6 +268,23 @@ MAT_tpCondRet RetiraMatriz(tpMatriz*pMatriz)
 *
 *  Função: ARV Move árvore
 *  ****/
+
+MAT_tpCondRet ObterValor(tpMatriz*pMatriz, void *ValorCorrente)
+{
+  //tratar matriz nao existente
+  if(pMatriz->pNoOrigem==NULL)
+  {
+    return MAT_CondRetMatrizNaoExiste;
+  }
+  /*tratar falha no nó corrente*/
+  if(pMatriz->pNoCorr==NULL)
+  {
+    return MAT_CondRetErroEstrutura;
+  }
+  ValorCorrente = pMatriz->pNoCorr->Valor;
+  return MAT_CondRetOK;
+}
+
 
 
 MAT_tpCondRet MoveLeste(tpMatriz*pMatriz)
@@ -430,33 +449,12 @@ MAT_tpCondRet MoveNoroeste(tpMatriz*pMatriz)
 }
 
 
-/***************************************************************************
-*
-*  Função: ARV Destruir árvore
-*  ****/
-
-MAT_tpCondRet ObterValor(tpMatriz*pMatriz, void *ValorCorrente)
-{
-  //tratar matriz nao existente
-  if(pMatriz->pNoOrigem==NULL)
-  {
-    return MAT_CondRetMatrizNaoExiste;
-  }
-  /*tratar falha no nó corrente*/
-  if(pMatriz->pNoCorr==NULL)
-  {
-    return MAT_CondRetErroEstrutura;
-  }
-  ValorCorrente = pMatriz->pNoCorr->Valor;
-  return MAT_CondRetOK;
-}
 
 /*****  Código das funções encapsuladas no módulo  *****/
 
-void ResetaCorr(tpMatriz * pMat)
+void RetornaOrigem(tpMatriz * pMat)
 {
 	pMat->pNoCorr = pMat->pNoOrigem;
-	return;
 }
 
 void ResetaMat(tpMatriz * pMat)
@@ -466,10 +464,10 @@ void ResetaMat(tpMatriz * pMat)
 	for(i=0; i<tam; i++)
 	{
 		
-		pMat->pNoCorr = pMat->pNoOrigem;
+		RetornaOrigem(pMat);
 		while(cont!=i)
 		{
-			pMat->pNoCorr = pMat->pNoCorr->pSul;
+			  MoveSul(pMat);
 			cont++;
 		}cont = 0;
 
@@ -477,7 +475,7 @@ void ResetaMat(tpMatriz * pMat)
 		{
 			pMat->pNoCorr->Valor = (void*)('a'+i*tam + j);
 			if(j<tam-1)
-				pMat->pNoCorr = pMat->pNoCorr->pLeste;
+				 MoveLeste(pMat);
 		}
 	}
 
@@ -492,10 +490,10 @@ void ImprimeMat(tpMatriz *pMat)
 	for(i=0; i<tam; i++)
 	{
 		printf("\n");
-		pMat->pNoCorr = pMat->pNoOrigem;
+		RetornaOrigem(pMat);
 		while(cont!=i)
 		{
-			pMat->pNoCorr = pMat->pNoCorr->pSul;
+			  MoveSul(pMat);
 			cont++;
 		}cont = 0;
 
@@ -504,33 +502,17 @@ void ImprimeMat(tpMatriz *pMat)
 			
 			printf("%c	",(char)pMat->pNoCorr->Valor);
 			if(j<tam-1)
-				pMat->pNoCorr = pMat->pNoCorr->pLeste;
+				 MoveLeste(pMat);
 		}
 	}
 	ResetaMat(pMat);
 	printf("\n");
 }
 
-
-
-
-/***********************************************************************
-*
-*  $FC Função: ARV Destruir a estrutura da árvore
-*
-*  $EAE Assertivas de entradas esperadas
-*     pNoArvore != NULL
-*
-***********************************************************************/
-
 void DestroiMatriz(tpNoMatriz * pMat )
 {
-	//int i,cont = 0;
-	//printf("la vai...");
-	free(pMat);
-	
-	//printf("foi krl\n");
-	
+	free(pMat);	
 }
 /********** Fim do módulo de implementação: Módulo árvore **********/
 
+////
