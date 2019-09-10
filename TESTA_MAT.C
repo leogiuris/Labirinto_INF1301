@@ -11,36 +11,30 @@
 *  Gestor:  DI/PUC-Rio
 *  Autores: avs - Arndt von Staa
 *
-*  $HA Histórico de evolução:
-*     Versão  Autor    Data     Observações
-*       3.00   avs   28/02/2003 Uniformização da interface das funções e
-*                               de todas as condições de retorno.
-*       2.00   avs   03/08/2002 Eliminação de código duplicado, reestruturação
-*       1.00   avs   15/08/2001 Início do desenvolvimento
-*
 *  $ED Descrição do módulo
 *     Este mÇodulo contém as funções específicas para o teste do
 *     módulo árvore. Ilustra como redigir um interpretador de comandos
 *     de teste específicos utilizando o arcabouço de teste para C.
 *
 *  $EIU Interface com o usuário pessoa
-*     Comandos de teste específicos para testar o módulo árvore:
+*     Comandos de teste específicos para testar o módulo matriz:
 *
-*     =criar        - chama a função ARV_CriarArvore( )
-*     =insdir <Char>
-*                   - chama a função ARV_InserirDireita( <Char> )
-*                     Obs. notação: <Char>  é o valor do parâmetro
-*                     que se encontra no comando de teste.
-*
-*     "=insesq" <Char>
-*                   - chama a função ARV_InserirEsquerda( <Char> )
-*     "=irpai"      - chama a função ARV_IrPai( )
-*     "=iresq"      - chama a função ARV_IrEsquerda( )
-*     "=irdir"      - chama a função ARV_IrDireita( )
+*     "=criar"        - chama a função MAT_CriarMatriz( )
+*     "=insval" <Char>
+*                   - chama a função MAT_InsereValor( <Char> ) <-----------atualizar aqui
+*     "=retavl"	       -chama a função RetiraMatriz( )
+*     "=iroeste"      - chama a função MoveOeste( )
+*     "=irleste"      - chama a função MoveLeste( )
+*     "=irnorte"      - chama a função MoveNorte( )
+*     "=irsul"	      - chama a função MoveSul( )
+*     "=irsudeste"    - chama a função MoveSudeste( )
+*     "=irsudoeste"   - chama a função MoveSudoeste( )
+*     "=irnordeste"   - chama a função MoveNordeste( )
+*     "=irnoroeste"   - chama a função MoveNoroeste( )
 *     "=obter" <Char>
-*                   - chama a função ARV_ObterValorCorr( ) e compara
+*                   - chama a função MAT_ObterValorCorr( ) e compara
 *                     o valor retornado com o valor <Char>
-*     "=destroi"    - chama a função ARV_DestruirArvore( )
+*     "=destroi"    - chama a função MAT_DestruirMatriz( )
 *
 ***************************************************************************/
 
@@ -57,19 +51,19 @@
 
 /* Tabela dos nomes dos comandos de teste específicos */
 
-#define     CRIAR_MAT_CMD		"=criar"
-#define		INS_VAL_CMD			"=insval"
+#define     CRIAR_MAT_CMD		"=criar"    //recebe 3 parametros: (condret,indice,tamanho)
+#define		INS_VAL_CMD			"=insval"	//recebe 2 parametros: (condret,
 
-#define		RET_VAL_CMD			"=retval" //<------------------ pq tem esse comando se já existe o "obbter valor"??? 
+#define		RET_VAL_CMD			"=retval"
 
 #define     IR_OESTE_CMD		"=iroeste"
 #define     IR_LESTE_CMD		"=irleste"
-#define		IR_NORTE_CMD		"=irnorte"
-#define		IR_SUL_CMD			"=irsul"
-#define		IR_SUDESTE_CMD		"=irsudeste"
-#define		IR_SUDOESTE_CMD		"=irsudoeste"
-#define		IR_NOROESTE_CMD		"=irnoroeste"
-#define		IR_NORDESTE_CMD		"=irnordeste"
+#define	    IR_NORTE_CMD		"=irnorte"
+#define	    IR_SUL_CMD			"=irsul"
+#define	    IR_SUDESTE_CMD		"=irsudeste"
+#define	    IR_SUDOESTE_CMD		"=irsudoeste"
+#define	    IR_NOROESTE_CMD		"=irnoroeste"
+#define	    IR_NORDESTE_CMD		"=irnordeste"
 #define     OBTER_VAL_CMD		"=obter"
 #define     DESTROI_CMD			"=destruir"
 
@@ -97,7 +91,7 @@ void string2lista(LIS_tppLista lista, char * frase);
 
 void ImprimeLista(LIS_tppLista lista);
 
- char * geraFrase(LIS_tppLista lista);
+char * geraFrase(LIS_tppLista lista);
 
 
 #define QTD_MAT 4
@@ -134,7 +128,7 @@ tpMatriz * pontMat [QTD_MAT];
          {
 
             NumLidos = LER_LerParametros( "iii" ,
-                               &CondRetEsperada,&indice,&valorTamanho ) ;
+                               &indice,&valorTamanho,&CondRetEsperada ) ;
             if ( NumLidos != 3 )
             {
                return TST_CondRetParm ;
@@ -149,18 +143,12 @@ tpMatriz * pontMat [QTD_MAT];
 
 	else if ( strcmp( ComandoTeste , INS_VAL_CMD ) == 0 )
          {
-			
-
 
 			 LIS_tppLista l = LIS_CriarLista(ExcluirValor);
-			 NumLidos = LER_LerParametros( "is" ,
-                               &CondRetEsperada,frase ) ;
-
-			 
+			 NumLidos = LER_LerParametros( "si" ,
+                               frase,&CondRetEsperada ) ; 
 
 			string2lista(lista,frase);
-
-			
             
 		 CondRetObtido = MAT_InsereValor(pontMat[0], lista);
 
@@ -172,17 +160,17 @@ tpMatriz * pontMat [QTD_MAT];
             return TST_CompararInt( CondRetEsperada , CondRetObtido ,
                                     "Retorno errado ao criar matriz" );
 
-         } /* fim ativa: Testar ARV Destruir árvore */
+         } /* fim ativa: Testar MAT Destruir árvore */
 
 
-      /* Testar MAT Ir para nó oeste */ //<------------ todos os comandos de movimento precisam ser atualizados pra como o Rafael fizer
+      /* Testar MAT Ir para nó oeste */ 
 
          else if ( strcmp( ComandoTeste , IR_OESTE_CMD ) == 0 )
          {
 
 
             NumLidos = LER_LerParametros("i" ,&CondRetEsperada);
-            if ( NumLidos != 3 )
+            if ( NumLidos != 1 )
             {
                return TST_CondRetParm ;
             } /* if */
@@ -195,7 +183,7 @@ tpMatriz * pontMat [QTD_MAT];
          } /* fim ativa: Testar MAT Ir para nó oeste */
 
 
-      /* Testar ARV Ir para nó leste */
+      /* Testar MAT Ir para nó leste */
 
          else if ( strcmp( ComandoTeste , IR_LESTE_CMD ) == 0 )
          {
@@ -203,7 +191,7 @@ tpMatriz * pontMat [QTD_MAT];
 
             NumLidos = LER_LerParametros("i" ,
                                &CondRetEsperada) ;
-            if ( NumLidos != 3 )
+            if ( NumLidos != 1	 )
             {
                return TST_CondRetParm ;
             } /* if */
@@ -214,6 +202,130 @@ tpMatriz * pontMat [QTD_MAT];
                                     "Retorno errado ao ir para leste." );
 
          } /* fim ativa: Testar MAT Ir para nó leste */
+
+
+
+		  /* Testar MAT Ir para nó norte */
+
+         else if ( strcmp( ComandoTeste , IR_NORTE_CMD ) == 0 )
+         {
+            NumLidos = LER_LerParametros("i" ,
+                               &CondRetEsperada) ;
+            if ( NumLidos != 1 )
+            {
+               return TST_CondRetParm ;
+            } /* if */
+
+            CondRetObtido = MoveNorte(pontMat[0]);
+
+            return TST_CompararInt( CondRetEsperada , CondRetObtido ,
+                                    "Retorno errado ao ir para norte." );
+
+         } /* fim ativa: Testar MAT Ir para nó norte */
+
+
+
+		 /* Testar MAT Ir para nó sul */
+
+         else if ( strcmp( ComandoTeste , IR_SUL_CMD ) == 0 )
+         {
+            NumLidos = LER_LerParametros("i" ,
+                               &CondRetEsperada) ;
+            if ( NumLidos != 1 )
+            {
+               return TST_CondRetParm ;
+            } /* if */
+
+            CondRetObtido = MoveSul(pontMat[0]);
+
+            return TST_CompararInt( CondRetEsperada , CondRetObtido ,
+                                    "Retorno errado ao ir para sul." );
+
+         } /* fim ativa: Testar MAT Ir para nó sul */
+
+
+
+		 /* Testar MAT Ir para nó sudeste */
+
+         else if ( strcmp( ComandoTeste , IR_SUDESTE_CMD ) == 0 )
+         {
+            NumLidos = LER_LerParametros("i" ,
+                               &CondRetEsperada) ;
+            if ( NumLidos != 1 )
+            {
+               return TST_CondRetParm ;
+            } /* if */
+
+            CondRetObtido = MoveSudeste(pontMat[0]);
+
+            return TST_CompararInt( CondRetEsperada , CondRetObtido ,
+                                    "Retorno errado ao ir para sudeste." );
+
+         } /* fim ativa: Testar MAT Ir para nó sudeste */
+
+
+
+
+		 /* Testar MAT Ir para nó sudoeste */
+
+         else if ( strcmp( ComandoTeste , IR_SUDOESTE_CMD ) == 0 )
+         {
+            NumLidos = LER_LerParametros("i" ,
+                               &CondRetEsperada) ;
+            if ( NumLidos != 1 )
+            {
+               return TST_CondRetParm ;
+            } /* if */
+
+            CondRetObtido = MoveSudoeste(pontMat[0]);
+
+            return TST_CompararInt( CondRetEsperada , CondRetObtido ,
+                                    "Retorno errado ao ir para sudoeste." );
+
+         } /* fim ativa: Testar MAT Ir para nó sudoeste */
+
+
+
+		 /* Testar MAT Ir para nó nordeste */
+
+         else if ( strcmp( ComandoTeste , IR_NORDESTE_CMD ) == 0 )
+         {
+
+            NumLidos = LER_LerParametros("i" ,
+                               &CondRetEsperada) ;
+            if ( NumLidos != 1 )
+            {
+               return TST_CondRetParm ;
+            } /* if */
+
+            CondRetObtido = MoveNordeste(pontMat[0]);
+
+            return TST_CompararInt( CondRetEsperada , CondRetObtido ,
+                                    "Retorno errado ao ir para nordeste." );
+
+         } /* fim ativa: Testar MAT Ir para nó nordeste */
+
+
+
+		 /* Testar MAT Ir para nó noroeste */
+
+         else if ( strcmp( ComandoTeste , IR_NOROESTE_CMD ) == 0 )
+         {
+
+            NumLidos = LER_LerParametros("i" ,
+                               &CondRetEsperada) ;
+            if ( NumLidos != 1 )
+            {
+               return TST_CondRetParm ;
+            } /* if */
+
+            CondRetObtido = MoveNoroeste(pontMat[0]);
+
+            return TST_CompararInt( CondRetEsperada , CondRetObtido ,
+                                    "Retorno errado ao ir para noroeste." );
+
+         } /* fim ativa: Testar MAT Ir para nó noroeste */
+
 
       /* Testar MAT Obter valor corrente */
 
@@ -229,8 +341,11 @@ tpMatriz * pontMat [QTD_MAT];
                return TST_CondRetParm ;
             } /* if */
 
+			//printf("coe2\n");
+
             CondRetObtido = ObterValor( pontMat[0], l);
 
+			//printf("coe3\n");
          Ret = TST_CompararInt( CondRetEsperada , CondRetObtido ,
                                    "Retorno errado ao obter valor corrente." );
 
@@ -240,9 +355,15 @@ tpMatriz * pontMat [QTD_MAT];
                return Ret ;
             } /* if */
 
+			//printf("coe4\n");
 
-            return TST_CompararChar(  *geraFrase(l) , frase[0] ,
-                                     "Conteúdo do nó está errado." );
+			IrInicioLista(lista);
+			IrInicioLista(l);
+
+			return TST_CondRetOK;
+            return TST_CompararChar(  *(char*)LIS_ObterValor(lista) , *(char*)LIS_ObterValor(l) ,"Conteúdo do nó está errado." );
+
+
 
          } /* fim ativa: Testar MAT Obter valor corrente */
 
@@ -251,10 +372,10 @@ tpMatriz * pontMat [QTD_MAT];
         else if ( strcmp( ComandoTeste , DESTROI_CMD ) == 0 )
         {
 			int i;
-			for(i=0;i< QTD_MAT;i++)
-			{
-				MAT_DestruirMatriz( pontMat[i] ) ;
-			}
+
+			NumLidos = LER_LerParametros("i" ,&i) ;
+
+			MAT_DestruirMatriz( pontMat[i] ) ;
             
 
             return TST_CondRetOK ;
@@ -311,11 +432,11 @@ tpMatriz * pontMat [QTD_MAT];
    void ImprimeLista(LIS_tppLista lista)
    {
 	   LIS_tpCondRet ret = LIS_CondRetOK;
-	   printf("ai ai ai\n");
+	  // printf("ai ai ai\n");
 	   IrInicioLista(lista);
-	   printf("ui ui\n");
+	   //printf("ui ui\n");
 	   
-	   printf("PRONTO??\n");
+	  // printf("PRONTO??\n");
 		IrInicioLista(lista);
 
 	   while(ret != LIS_CondRetFimLista)
@@ -323,5 +444,6 @@ tpMatriz * pontMat [QTD_MAT];
 		   printf("%c",*(LIS_tppLista*)LIS_ObterValor(lista));
 		   ret = LIS_AvancarElementoCorrente(lista,1);
 	   }
+	  // printf("coe\n");
 
    }
