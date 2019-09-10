@@ -112,8 +112,7 @@
       char ValorDado     = '\0' ;
 	  //---------------------------
 
-	  int valorColuna = 3;
-	  int valorLinha = 3;
+	  int valorTamanho;
 	int indice;
 
       int  NumLidos = -1 ;
@@ -125,16 +124,16 @@
          if ( strcmp( ComandoTeste , CRIAR_MAT_CMD ) == 0 )
          {
 
-            NumLidos = LER_LerParametros( "iiii" ,
-                               &CondRetEsperada,&indice,&valorLinha,&valorColuna ) ;
-            if ( NumLidos != 4 )
+            NumLidos = LER_LerParametros( "iii" ,
+                               &CondRetEsperada,&indice,&valorTamanho ) ;
+            if ( NumLidos != 3 )
             {
                return TST_CondRetParm ;
             } /* if */
 
 			while(indice<QTD_MAT)
 			{
-				CondRetObtido = MAT_CriarMatriz(&pontMat[indice], valorLinha+indice, valorColuna+indice);
+				CondRetObtido = MAT_CriarMatriz(&pontMat[indice], valorTamanho+indice);
 				indice++;
 			}
 

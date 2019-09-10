@@ -74,9 +74,10 @@
          MAT_CondRetNaoPossuiVizinho = 7 ,
                /* Nó corrente não possui filho na direção desejada */
 
-         MAT_CondRetFaltouMemoria = 8
+         MAT_CondRetFaltouMemoria = 8,
                /* Faltou memória ao alocar dados */
 
+		 MAT_CondRetTamanhoInvalido = 9
    } MAT_tpCondRet ;
 
 
@@ -97,7 +98,7 @@
 *
 ***********************************************************************/
 
-   MAT_tpCondRet MAT_CriarMatriz(tpMatriz ** pMat, int fil, int col);
+   MAT_tpCondRet MAT_CriarMatriz(tpMatriz ** pMat, int tam);
 
 
 /***********************************************************************

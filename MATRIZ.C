@@ -74,8 +74,7 @@ typedef struct tgMatriz {
     tpNoMatriz * pNoCorr ;
                /* Ponteiro para o nó corrente da árvore */
 
-	int fileiras;
-	int colunas;
+	int tamanho;
 
 } tpMatriz ;
 
@@ -100,11 +99,15 @@ void ResetaMat(tpMatriz * pMat);
 *  Função: ARV Criar árvore
 *  ****/
 
-MAT_tpCondRet MAT_CriarMatriz(tpMatriz **pMat, int fil,int col)
+MAT_tpCondRet MAT_CriarMatriz(tpMatriz **pMat, int tam)
 {
 	int i,j;
 	tpNoMatriz ** mat;
 	printf("\n[CriarMatriz]\n");  
+
+	if(tam<1)
+		return MAT_CondRetTamanhoInvalido;
+
     if ( *pMat != NULL )
     {
 		//printf("\nah nao\n");
@@ -118,15 +121,15 @@ MAT_tpCondRet MAT_CriarMatriz(tpMatriz **pMat, int fil,int col)
 		return MAT_CondRetFaltouMemoria ;
     } /* if */
 	//printf("sei...\n");
-	mat = (tpNoMatriz**)malloc(fil*sizeof(tpNoMatriz*));
-	for(i=0; i<fil ;i++)
+	mat = (tpNoMatriz**)malloc(tam*sizeof(tpNoMatriz*));
+	for(i=0; i<tam ;i++)
 	{
 		//printf("i\n");
-		mat[i] = (tpNoMatriz*)malloc(col*sizeof(tpNoMatriz));
-		for(j=0; j<col; j++)
+		mat[i] = (tpNoMatriz*)malloc(tam*sizeof(tpNoMatriz));
+		for(j=0; j<tam; j++)
 		{
 			//printf("j\n");
-			mat[i][j].Valor = (void*)('a'+i*col + j);
+			mat[i][j].Valor = (void*)('a'+i*tam + j);
 			mat[i][j].pNorte = NULL;
 			mat[i][j].pNordeste = NULL;
 			mat[i][j].pNoroeste = NULL;
@@ -138,31 +141,31 @@ MAT_tpCondRet MAT_CriarMatriz(tpMatriz **pMat, int fil,int col)
 		}
 	}
 
-	for(i=0; i<fil ;i++){
-		for(j=0; j<col; j++){
-			mat[i][j].Valor = (void*)('a' +(i*col) + j);
+	for(i=0; i<tam ;i++){
+		for(j=0; j<tam; j++){
+			mat[i][j].Valor = (void*)('a' +(i*tam) + j);
 			if(i>0)
 			{
 				
 				mat[i][j].pNorte = &mat[i-1][j];
 				if(j>0)
 					mat[i][j].pNoroeste = &mat[i-1][j-1];
-				if(j<col)
+				if(j<tam)
 					mat[i][j].pNordeste = &mat[i-1][j+1];
 			}
-			if(i<fil-1)
+			if(i<tam-1)
 			{
 				mat[i][j].pSul = &mat[i+1][j];
 				if(j>0)
 					mat[i][j].pSudoeste = &mat[i+1][j-1];
-				if(j<col)
+				if(j<tam)
 					mat[i][j].pSudeste = &mat[i+1][j+1];
 			}
 			if(j>0)
 			{
 				mat[i][j].pOeste = &mat[i][j-1];
 			}
-			if(j<col-1)
+			if(j<tam-1)
 			{
 				mat[i][j].pLeste = &mat[i][j+1];
 			}
@@ -172,8 +175,7 @@ MAT_tpCondRet MAT_CriarMatriz(tpMatriz **pMat, int fil,int col)
 	
     (*pMat)->pNoOrigem = &mat[0][0] ;
 	(*pMat)->pNoCorr = &mat[0][0];
-	(*pMat)->fileiras = fil;
-	(*pMat)->colunas = col;
+	(*pMat)->tamanho = tam;
 	
 	//printf("krl mano...\n");
 	ImprimeMat(*pMat);
@@ -190,7 +192,7 @@ MAT_tpCondRet MAT_CriarMatriz(tpMatriz **pMat, int fil,int col)
 void MAT_DestruirMatriz( tpMatriz * pMat )
 {	
 	
-	int fil = pMat->fileiras;
+	int fil = pMat->tamanho;
 	int i = fil;
 	pMat->pNoCorr = pMat->pNoOrigem;
 	printf("\n[DestroiMatriz]\n"); 
@@ -460,9 +462,8 @@ void ResetaCorr(tpMatriz * pMat)
 void ResetaMat(tpMatriz * pMat)
 {
 	int i,j,cont = 0;
-	int fil = pMat->fileiras;
-	int col = pMat->colunas;
-	for(i=0; i<fil; i++)
+	int tam = pMat->tamanho;
+	for(i=0; i<tam; i++)
 	{
 		
 		pMat->pNoCorr = pMat->pNoOrigem;
@@ -472,10 +473,10 @@ void ResetaMat(tpMatriz * pMat)
 			cont++;
 		}cont = 0;
 
-		for(j=0; j<col; j++)
+		for(j=0; j<tam; j++)
 		{
-			pMat->pNoCorr->Valor = (void*)('a'+i*col + j);
-			if(j<col-1)
+			pMat->pNoCorr->Valor = (void*)('a'+i*tam + j);
+			if(j<tam-1)
 				pMat->pNoCorr = pMat->pNoCorr->pLeste;
 		}
 	}
@@ -485,11 +486,10 @@ void ResetaMat(tpMatriz * pMat)
 void ImprimeMat(tpMatriz *pMat)
 {
 	int i,j,cont = 0;
-	int fil = pMat->fileiras;
-	int col = pMat->colunas;
+	int tam = pMat->tamanho;
 	
 	//printf("\n[ImprimeMatriz]\n"); 
-	for(i=0; i<fil; i++)
+	for(i=0; i<tam; i++)
 	{
 		printf("\n");
 		pMat->pNoCorr = pMat->pNoOrigem;
@@ -499,11 +499,11 @@ void ImprimeMat(tpMatriz *pMat)
 			cont++;
 		}cont = 0;
 
-		for(j=0; j<col; j++)
+		for(j=0; j<tam; j++)
 		{
 			
 			printf("%c	",(char)pMat->pNoCorr->Valor);
-			if(j<col-1)
+			if(j<tam-1)
 				pMat->pNoCorr = pMat->pNoCorr->pLeste;
 		}
 	}
