@@ -223,7 +223,7 @@ void MAT_DestruirMatriz( tpMatriz * pMat )
 *  Função: ARV Destruir árvore
 *  ****/
 
-MAT_tpCondRet InsereMatriz(tpMatriz*pMatriz, void * Valor)
+MAT_tpCondRet MAT_InsereValor(tpMatriz*pMatriz, void * Valor)
 {
   
   //tratar matriz nao existente

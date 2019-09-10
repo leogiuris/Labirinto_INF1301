@@ -46,12 +46,13 @@
 
 #include    <string.h>
 #include    <stdio.h>
-
+#include	<string.h>
 #include    "TST_ESPC.H"
+#include	<malloc.h>
 
 #include    "generico.h"
 #include    "lerparm.h"
-
+#include	"LISTA.H"
 #include    "MATRIZ.H"
 
 /* Tabela dos nomes dos comandos de teste específicos */
@@ -90,12 +91,17 @@
 *     Ver TST_tpCondRet definido em TST_ESPC.H
 *
 ***********************************************************************/
+void ExcluirValor(void * pValor);
 
+void string2lista(LIS_tppLista lista, char * frase);
 
+void ImprimeLista(LIS_tppLista lista);
+
+ char * geraFrase(LIS_tppLista lista);
 
 
 #define QTD_MAT 4
- tpMatriz * pontMat [QTD_MAT];
+tpMatriz * pontMat [QTD_MAT];
 
 
    TST_tpCondRet TST_EfetuarComando( char * ComandoTeste )
@@ -113,8 +119,11 @@
 	  //---------------------------
 
 	  int valorTamanho;
-	int indice;
-
+	  int indice;
+	  char frase[10];
+	  char fraseRet[10];
+	  LIS_tppLista lista = LIS_CriarLista(ExcluirValor);
+	  
       int  NumLidos = -1 ;
 
       //TST_tpCondRet Ret ;
@@ -131,95 +140,119 @@
                return TST_CondRetParm ;
             } /* if */
 
-			while(indice<QTD_MAT)
-			{
-				CondRetObtido = MAT_CriarMatriz(&pontMat[indice], valorTamanho+indice);
-				indice++;
-			}
-
+			CondRetObtido = MAT_CriarMatriz(&pontMat[indice], valorTamanho);
 
             return TST_CompararInt( CondRetEsperada , CondRetObtido ,
                                     "Retorno errado ao criar matriz" );
          
 		 } /* fim ativa: Testar MAT Criar matriz */
 
+	else if ( strcmp( ComandoTeste , INS_VAL_CMD ) == 0 )
+         {
+			
+
+
+			 LIS_tppLista l = LIS_CriarLista(ExcluirValor);
+			 NumLidos = LER_LerParametros( "is" ,
+                               &CondRetEsperada,frase ) ;
+
+			 
+
+			string2lista(lista,frase);
+
+			
+            
+		 CondRetObtido = MAT_InsereValor(pontMat[0], lista);
+
+		 CondRetObtido = ObterValor(pontMat[0], l);
+
+			 printf("\n%s\n",frase);
+				ImprimeLista(lista);
+
+            return TST_CompararInt( CondRetEsperada , CondRetObtido ,
+                                    "Retorno errado ao criar matriz" );
+
+         } /* fim ativa: Testar ARV Destruir árvore */
+
+
       /* Testar MAT Ir para nó oeste */ //<------------ todos os comandos de movimento precisam ser atualizados pra como o Rafael fizer
 
-         //else if ( strcmp( ComandoTeste , IR_OESTE_CMD ) == 0 )
-         //{
+         else if ( strcmp( ComandoTeste , IR_OESTE_CMD ) == 0 )
+         {
 
 
-         //   NumLidos = LER_LerParametros("iii" ,
-         //                      &CondRetEsperada,&valorLinha,&valorColuna);
-         //   if ( NumLidos != 3 )
-         //   {
-         //      return TST_CondRetParm ;
-         //   } /* if */
+            NumLidos = LER_LerParametros("i" ,&CondRetEsperada);
+            if ( NumLidos != 3 )
+            {
+               return TST_CondRetParm ;
+            } /* if */
 
-         //   CondRetObtido = MAT_IrNoEsquerda(&pontMat, valorLinha, valorColuna);
+            CondRetObtido = MoveOeste(pontMat[0]);
 
-         //   return TST_CompararInt( CondRetEsperada , CondRetObtido ,
-         //                           "Retorno errado ao ir para oeste." );
+            return TST_CompararInt( CondRetEsperada , CondRetObtido ,
+                                    "Retorno errado ao ir para oeste." );
 
-         //} /* fim ativa: Testar MAT Ir para nó oeste */
+         } /* fim ativa: Testar MAT Ir para nó oeste */
 
 
       /* Testar ARV Ir para nó leste */
 
-         //else if ( strcmp( ComandoTeste , IR_LESTE_CMD ) == 0 )
-         //{
+         else if ( strcmp( ComandoTeste , IR_LESTE_CMD ) == 0 )
+         {
 
 
-         //   NumLidos = LER_LerParametros("iii" ,
-         //                      &CondRetEsperada,&valorLinha,&valorColuna) ;
-         //   if ( NumLidos != 3 )
-         //   {
-         //      return TST_CondRetParm ;
-         //   } /* if */
+            NumLidos = LER_LerParametros("i" ,
+                               &CondRetEsperada) ;
+            if ( NumLidos != 3 )
+            {
+               return TST_CondRetParm ;
+            } /* if */
 
-         //   CondRetObtido = MAT_IrNoDireita(&pontMat, valorLinha, valorColuna);
+            CondRetObtido = MoveLeste(pontMat[0]);
 
-         //   return TST_CompararInt( CondRetEsperada , CondRetObtido ,
-         //                           "Retorno errado ao ir para leste." );
+            return TST_CompararInt( CondRetEsperada , CondRetObtido ,
+                                    "Retorno errado ao ir para leste." );
 
-         //} /* fim ativa: Testar MAT Ir para nó leste */
+         } /* fim ativa: Testar MAT Ir para nó leste */
 
       /* Testar MAT Obter valor corrente */
 
-         //else if ( strcmp( ComandoTeste , OBTER_VAL_CMD ) == 0 )
-         //{
+         else if ( strcmp( ComandoTeste , OBTER_VAL_CMD ) == 0 )
+         {
+			 TST_tpCondRet Ret;
+			 LIS_tppLista l = LIS_CriarLista(ExcluirValor);
+
+            NumLidos = LER_LerParametros( "si" ,
+                               frase , &CondRetEsperada );
+            if ( NumLidos != 2 )
+            {
+               return TST_CondRetParm ;
+            } /* if */
+
+            CondRetObtido = ObterValor( pontMat[0], l);
+
+         Ret = TST_CompararInt( CondRetEsperada , CondRetObtido ,
+                                   "Retorno errado ao obter valor corrente." );
 
 
-         //   NumLidos = LER_LerParametros( "ci" ,
-         //                      &ValorEsperado , &CondRetEsperada );
-         //   if ( NumLidos != 2 )
-         //   {
-         //      return TST_CondRetParm ;
-         //   } /* if */
-
-         //   CondRetObtido = MAT_ObterValorCorr( &ValorObtido );
-
-         //Ret = TST_CompararInt( CondRetEsperada , CondRetObtido ,
-         //                          "Retorno errado ao obter valor corrente." );
+            if ( Ret != TST_CondRetOK )
+            {
+               return Ret ;
+            } /* if */
 
 
-         //   if ( Ret != TST_CondRetOK )
-         //   {
-         //      return Ret ;
-         //   } /* if */
+            return TST_CompararChar(  *geraFrase(l) , frase[0] ,
+                                     "Conteúdo do nó está errado." );
 
-
-         //   return TST_CompararChar( ValorEsperado , ValorObtido ,
-         //                            "Conteúdo do nó está errado." );
-
-         //} /* fim ativa: Testar MAT Obter valor corrente */
+         } /* fim ativa: Testar MAT Obter valor corrente */
 
       /* Testar MAT Destruir matriz */
 
-         else if ( strcmp( ComandoTeste , DESTROI_CMD ) == 0 )
-         {
-			 int i;
-			for(i=0;i< QTD_MAT;i++){
+        else if ( strcmp( ComandoTeste , DESTROI_CMD ) == 0 )
+        {
+			int i;
+			for(i=0;i< QTD_MAT;i++)
+			{
 				MAT_DestruirMatriz( pontMat[i] ) ;
 			}
             
@@ -234,3 +267,61 @@
 
 /********** Fim do módulo de implementação: Módulo de teste específico **********/
 
+
+   void ExcluirValor(void * pValor)
+   {
+	   pValor = NULL;
+   }
+
+
+   void string2lista(LIS_tppLista lista,char * frase)
+   {
+	   int i;
+		for(i=0; i<strlen(frase); i++)
+		{
+			//printf("i");
+			LIS_InserirElementoApos(lista, frase+i);
+		}
+   }
+
+   char * geraFrase(LIS_tppLista lista){
+	  
+	   char * frase;
+	   int cont = 0,i = 0;
+	   LIS_tpCondRet ret = LIS_CondRetOK;
+	   IrInicioLista(lista);
+	   while(ret != LIS_CondRetFimLista)
+	   {
+
+		   cont++;
+
+		   //printf("%c",*(LIS_tppLista*)LIS_ObterValor(lista));
+		   ret = LIS_AvancarElementoCorrente(lista,1);
+	   }
+
+	   frase=(char*)malloc(cont);
+	   
+	   IrInicioLista(lista);
+	   for(i=0;frase+i!=NULL;i++){
+		   frase[i] = (char) *(LIS_tppLista*)LIS_ObterValor(lista);
+	   }
+	   return frase;
+   }
+
+   void ImprimeLista(LIS_tppLista lista)
+   {
+	   LIS_tpCondRet ret = LIS_CondRetOK;
+	   printf("ai ai ai\n");
+	   IrInicioLista(lista);
+	   printf("ui ui\n");
+	   
+	   printf("PRONTO??\n");
+		IrInicioLista(lista);
+
+	   while(ret != LIS_CondRetFimLista)
+	   {
+		   printf("%c",*(LIS_tppLista*)LIS_ObterValor(lista));
+		   ret = LIS_AvancarElementoCorrente(lista,1);
+	   }
+
+   }
