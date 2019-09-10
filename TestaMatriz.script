@@ -1,3 +1,9 @@
 
-==cria uma matriz 3x3
-=criar	0	3	3
+==cria matrizes
+=criar	0	0	1
+
+==insere lista
+=insval	0	"piru" 
+
+==obtem valor
+=obter 	"piru"	0
