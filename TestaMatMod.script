@@ -1,16 +1,20 @@
 // Script:    TestaMatrizMod.script
 // Autor:     Daniel Peralta, Leonardo Giuri, Rafael Serpa
-// Data:      08/09/2019
+// Data:      09/09/2019
 // Propósito: Testa a construção de uma matriz usando parâmetros literais
 //            Verifica se as operações modificaram corretamente as referências
 //
 
 == Verificar assertivas de entrada de irleste
-=irleste      2
+=irleste      2   0
+//mudar esse 2
 
 == Verificar comando recuperar
-=irleste      0
+=irleste      0   0
 =recuperar 
+
+==Verificar se há uma matriz existente
+=insval 'a'   2
 
 == Verificar ObterValorCorr relativo a matriz inexistente
 // O interpretador de teste inicializa o valor a ser obtido com '!'. Consequentemente,
@@ -24,10 +28,22 @@
 =obter  'z'   2
 =recuperar
 
-== Criar matriz 3x3
-=criar    0    3    3
+==Verificar recuperar de DestruirMatriz relativo a uma matriz inexistente
+=destruir  0
+=recuperar
 
-== Verificar se o nó corrente possui algum filho
+==Verificar recuperar de InserirValor relativo a uma matriz inexistente
+=insval   'a'  0
+=recuperar
+
+==Verificar criar uma matriz iválida
+=criar 6  0  0 
+=recuperar
+
+== Cria matriz 3x3
+=criar  0   0  3
+
+== Verificar se o nó corrente possui algum vizinho
 =irleste      0
 =iroeste      0
 =irnorte      0
@@ -39,144 +55,139 @@
 
 ==Verificar se leste está vazio
 =irleste  0
-=retval   4
+=retval   3
 
 ==Verificar se oeste está vazio
-=iroeste  0
-=retval   4
+=iroeste  0   
+=retval   3
 
 ==Verificar se norte está vazio
-=irnorte  0
-=retval   4
+=irnorte  0   
+=retval   3
 
 ==Verificar se sul está vazio
-=irsul    0
-=retval   4
+=irsul    0   
+=retval   3
 
 ==Verificar se sudeste está vazio
-=irsudeste  0
-=retval     4
+=irsudeste  0   
+=retval     3
 
 ==Verificar se sudoeste está vazio
-=irsudoeste  0
-=retval      4
+=irsudoeste  0 
+=retval      3
 
 ==Verificar se noroeste está vazio
-=irnoroeste  0
-=retval      4
+=irnoroeste  0  
+=retval      3
 
 ==Verificar se nordeste está vazio
-=irnordeste  0
-=retval      4
+=irnordeste  0   
+=retval      3
 
-==Inserir valor no centro da Matriz
-//
-//isso aqui não sei se está certo
-//
-==insval 'e'  0
 
 == Inserir à leste
-=irleste 0
-=insval 'f'   0
+=irleste 0    
+=insval 'f'  0
 
 == Inserir à oeste
-=iroeste    0
-=insval 'd' 0
+=iroeste  0  
+=insval  'd' 0
 
 == Inserir à norte
-=irnorte    0
-=insval 'b' 0
+=irnorte  0  
+=insval  'b' 0
 
 == Inserir à sul
-=irsul       0
-=insval 'h'  0
+=irsul    0   
+=insval  'h'  0
 
 == Inserir à sudeste
-=irsudeste   0
-=insval 'i'   0
+=irsudeste  0  
+=insval   'i'  0
 
 == Inserir à sudoeste
-=irsudoeste  0 
-=insval 'g'   0
+=irsudoeste 0   
+=insval  'g'   0
 
 == Inserir à noroeste
-=irnoroeste  0
-=insval 'c'  0
+=irnoroeste  0  
+=insval    'c'  0
 
 == Inserir à nordeste
-=irnordeste  0
-=insval 'a'  0
+=irnordeste   0  
+=insval     'a'  0
 
 == Verificar valor obtido diferente do esperado
 =obter      '!'   0
 =recuperar
 
 == Obter valor à leste
-=irleste    0
-=obter 'f'  0
+=irleste  0   
+=obter   'f'  0
 
 == Obter valor à oeste
-=iroeste    0
-=obter 'd'  0
+=iroeste  0    
+=obter    'd'  0
 
 == Obter valor à norte
-=irnorte    0
-=obter 'b'  0
+=irnorte  0   
+=obter   'b'  0
 
 == Obter valor à sul
-=irsul       0
-=obter 'h'   0
+=irsul   0    
+=obter  'h'   0
 
 == Obter valor à sudeste
-=irsudeste    0
-=obter 'i'    0
+=irsudeste  0  
+=obter     'i  0
 
 == Obter valor à sudoeste
-=irsudoeste  0 
+=irsudoeste  0  
 =obter 'g'   0
 
 == Obter valor à noroeste
-=irnoroeste  0
+=irnoroeste  0  
 =obter 'c'   0
 
 == Obter valor à nordeste
-=irnordeste  0
+=irnordeste  0  
 =obter 'a'   0
 
 == Retirar valor à leste
-=irleste 0
+=irleste 0  
 =retval  0
 
 == Retirar valor à oeste
-=iroeste  0
+=iroeste  0  
 =retval   0
 
 == Retirar valor à norte
-=irnorte 0
+=irnorte 0  
 =retval  0
 
 == Retirar valor à sul
-=irsul   0
+=irsul   0  
 =retval  0
 
 == Retirar valor à sudeste
-=irsudeste  0
+=irsudeste  0  
 =retval     0
 
 == Retirar valor à sudoeste
-=irsudoeste  0 
+=irsudoeste  0   
 =retval      0
 
 == Retirar valor à noroeste
-=irnoroeste  0
+=irnoroeste  0   
 =retval      0
 
 == Retirar valor à nordeste
-=irnordeste  0
+=irnordeste  0   
 =retval      0
 
 == Destroi a matriz
-=destruir
-=irleste      4
+=destruir 0  
+=irleste  2
 
 // fim
