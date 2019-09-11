@@ -5,12 +5,8 @@
 //            Verifica se as operações modificaram corretamente as referências
 //
 
-== Verificar assertivas de entrada de irleste
-=irleste      2   0
-//mudar esse 2
-
 == Verificar comando recuperar
-=irleste      0   0
+=irleste      0   
 =recuperar 
 
 ==Verificar se há uma matriz existente
@@ -32,7 +28,7 @@
 =destruir  0
 =recuperar
 
-==Verificar recuperar de InserirValor relativo a uma matriz inexistente
+==Verificar assertiva de InserirValor relativo a uma matriz inexistente
 =insval   'a'  0
 =recuperar
 
@@ -41,7 +37,11 @@
 =recuperar
 
 == Cria matriz 3x3
-=criar  0   0  3
+=criar  0  0  3
+
+==Verificar criar uma matriz em um mesmo indice com uma já existente
+==criar 0  0  3
+==recuperar
 
 == Verificar se o nó corrente possui algum vizinho
 =irleste      0
@@ -84,7 +84,6 @@
 ==Verificar se nordeste está vazio
 =irnordeste  0   
 =retval      3
-
 
 == Inserir à leste
 =irleste 0    
