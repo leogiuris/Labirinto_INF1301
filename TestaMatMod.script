@@ -10,7 +10,7 @@
 =recuperar 
 
 ==Verificar se há uma matriz existente
-=insval 'a'   2
+=irsul   2
 
 == Verificar ObterValorCorr relativo a matriz inexistente
 // O interpretador de teste inicializa o valor a ser obtido com '!'. Consequentemente,
@@ -43,15 +43,37 @@
 ==criar 0  0  3
 ==recuperar
 
-== Verificar se o nó corrente possui algum vizinho
-=irleste      0
-=iroeste      0
-=irnorte      0
-=irsul        0
-=irsudeste    0
-=irsudoeste   0
-=irnoroeste   0
-=irnordeste   0
+==Verificar se nó leste possui algum vizinho
+=irleste  0
+=recuperar
+
+==Verificar se nó oeste possui algum vizinho
+=iroeste  0
+=recuperar
+
+==Verificar se nó norte possui algum vizinho
+=irnorte  0
+=recuperar
+
+==Verificar se nó sul possui algum vizinho
+=irsul  0
+=recuperar
+
+==Verificar se nó sudeste possui algum vizinho
+=irsudeste  0
+=recuperar
+
+==Verificar se nó sudoeste possui algum vizinho
+=irsudoeste  0
+=recuperar
+
+==Verificar se nó noroeste possui algum vizinho
+=irnoroeste  0
+=recuperar
+
+==Verificar se nó nordeste possui algum vizinho
+=irnordeste  0
+=recuperar
 
 ==Verificar se leste está vazio
 =irleste  0
@@ -84,6 +106,11 @@
 ==Verificar se nordeste está vazio
 =irnordeste  0   
 =retval      3
+
+==Verificar ponteiro corrente andar para fora da matriz
+=irnorte 0
+=irnorte 0
+=recuperar
 
 == Inserir à leste
 =irleste 0    
