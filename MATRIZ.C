@@ -1,22 +1,22 @@
 /***************************************************************************
-*  $MCI Módulo de implementação: Módulo árvore
+*  $MCI Módulo de implementação: Módulo Matriz
 *
-*  Arquivo gerado:              ARVORE.C
-*  Letras identificadoras:      ARV
+*  Arquivo gerado:              Matriz.C
+*  Letras identificadoras:      MAT
 *
 *  Nome da base de software:    Exemplo de teste automatizado
 *  Arquivo da base de software: D:\AUTOTEST\PROJETOS\SIMPLES.BSW
 *
 *  Projeto: Disciplinas INF 1628 / 1301
 *  Gestor:  DI/PUC-Rio
-*  Autores: avs - Arndt von Staa
+*  Autores: Leonardo Santiago, Rafael Serpa
 *
 *  $HA Histórico de evolução:
 *     Versão  Autor    Data     Observações
-*       3.00   avs   28/02/2003 Uniformização da interface das funções e
+*       3.00   avs   11/09/2019 Uniformização da interface das funções e
 *                               de todas as condições de retorno.
-*       2.00   avs   03/08/2002 Eliminação de código duplicado, reestruturação
-*       1.00   avs   15/08/2001 Início do desenvolvimento
+*       2.00   avs   08/09/2019 Adaptacao de codigo para multiplas matrizes
+*       1.00   avs   04/09/2019 Início do desenvolvimento
 *
 ***************************************************************************/
 
@@ -29,7 +29,7 @@
 
 /***********************************************************************
 *
-*  $TC Tipo de dados: ARV Descritor do nó da árvore
+*  $TC Tipo de dados: MAT Descritor do nó da Matriz
 *
 *
 *  $ED Descrição do tipo
@@ -55,24 +55,24 @@ typedef struct tgNoMatriz {
 
 /***********************************************************************
 *
-*  $TC Tipo de dados: ARV Descritor da cabeça de uma árvore
+*  $TC Tipo de dados: MAT Descritor da cabeça de uma Matriz
 *
 *
 *  $ED Descrição do tipo
-*     A cabe‡a da árvore é o ponto de acesso para uma determinada árvore.
+*     A cabe‡a da Matriz é o ponto de acesso para uma determinada Matriz.
 *     Por intermédio da referência para o nó corrente e do ponteiro
-*     pai pode-se navegar a árvore sem necessitar de uma pilha.
-*     Pode-se, inclusive, operar com a árvore em forma de co-rotina.
+*     pai pode-se navegar a Matriz sem necessitar de uma pilha.
+*     Pode-se, inclusive, operar com a Matriz em forma de co-rotina.
 *
 ***********************************************************************/
 
 typedef struct tgMatriz {
 
 	tpNoMatriz * pNoOrigem ;
-               /* Ponteiro para a raiz da árvore */
+               /* Ponteiro para a raiz da Matriz */
 
     tpNoMatriz * pNoCorr ;
-               /* Ponteiro para o nó corrente da árvore */
+               /* Ponteiro para o nó corrente da Matriz */
 
 	int tamanho;
 
@@ -98,39 +98,38 @@ void RetornaOrigem(tpMatriz * pMat);
 
 /***************************************************************************
 *
-*  Função: ARV Criar árvore
+*  Função: MAT Criar Matriz
 *  ****/
 
 MAT_tpCondRet MAT_CriarMatriz(tpMatriz **pMat, int tam)
 {
 	int i,j;
 	tpNoMatriz ** mat;
-	//printf("[CriarMatriz]\n");  
 
 	if(tam<1)
 		return MAT_CondRetTamanhoInvalido;
 
     if ( *pMat != NULL )
     {
-		//printf("\nah nao\n");
+		 printf("iiiiiihh\n");
         MAT_DestruirMatriz( *pMat ) ;
     } /* if */
-	//printf("aham\n");
+	
 	*pMat = ( tpMatriz * ) malloc( sizeof( tpMatriz )) ;
     if ( pMat == NULL )
     {
 		
 		return MAT_CondRetFaltouMemoria ;
     } /* if */
-	//printf("sei...\n");
+	
 	mat = (tpNoMatriz**)malloc(tam*sizeof(tpNoMatriz*));
 	for(i=0; i<tam ;i++)
 	{
-		//printf("i\n");
+		
 		mat[i] = (tpNoMatriz*)malloc(tam*sizeof(tpNoMatriz));
 		for(j=0; j<tam; j++)
 		{
-			//printf("j\n");
+			
 			mat[i][j].Valor = (void*)('a'+i*tam + j);
 			mat[i][j].pNorte = NULL;
 			mat[i][j].pNordeste = NULL;
@@ -142,10 +141,10 @@ MAT_tpCondRet MAT_CriarMatriz(tpMatriz **pMat, int tam)
 			mat[i][j].pSudoeste = NULL;
 		}
 	}
-
+	
 	for(i=0; i<tam ;i++){
 		for(j=0; j<tam; j++){
-			mat[i][j].Valor = (void*)('a' +(i*tam) + j);
+			
 			if(i>0)
 			{
 				
@@ -179,16 +178,15 @@ MAT_tpCondRet MAT_CriarMatriz(tpMatriz **pMat, int tam)
 	(*pMat)->pNoCorr = &mat[0][0];
 	(*pMat)->tamanho = tam;
 	
-	//printf("krl mano...\n");
-	//ImprimeMat(*pMat);
+	ImprimeMat(*pMat);
     return MAT_CondRetOK ;
 
-}/* Fim função: ARV Destruir árvore */
+}/* Fim função: MAT Destruir Matriz */
 
 
 /***************************************************************************
 *
-*  Função: ARV Destruir árvore
+*  Função: MAT Destruir Matriz
 *  ****/
 
 void MAT_DestruirMatriz( tpMatriz * pMat )
@@ -197,39 +195,39 @@ void MAT_DestruirMatriz( tpMatriz * pMat )
 		int fil = pMat->tamanho;
 		int i = fil;
 		RetornaOrigem(pMat);
-		//printf("\n[DestroiMatriz]\n"); 
+		 
 		while(fil>1)
 		{
-		
-			for(i=fil;i>0;i--){
-				//printf("i");
+			
+			for(i=fil; i>1; i--)
+			{
+				
 				  MoveSul(pMat);
 			}
-			//printf("\naaaaaa\n");
+			
 			DestroiMatriz(pMat->pNoCorr);
-			//printf("opa\n");
+			
 			RetornaOrigem(pMat);
 			fil--;
 		}
-		//printf("foi?..\n");
+	
 		DestroiMatriz(pMat->pNoCorr);
-		//printf("ae porra\n");
-
+		
+		
 		pMat=NULL;
 		free(pMat);
+		
 	}
-} /* Fim função: ARV Destruir árvore */
+} /* Fim função: MAT Destruir Matriz */
 
 
 /***************************************************************************
 *
-*  Função: ARV Destruir árvore
+*  Função: MAT Destruir Matriz
 *  ****/
 
 MAT_tpCondRet MAT_InsereValor(tpMatriz*pMatriz, void * Valor)
 { 
-  //tratar matriz nao existente
-	//printf("aaaaaaa\n");
 	if(pMatriz==NULL)
 	{
 
@@ -242,20 +240,21 @@ MAT_tpCondRet MAT_InsereValor(tpMatriz*pMatriz, void * Valor)
 	}
 	pMatriz->pNoCorr->Valor = Valor;
 	return MAT_CondRetOK;
-}/* Fim função: ARV Destruir árvore */
+}/* Fim função: MAT Destruir Matriz */
 
 /***************************************************************************
 *
-*  Função: ARV Destruir árvore
+*  Função: MAT Destruir Matriz
 *  ****/
 
-MAT_tpCondRet RetiraMatriz(tpMatriz*pMatriz)
+MAT_tpCondRet MAT_RetiraValor(tpMatriz*pMatriz)
 {
   //tratar matriz nao existente
-   if(pMatriz->pNoOrigem==NULL)
-  {
-    return MAT_CondRetMatrizNaoExiste;
-  }
+   if(pMatriz==NULL)
+	{
+
+		return MAT_CondRetMatrizNaoExiste;
+	}
   /*tratar falha no nó corrente*/
   if(pMatriz->pNoCorr==NULL)
   {
@@ -267,12 +266,16 @@ MAT_tpCondRet RetiraMatriz(tpMatriz*pMatriz)
 
 /***************************************************************************
 *
-*  Função: ARV Move árvore
+*  Função: MAT Move Matriz
 *  ****/
 
-MAT_tpCondRet ObterValor(tpMatriz*pMatriz, void *ValorCorrente)
+MAT_tpCondRet ObterValor(tpMatriz*pMatriz, void ** ValorCorrente)
 {
-  //tratar matriz nao existente
+  if(pMatriz==NULL)
+	{
+
+		return MAT_CondRetMatrizNaoExiste;
+	}
   if(pMatriz->pNoOrigem==NULL)
   {
     return MAT_CondRetMatrizNaoExiste;
@@ -282,7 +285,7 @@ MAT_tpCondRet ObterValor(tpMatriz*pMatriz, void *ValorCorrente)
   {
     return MAT_CondRetErroEstrutura;
   }
-  ValorCorrente = pMatriz->pNoCorr->Valor;
+  *ValorCorrente = pMatriz->pNoCorr->Valor;
   return MAT_CondRetOK;
 }
 
@@ -290,6 +293,11 @@ MAT_tpCondRet ObterValor(tpMatriz*pMatriz, void *ValorCorrente)
 
 MAT_tpCondRet MoveLeste(tpMatriz*pMatriz)
 {
+
+	 if(pMatriz->pNoOrigem==NULL)
+  {
+    return MAT_CondRetMatrizNaoExiste;
+  }
   //tratar matriz nao existente
    if(pMatriz->pNoOrigem==NULL)
   {
@@ -487,7 +495,7 @@ void ImprimeMat(tpMatriz *pMat)
 	int i,j,cont = 0;
 	int tam = pMat->tamanho;
 	
-	//printf("\n[ImprimeMatriz]\n"); 
+	
 	for(i=0; i<tam; i++)
 	{
 		printf("\n");
@@ -514,6 +522,6 @@ void DestroiMatriz(tpNoMatriz * pMat )
 {
 	free(pMat);	
 }
-/********** Fim do módulo de implementação: Módulo árvore **********/
+/********** Fim do módulo de implementação: Módulo Matriz **********/
 
 ////
