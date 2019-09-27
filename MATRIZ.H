@@ -2,7 +2,7 @@
 #define Matriz_
 /***************************************************************************
 *
-*  $MCD Módulo de definição: Módulo matriz
+*  $MCD M�dulo de defini��o: M�dulo Matriz
 *
 *  Arquivo gerado:              Matriz.H
 *  Letras identificadoras:      MAT
@@ -12,25 +12,23 @@
 *
 *  Projeto: Disciplinas INF 1628 / 1301
 *  Gestor:  DI/PUC-Rio
-*  Autores: avs - Arndt von Staa
+*  Autores: Daniel Peralta, Rafael Serpa, Leonardo Santiago
 *
-*  $HA Histórico de evolução:
-*     Versão  Autor    Data     Observações
-*       3.00   avs   28/02/2003 Uniformização da interface das funções e
-*                               de todas as condições de retorno.
-*       2.00   avs   03/08/2002 Eliminação de código duplicado, reestruturação
-*       1.00   avs   15/08/2001 Início do desenvolvimento
+*  $HA Hist�rico de evolu��o:
+*     Vers�o  Autor    Data     Observa��es
+*       3.00   avs   11/09/2019 Uniformiza��o da interface das fun��es e
+*                               de todas as condi��es de retorno.
+*       2.00   avs   09/09/2019 Elimina��o de c�digo duplicado, reestrutura��o
+*       1.00   avs   03/09/2019 In�cio do desenvolvimento
 *
-*  $ED Descrição do módulo
-*     Este módulo implementa um conjunto simples de funções para criar e
-*     explorar matrizes.
-*     A matriz possui uma cabeça que contém uma referência para o elemento a[0][0],
-*     chamado de nó origem da matriz e outra para um nó corrente da árvore.
-*     O módulo permite diversas matrizes
-*     Ao iniciar a execução do programa não existe matriz.
-*     A matriz poderá estar vazia. Neste caso o nó origem e o nó corrente
-*     serão nulos, a cabeça também será nula.
-*     O nó corrente será nulo se e somente se a árvore estiver vazia.
+*  $ED Descri��o do m�dulo
+*     Este m�dulo implementa um conjunto simples de fun��es para criar e
+*     explorar Matrizes
+*     A Matriz possui uma cabe�a que cont�m uma refer�ncia para a Origem(0,0) da
+*     Matriz e outra para um n� corrente da Matriz.
+*     A cada momento o m�dulo admite no m�ximo uma �nica Matriz.
+*     Ao iniciar a execu��o do programa n�o existe Matriz.
+*     O n� corrente ser� nulo se e somente se a Matriz estiver vazia.
 *
 ***************************************************************************/
  
@@ -53,34 +51,39 @@
          MAT_CondRetOK = 0 ,
                /* Executou correto */
 
-		 MAT_CondRetErroEstrutura = 1 ,
-               /* Estrutura da matriz está errada */
 
-         MAT_CondRetMatrizNaoExiste = 2 ,
-               /* Matriz não existe */
+         
+               /* N�o � folha relativa � dire��o de inser��o desejada */
 
-         MAT_CondRetMatrizVazia = 3 ,
-               /* Matriz está vazia */
+         MAT_CondRetMatrizNaoExiste = 4 ,
+               /* Matriz n�o existe */
 
-         MAT_CondRetNaoPossuiVizinho = 4 ,
-               /* Nó corrente não possui filho na direção desejada */
+         MAT_CondRetMatrizVazia = 5 ,
+               /* Matriz est� vazia */
 
-         MAT_CondRetFaltouMemoria = 5,
-               /* Faltou memória ao alocar dados */
 
-		 MAT_CondRetTamanhoInvalido = 6,
-			   /*Tamanho não é grande o suficiente para se formar uma matriz */
 
+         MAT_CondRetNaoPossuiVizinho = 7 ,
+               /* N� corrente n�o possui filho na dire��o desejada */
+
+         MAT_CondRetFaltouMemoria = 8,
+               /* Faltou mem�ria ao alocar dados */
+
+		 MAT_CondRetTamanhoInvalido = 9, 
+		 MAT_CondRetErroEstrutura = 10
    } MAT_tpCondRet ;
+
+
+
 
    typedef struct tgMatriz tpMatriz;
 /***********************************************************************
 *
-*  $FC Função: MAT Criar matriz
+*  $FC Fun��o: MAT Criar matriz
 *
-*  $ED Descrição da função
-*     Cria uma nova matriz vazia.
-*     Caso já exista uma matriz, esta será destruída.
+*  $ED Descri��o da fun��o
+*     Cria uma nova Matriz vazia.
+*     Caso j� exista uma Matriz, esta ser� destru�da.
 *
 *  $FV Valor retornado
 *     MAT_CondRetOK
@@ -88,139 +91,119 @@
 *
 ***********************************************************************/
 
-   MAT_tpCondRet MAT_CriarMatriz(tpMatriz ** pMat, int tam);
+   MAT_tpCondRet MAT_CriarMatriz(tpMatriz ** pMat, int lin, int col);
 
-
+   MAT_tpCondRet MAT_InsereValor(tpMatriz*pMatriz, void * Valor);
 /***********************************************************************
 *
-*  $FC Função: MAT Destruir matriz
+*  $FC Fun��o: MAT Destruir Matriz
 *
-*  $ED Descrição da função
-*     Destrói a matriz ao qual o ponteiro corrente da estrutura cabeça estiver apontando.
-*     Faz nada caso a matriz corrente não exista.
+*  $ED Descri��o da fun��o
+*     Destr�i o corpo e a cabe�a da Matriz, anulando a Matriz corrente.
+*     Faz nada caso a Matriz corrente n�o exista.
+*
+***********************************************************************/
+   char * ObtemMatrizString(tpMatriz * pMat);
+   void MAT_DestruirMatriz( tpMatriz * pMat );
+
+   void ImprimeMat(tpMatriz *pMat);
+/***********************************************************************
+*
+*  $FC Fun��o: MAT Adicionar filho � esquerda
+*
+*  $EP Par�metros
+*     $P ValorParm - valor a ser inserido no novo n�.
+*
+*  $FV Valor retornado
+*     MAT_CondRetOK
+*     MAT_CondRetErroEstrutura
+*     MAT_CondRetFaltouMemoria
+*     MAT_CondRetNaoEhFolha     - caso n�o seja folha para a esquerda
 *
 ***********************************************************************/
 
-   void MAT_DestruirMatriz( tpMatriz * pMat ) ;
+MAT_tpCondRet	ObterValor(tpMatriz*pMatriz, void **ValorCorrente);
+
+MAT_tpCondRet	MAT_RetiraValor(tpMatriz*pMatriz);
+/***********************************************************************
+*
+*  $FC Fun��o: MAT Adicionar filho � direita
+*
+*  $EP Par�metros
+*     $P ValorParm - valor a ser inserido no novo n�
+*
+*  $FV Valor retornado
+*     MAT_CondRetOK
+*     MAT_CondRetErroEstrutura
+*     MAT_CondRetFaltouMemoria
+*     MAT_CondRetNaoEhFolha     - caso n�o seja folha para a direita
+*
+***********************************************************************/
+
+   MAT_tpCondRet MAT_InserirDireita( char ValorParm ) ;
+
 
 /***********************************************************************
 *
-*  $FC Função: ARV Ir para nó à leste
+*  $FC Fun��o: MAT Ir para n� pai
 *
 *  $FV Valor retornado
 *     MAT_CondRetOK
 *     MAT_CondRetMatrizNaoExiste
 *     MAT_CondRetMatrizVazia
-*     MAT_CondRetNaoPossuiFilho   - nó corrente não possui vizinho à leste
+*     MAT_CondRetNoEhRaiz
 *
 ***********************************************************************/
+   MAT_tpCondRet MoveOeste(tpMatriz*pMatriz);
+   MAT_tpCondRet MoveLeste(tpMatriz*pMatriz);
+   MAT_tpCondRet MoveNorte(tpMatriz*pMatriz);
+   MAT_tpCondRet MoveSul(tpMatriz*pMatriz);
+   MAT_tpCondRet MoveNordeste(tpMatriz*pMatriz);
+   MAT_tpCondRet MoveNoroeste(tpMatriz*pMatriz);
+   MAT_tpCondRet MoveSudeste(tpMatriz*pMatriz);
+   MAT_tpCondRet MoveSudoeste(tpMatriz*pMatriz);
 
-MAT_tpCondRet MoveLeste(tpMatriz*pMatriz);
+	void MAT_RetornaOrigem(tpMatriz * pMat);
+
 
 /***********************************************************************
 *
-*  $FC Função: ARV Ir para nó à oeste
+*  $FC Fun��o: MAT Ir para n� � esquerda
 *
 *  $FV Valor retornado
 *     MAT_CondRetOK
 *     MAT_CondRetMatrizNaoExiste
 *     MAT_CondRetMatrizVazia
-*     MAT_CondRetNaoPossuiFilho   - nó corrente não possui vizinho à oeste
+*     MAT_CondRetNaoPossuiFilho   - n� corrente n�o possui filho � esquerda
 *
 ***********************************************************************/
 
-MAT_tpCondRet MoveOeste(tpMatriz*pMatriz);
+   MAT_tpCondRet MAT_IrNoEsquerda( void ) ;
+
+
 /***********************************************************************
 *
-*  $FC Função: ARV Ir para nó ao norte
+*  $FC Fun��o: MAT Ir para n� � direita
 *
 *  $FV Valor retornado
 *     MAT_CondRetOK
 *     MAT_CondRetMatrizNaoExiste
 *     MAT_CondRetMatrizVazia
-*     MAT_CondRetNaoPossuiFilho   - nó corrente não possui vizinho ao norte
+*     MAT_CondRetNaoPossuiFilho   - n� corrente n�o possui filho � direita
 *
 ***********************************************************************/
 
-MAT_tpCondRet MoveNorte( tpMatriz*pMatriz ) ;
+   MAT_tpCondRet MAT_IrNoDireita( void ) ;
+
+   MAT_tpCondRet ObterValor(tpMatriz*pMatriz, void ** ValorCorrente);
 
 /***********************************************************************
 *
-*  $FC Função: ARV Ir para nó ao sul
+*  $FC Fun��o: MAT Obter valor corrente
 *
-*  $FV Valor retornado
-*     MAT_CondRetOK
-*     MAT_CondRetMatrizNaoExiste
-*     MAT_CondRetMatrizVazia
-*     MAT_CondRetNaoPossuiFilho   - nó corrente não possui vizinho ao sul
-*
-***********************************************************************/
-
-MAT_tpCondRet MoveSul( tpMatriz*pMatriz ) ;
-
-/***********************************************************************
-*
-*  $FC Função: ARV Ir para nó à sudeste
-*
-*  $FV Valor retornado
-*     MAT_CondRetOK
-*     MAT_CondRetMatrizNaoExiste
-*     MAT_CondRetMatrizVazia
-*     MAT_CondRetNaoPossuiFilho   - nó corrente não possui vizinho à sudeste
-*
-***********************************************************************/
-
-MAT_tpCondRet MoveSudeste( tpMatriz*pMatriz ) ;
-
-/***********************************************************************
-*
-*  $FC Função: ARV Ir para nó à sudoeste
-*
-*  $FV Valor retornado
-*     MAT_CondRetOK
-*     MAT_CondRetMatrizNaoExiste
-*     MAT_CondRetMatrizVazia
-*     MAT_CondRetNaoPossuiFilho   - nó corrente não possui vizinho à sudoeste
-*
-***********************************************************************/
-
-MAT_tpCondRet MoveSudoeste( tpMatriz*pMatriz ) ;
-
-/***********************************************************************
-*
-*  $FC Função: ARV Ir para nó à nordeste
-*
-*  $FV Valor retornado
-*     MAT_CondRetOK
-*     MAT_CondRetMatrizNaoExiste
-*     MAT_CondRetMatrizVazia
-*     MAT_CondRetNaoPossuiFilho   - nó corrente não possui vizinho à nordeste
-*
-***********************************************************************/
-
-MAT_tpCondRet MoveNordeste( tpMatriz*pMatriz ) ;
-
-/***********************************************************************
-*
-*  $FC Função: ARV Ir para nó à noroeste
-*
-*  $FV Valor retornado
-*     MAT_CondRetOK
-*     MAT_CondRetMatrizNaoExiste
-*     MAT_CondRetMatrizVazia
-*     MAT_CondRetNaoPossuiFilho   - nó corrente não possui vizinho à noroeste
-*
-***********************************************************************/
-
-MAT_tpCondRet MoveNoroeste( tpMatriz*pMatriz ) ;
-
-/***********************************************************************
-*
-*  $FC Função: ARV Obter valor corrente
-*
-*  $EP Parâmetros
-*     $P ValorParm - é o parâmetro que receberá o valor contido no nó.
-*                    Este parâmetro é passado por referência.
+*  $EP Par�metros
+*     $P ValorParm - � o par�metro que receber� o valor contido no n�.
+*                    Este par�metro � passado por refer�ncia.
 *
 *  $FV Valor retornado
 *     MAT_CondRetOK
@@ -229,20 +212,11 @@ MAT_tpCondRet MoveNoroeste( tpMatriz*pMatriz ) ;
 *
 ***********************************************************************/
 
-MAT_tpCondRet MAT_InsereValor(tpMatriz*pMatriz, void * Valor);
-
-MAT_tpCondRet RetiraMatriz(tpMatriz*pMatriz);
-
-MAT_tpCondRet ObterValor(tpMatriz*pMatriz, void *ValorCorrente);
-
-
-
-
+   MAT_tpCondRet MAT_ObterValorCorr( char * ValorParm ) ;
 
 #undef Matriz_EXT
 
-/********** Fim do módulo de definição: Módulo árvore **********/
+/********** Fim do m�dulo de defini��o: M�dulo Matriz **********/
 
 #else
 #endif
-

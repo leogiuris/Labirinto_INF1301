@@ -74,7 +74,8 @@ typedef struct tgMatriz {
     tpNoMatriz * pNoCorr ;
                /* Ponteiro para o nó corrente da Matriz */
 
-	int tamanho;
+	int linhas;
+	int colunas;
 
 } tpMatriz ;
 
@@ -92,7 +93,7 @@ void ExcluiNoLista(void * elem);
 
 void ResetaMat(tpMatriz * pMat);
 
-void RetornaOrigem(tpMatriz * pMat);
+void MAT_RetornaOrigem(tpMatriz * pMat);
 
 /*****  Código das funções exportadas pelo módulo  *****/
 
@@ -101,36 +102,37 @@ void RetornaOrigem(tpMatriz * pMat);
 *  Função: MAT Criar Matriz
 *  ****/
 
-MAT_tpCondRet MAT_CriarMatriz(tpMatriz **pMat, int tam)
+MAT_tpCondRet MAT_CriarMatriz(tpMatriz ** pMat, int lin, int col)
 {
 	int i,j;
 	tpNoMatriz ** mat;
 
-	if(tam<1)
+	//printf("[Cria Matriz]\n");
+	if(lin < 1 || col < 1)
 		return MAT_CondRetTamanhoInvalido;
-
+	//printf("b\n");
     if ( *pMat != NULL )
     {
-		 printf("iiiiiihh\n");
+		
         MAT_DestruirMatriz( *pMat ) ;
     } /* if */
-	
+	//printf("c\n");
 	*pMat = ( tpMatriz * ) malloc( sizeof( tpMatriz )) ;
     if ( pMat == NULL )
     {
 		
 		return MAT_CondRetFaltouMemoria ;
     } /* if */
-	
-	mat = (tpNoMatriz**)malloc(tam*sizeof(tpNoMatriz*));
-	for(i=0; i<tam ;i++)
+	//printf("d\n");
+	mat = (tpNoMatriz**)malloc(lin*sizeof(tpNoMatriz*));
+	for(i=0; i<lin ;i++)
 	{
 		
-		mat[i] = (tpNoMatriz*)malloc(tam*sizeof(tpNoMatriz));
-		for(j=0; j<tam; j++)
+		mat[i] = (tpNoMatriz*)malloc(col*sizeof(tpNoMatriz));
+		for(j=0; j<col; j++)
 		{
 			
-			mat[i][j].Valor = (void*)('a'+i*tam + j);
+			mat[i][j].Valor = (void*)('@');
 			mat[i][j].pNorte = NULL;
 			mat[i][j].pNordeste = NULL;
 			mat[i][j].pNoroeste = NULL;
@@ -142,8 +144,8 @@ MAT_tpCondRet MAT_CriarMatriz(tpMatriz **pMat, int tam)
 		}
 	}
 	
-	for(i=0; i<tam ;i++){
-		for(j=0; j<tam; j++){
+	for(i=0; i<lin ;i++){
+		for(j=0; j<col; j++){
 			
 			if(i>0)
 			{
@@ -151,22 +153,22 @@ MAT_tpCondRet MAT_CriarMatriz(tpMatriz **pMat, int tam)
 				mat[i][j].pNorte = &mat[i-1][j];
 				if(j>0)
 					mat[i][j].pNoroeste = &mat[i-1][j-1];
-				if(j<tam)
+				if(j<col)
 					mat[i][j].pNordeste = &mat[i-1][j+1];
 			}
-			if(i<tam-1)
+			if(i<lin-1)
 			{
 				mat[i][j].pSul = &mat[i+1][j];
 				if(j>0)
 					mat[i][j].pSudoeste = &mat[i+1][j-1];
-				if(j<tam)
+				if(j<col)
 					mat[i][j].pSudeste = &mat[i+1][j+1];
 			}
 			if(j>0)
 			{
 				mat[i][j].pOeste = &mat[i][j-1];
 			}
-			if(j<tam-1)
+			if(j<col-1)
 			{
 				mat[i][j].pLeste = &mat[i][j+1];
 			}
@@ -176,9 +178,9 @@ MAT_tpCondRet MAT_CriarMatriz(tpMatriz **pMat, int tam)
 	
     (*pMat)->pNoOrigem = &mat[0][0] ;
 	(*pMat)->pNoCorr = &mat[0][0];
-	(*pMat)->tamanho = tam;
-	
-	ImprimeMat(*pMat);
+	(*pMat)->linhas = lin;
+	(*pMat)->colunas = col;
+
     return MAT_CondRetOK ;
 
 }/* Fim função: MAT Destruir Matriz */
@@ -191,15 +193,19 @@ MAT_tpCondRet MAT_CriarMatriz(tpMatriz **pMat, int tam)
 
 void MAT_DestruirMatriz( tpMatriz * pMat )
 {	
-	if(pMat!=NULL){
-		int fil = pMat->tamanho;
-		int i = fil;
-		RetornaOrigem(pMat);
-		 
-		while(fil>1)
-		{
-			
-			for(i=fil; i>1; i--)
+	printf("[Destruir Matriz]\n");
+	if(pMat!=NULL)
+	{
+		
+		int lin = 10;
+		int i = lin;
+		printf("ffff\n");
+		MAT_RetornaOrigem(pMat);
+		printf("ggggg\n");
+		while(lin>1)
+		{	
+			printf("i\n");
+			for(i=lin; i>1; i--)
 			{
 				
 				  MoveSul(pMat);
@@ -207,8 +213,8 @@ void MAT_DestruirMatriz( tpMatriz * pMat )
 			
 			DestroiMatriz(pMat->pNoCorr);
 			
-			RetornaOrigem(pMat);
-			fil--;
+			MAT_RetornaOrigem(pMat);
+			lin--;
 		}
 	
 		DestroiMatriz(pMat->pNoCorr);
@@ -218,6 +224,7 @@ void MAT_DestruirMatriz( tpMatriz * pMat )
 		free(pMat);
 		
 	}
+	printf("hhhhhhh\n");
 } /* Fim função: MAT Destruir Matriz */
 
 
@@ -285,6 +292,7 @@ MAT_tpCondRet ObterValor(tpMatriz*pMatriz, void ** ValorCorrente)
   {
     return MAT_CondRetErroEstrutura;
   }
+
   *ValorCorrente = pMatriz->pNoCorr->Valor;
   return MAT_CondRetOK;
 }
@@ -461,65 +469,114 @@ MAT_tpCondRet MoveNoroeste(tpMatriz*pMatriz)
 
 /*****  Código das funções encapsuladas no módulo  *****/
 
-void RetornaOrigem(tpMatriz * pMat)
+void MAT_RetornaOrigem(tpMatriz * pMat)
 {
 	pMat->pNoCorr = pMat->pNoOrigem;
 }
 
+
 void ResetaMat(tpMatriz * pMat)
 {
 	int i,j,cont = 0;
-	int tam = pMat->tamanho;
-	for(i=0; i<tam; i++)
+	int lin = pMat->linhas;
+	int col = pMat->colunas;
+
+	for(i=0; i<lin; i++)
 	{
 		
-		RetornaOrigem(pMat);
+		MAT_RetornaOrigem(pMat);
 		while(cont!=i)
 		{
 			  MoveSul(pMat);
 			cont++;
 		}cont = 0;
 
-		for(j=0; j<tam; j++)
+		for(j=0; j<col; j++)
 		{
-			pMat->pNoCorr->Valor = (void*)('a'+i*tam + j);
-			if(j<tam-1)
+			pMat->pNoCorr->Valor = (void*)(219);
+			if(j<col-1)
 				 MoveLeste(pMat);
 		}
 	}
 
 }
+
+
+char * ObtemMatrizString(tpMatriz * pMat)
+{
+	char * str;
+	int i,j,cont = 0;
+	int lin = pMat->linhas;
+	int col = pMat->colunas;
+	tpNoMatriz * temp = pMat->pNoCorr;
+	str = (char*)malloc(col*lin);
+	
+	
+	for(i=0; i<lin; i++)
+	{
+		MAT_RetornaOrigem(pMat);
+		while(cont!=i)
+		{
+			MoveSul(pMat);
+			cont++;
+		}cont = 0;
+
+		for(j=0; j<col; j++)
+		{
+			if(pMat->pNoCorr == temp)
+			{
+				str[i*col + j] = 'o';
+			}
+			else
+			{
+				str[i*col + j] = (char)pMat->pNoCorr->Valor;;
+			}
+			if(j < col-1)
+				 MoveLeste(pMat);
+		}
+		
+	}
+	pMat->pNoCorr = temp;
+	return str;
+}
+
 
 void ImprimeMat(tpMatriz *pMat)
 {
 	int i,j,cont = 0;
-	int tam = pMat->tamanho;
+	int lin = pMat->linhas;
+	int col = pMat->colunas;
+	tpNoMatriz * temp = pMat->pNoCorr;
 	
-	
-	for(i=0; i<tam; i++)
+	for(i=0; i<lin; i++)
 	{
 		printf("\n");
-		RetornaOrigem(pMat);
+		MAT_RetornaOrigem(pMat);
 		while(cont!=i)
 		{
 			  MoveSul(pMat);
 			cont++;
 		}cont = 0;
 
-		for(j=0; j<tam; j++)
+		for(j=0; j<col; j++)
 		{
-			
-			printf("%c	",(char)pMat->pNoCorr->Valor);
-			if(j<tam-1)
+			if(pMat->pNoCorr == temp)
+				printf("o ");
+			else
+				printf("%c ",(char)pMat->pNoCorr->Valor);
+			if(j < col-1)
 				 MoveLeste(pMat);
 		}
+		
 	}
-	ResetaMat(pMat);
+	pMat->pNoCorr = temp;
 	printf("\n");
 }
 
+
 void DestroiMatriz(tpNoMatriz * pMat )
 {
+	printf("destroi\n");
 	free(pMat);	
 }
 /********** Fim do módulo de implementação: Módulo Matriz **********/
