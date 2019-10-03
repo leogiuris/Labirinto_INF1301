@@ -197,8 +197,7 @@ void MAT_DestruirMatriz( tpMatriz * pMat )
 	if(pMat!=NULL)
 	{
 		
-		int lin = 10;
-		int i = lin;
+		int i,lin = pMat->linhas;
 		printf("ffff\n");
 		MAT_RetornaOrigem(pMat);
 		printf("ggggg\n");

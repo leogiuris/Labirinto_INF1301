@@ -1,5 +1,5 @@
 #include"lab2.h"
-
+#include "MATRIZ.H"
 #define PAREDE	'@'
 #define CAMINHO ' '
 #define INICIO	'i'
@@ -16,13 +16,13 @@ typedef struct tgLabirinto{
 
 void ImprimeLabirinto(tpLabirinto * pLab);
 
-void criaLab(tpLabirinto ** pLab, int linhas, int colunas)
+LAB_tpCondRet LAB_CriarLabirinto(tpLabirinto ** pLab, int linhas, int colunas)
 {
 	tpMatriz * pMat = NULL;
+	
 
 	if(*pLab!=NULL) return;
 	//printf("aaaaa\n");
-
 
 	*pLab = (tpLabirinto *) malloc(sizeof(tpLabirinto));
 	//printf("aaaaa\n");
@@ -34,8 +34,19 @@ void criaLab(tpLabirinto ** pLab, int linhas, int colunas)
 	MAT_InsereValor((*pLab)->mat,(void*)INICIO);
 	ImprimeLabirinto(*pLab);
 	//printf("aaaaa\n");
-	return;
+	return LAB_CondRetOK;
 }
+
+LAB_tpCondRet LAB_DestruirLabirinto(tpLabirinto * pLab)
+{
+	if(pLab==NULL)
+		return LAB_CondRetLabirintoNaoExiste;
+	
+	MAT_DestruirMatriz(pLab->mat);
+	free(pLab);
+	return LAB_CondRetOK;
+}
+
 
 void LAB_ObterValor(tpLabirinto * pLab, char * valor)
 {
@@ -56,7 +67,7 @@ void RetornaInicio(tpLabirinto * pLab)
 }
 
 
-void ConstroiLeste (tpLabirinto *pLab)
+void LAB_ConstroiLeste (tpLabirinto *pLab)
 {
 	if(MoveLeste(pLab->mat) == MAT_CondRetNaoPossuiVizinho)
 	{
@@ -70,7 +81,7 @@ void ConstroiLeste (tpLabirinto *pLab)
 	return;
 }
 
-void ConstroiSul (tpLabirinto *pLab)
+void LAB_ConstroiSul (tpLabirinto *pLab)
 {
 	if(MoveSul(pLab->mat) == MAT_CondRetNaoPossuiVizinho)
 	{
@@ -84,7 +95,7 @@ void ConstroiSul (tpLabirinto *pLab)
 	return;
 }
 
-void ConstroiNorte (tpLabirinto *pLab)
+void LAB_ConstroiNorte (tpLabirinto *pLab)
 {
 	if(MoveNorte(pLab->mat) == MAT_CondRetNaoPossuiVizinho)
 	{
@@ -98,7 +109,7 @@ void ConstroiNorte (tpLabirinto *pLab)
 	return;
 }
 
-void ConstroiOeste (tpLabirinto *pLab)
+void LAB_ConstroiOeste (tpLabirinto *pLab)
 {
 	if(MoveOeste(pLab->mat) == MAT_CondRetNaoPossuiVizinho)
 	{
@@ -158,7 +169,7 @@ void FinalizaConstrucao(tpLabirinto * pLab)
 	ImprimeLabirinto(pLab);
 }
 
-void PercorreLeste(tpLabirinto * pLab)
+void LAB_PercorreLeste(tpLabirinto * pLab)
 {
 	char * ret = (char*)malloc(1);
 	if(MoveLeste(pLab->mat) == MAT_CondRetNaoPossuiVizinho)
@@ -176,7 +187,7 @@ void PercorreLeste(tpLabirinto * pLab)
 	return;
 }
 
-void PercorreOeste(tpLabirinto * pLab)
+void LAB_PercorreOeste(tpLabirinto * pLab)
 {
 	char * ret = (char*)malloc(1);
 	if(MoveOeste(pLab->mat) == MAT_CondRetNaoPossuiVizinho)
@@ -194,7 +205,7 @@ void PercorreOeste(tpLabirinto * pLab)
 	return;
 }
 
-void PercorreSul(tpLabirinto * pLab)
+void LAB_PercorreSul(tpLabirinto * pLab)
 {
 	char * ret = (char*)malloc(1);
 	if(MoveSul(pLab->mat) == MAT_CondRetNaoPossuiVizinho)
@@ -212,7 +223,7 @@ void PercorreSul(tpLabirinto * pLab)
 	return;
 }
 
-void PercorreNorte(tpLabirinto * pLab)
+void LAB_PercorreNorte(tpLabirinto * pLab)
 {
 	char * ret = (char*)malloc(1);
 	if(MoveNorte(pLab->mat) == MAT_CondRetNaoPossuiVizinho)
