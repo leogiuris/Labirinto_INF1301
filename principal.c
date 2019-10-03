@@ -14,16 +14,16 @@ void ConstroiLabirinto(tpLabirinto * pLab)
 	c = _getch();
 
 	if(c == 'd'){
-		ConstroiLeste(pLab);
+		LAB_ConstroiLeste(pLab);
 	}
 	if(c == 'w'){
-		ConstroiNorte(pLab);
+		LAB_ConstroiNorte(pLab);
 	}
 	if(c == 'a'){
-		ConstroiOeste(pLab);
+		LAB_ConstroiOeste(pLab);
 	}
 	if(c == 's'){
-		ConstroiSul(pLab);
+		LAB_ConstroiSul(pLab);
 	}
 	if(c=='f'){
 		FinalizaConstrucao(pLab);
@@ -41,16 +41,16 @@ void PercorreLabirinto(tpLabirinto * pLab)
 	c = _getch();
 
 	if(c == 'd'){
-		PercorreLeste(pLab);
+		LAB_PercorreLeste(pLab);
 	}
 	if(c == 'w'){
-		PercorreNorte(pLab);
+		LAB_PercorreNorte(pLab);
 	}
 	if(c == 'a'){
-		PercorreOeste(pLab);
+		LAB_PercorreOeste(pLab);
 	}
 	if(c == 's'){
-		PercorreSul(pLab);
+		LAB_PercorreSul(pLab);
 	}
 	LAB_ObterValor(pLab,val);
 	if(*val=='f'){
@@ -65,11 +65,10 @@ int main()
 {
 	char * b = (char *)malloc(1);
 
-	criaLab(&pLab,15,15);
+	LAB_CriarLabirinto(&pLab,15,15);
 	ConstroiLabirinto(pLab);
 	PercorreLabirinto(pLab);
 	printf("\nParabens! Voce chegou ao fim!\n");
 	_getch();
 	return 0;
 }
-
