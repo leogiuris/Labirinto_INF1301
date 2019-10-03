@@ -1,0 +1,11 @@
+
+
+==destruir labirinto antes de criar
+=destruir 0
+=recuperar
+
+==cria labirinto
+=criar 5 5 0
+
+==destroi lab
+=destruir 0
