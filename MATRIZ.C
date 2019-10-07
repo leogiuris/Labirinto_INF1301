@@ -13,10 +13,10 @@
 *
 *  $HA Histórico de evolução:
 *     Versão  Autor    Data     Observações
-*       3.00   avs   11/09/2019 Uniformização da interface das funções e
+*       3.00   lgs   11/09/2019 Uniformização da interface das funções e
 *                               de todas as condições de retorno.
-*       2.00   avs   08/09/2019 Adaptacao de codigo para multiplas matrizes
-*       1.00   avs   04/09/2019 Início do desenvolvimento
+*       2.00   rs   08/09/2019 Adaptacao de codigo para multiplas matrizes
+*       1.00   dp   04/09/2019 Início do desenvolvimento
 *
 ***************************************************************************/
 
@@ -193,17 +193,17 @@ MAT_tpCondRet MAT_CriarMatriz(tpMatriz ** pMat, int lin, int col)
 
 void MAT_DestruirMatriz( tpMatriz * pMat )
 {	
-	printf("[Destruir Matriz]\n");
+	
 	if(pMat!=NULL)
 	{
 		
 		int i,lin = pMat->linhas;
-		printf("ffff\n");
+
 		MAT_RetornaOrigem(pMat);
-		printf("ggggg\n");
+
 		while(lin>1)
 		{	
-			printf("i\n");
+			
 			for(i=lin; i>1; i--)
 			{
 				
@@ -223,7 +223,7 @@ void MAT_DestruirMatriz( tpMatriz * pMat )
 		free(pMat);
 		
 	}
-	printf("hhhhhhh\n");
+	
 } /* Fim função: MAT Destruir Matriz */
 
 
@@ -575,7 +575,7 @@ void ImprimeMat(tpMatriz *pMat)
 
 void DestroiMatriz(tpNoMatriz * pMat )
 {
-	printf("destroi\n");
+	
 	free(pMat);	
 }
 /********** Fim do módulo de implementação: Módulo Matriz **********/

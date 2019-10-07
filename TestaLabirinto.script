@@ -1,4 +1,19 @@
 
+//		CRIAR_LAB_CMD		"=criar"
+//		DESTRUIR_LAB_CMD	"=destruir"
+//		CONSTRUIR_NORTE_CMD	"=constn"
+//		CONSTRUIR_LESTE_CMD	"=constl"
+//		CONSTRUIR_SUL_CMD	"=consts"
+//		CONSTRUIR_OESTE_CMD	"=consto"
+//		FIM_CONSTRUCAO_CMD	"=fimconst"
+//		PERCORRE_NORTE_CMD	"=percn"
+//		PERCORRE_LESTE_CMD	"=percl"
+//		PERCORRE_SUL_CMD	"=percs"
+//		PERCORRE_OESTE_CMD	"=perco"
+//		OBTER_VALOR_CMD		"=obtem"
+
+
+
 
 ==destruir labirinto antes de criar
 =destruir 0
@@ -6,6 +21,67 @@
 
 ==cria labirinto
 =criar 5 5 0
+
+==criar labirinto novamente
+=criar 3 3 0
+
+==constroi leste
+=constl 0
+
+==constroi leste
+=constl 0
+
+==constroi fora dos limites
+=constl 0
+=recuperar
+
+==constroi onde ja tem caminho
+=consto 0
+
+==constroi sul
+=consts 0
+
+==constroi norte
+=consts 0
+=constl 0
+=constn 0
+
+==constroi oeste
+=consto 0
+=consto 0
+
+
+==finaliza construcao
+=fimconst 0
+
+
+
+==percorrer leste
+=criar 3 3 0
+=constl 0
+=consts 0
+=consts 0
+=consto 0
+=fimconst 0
+=percl 0
+
+==percorrer na parede
+=percl 0
+=recuperar
+
+==percorrer fora do labirinto
+=percn 0
+=recuperar
+
+==percorrer sul
+=percs 0
+
+==percorrer oeste
+=percs 0
+=perco 0
+
+==obtem valor no fim do labirinto
+=obtem 'f' 0
 
 ==destroi lab
 =destruir 0

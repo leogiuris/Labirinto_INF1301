@@ -9,7 +9,6 @@
 typedef struct tgLabirinto{
 	tpMatriz * mat;
 	int lin;
-	///numero de colunas
 	int col;
 }tpLabirinto;
 
@@ -19,21 +18,21 @@ void ImprimeLabirinto(tpLabirinto * pLab);
 LAB_tpCondRet LAB_CriarLabirinto(tpLabirinto ** pLab, int linhas, int colunas)
 {
 	tpMatriz * pMat = NULL;
-	
+	MAT_tpCondRet ret;
 
-	if(*pLab!=NULL) return;
-	//printf("aaaaa\n");
+	if(*pLab!=NULL) 
+		LAB_DestruirLabirinto(*pLab);
 
 	*pLab = (tpLabirinto *) malloc(sizeof(tpLabirinto));
-	//printf("aaaaa\n");
-	MAT_CriarMatriz(&pMat,linhas,colunas);
-	//printf("aaaaa\n");
+
+	ret = MAT_CriarMatriz(&pMat,linhas,colunas);
+
 	(*pLab)->mat = pMat;
 	(*pLab)->lin = linhas;
 	(*pLab)->col = colunas;
 	MAT_InsereValor((*pLab)->mat,(void*)INICIO);
 	ImprimeLabirinto(*pLab);
-	//printf("aaaaa\n");
+
 	return LAB_CondRetOK;
 }
 
@@ -48,15 +47,20 @@ LAB_tpCondRet LAB_DestruirLabirinto(tpLabirinto * pLab)
 }
 
 
-void LAB_ObterValor(tpLabirinto * pLab, char * valor)
+LAB_tpCondRet LAB_ObterValor(tpLabirinto * pLab, char * valor)
 {
+	//AE: Labirinto tem que existir
+	
+
 	void * temp;
 
-	//printf("[Obtem Valor Labirinto]\n");
+	if(pLab==NULL)
+		return LAB_CondRetLabirintoNaoExiste;
+
 	ObterValor(pLab->mat, &temp);
 	
 	*valor = (char)temp;
-	//printf("%c\n",*valor);
+
 
 	return;
 }
@@ -67,60 +71,76 @@ void RetornaInicio(tpLabirinto * pLab)
 }
 
 
-void LAB_ConstroiLeste (tpLabirinto *pLab)
+LAB_tpCondRet LAB_ConstroiLeste (tpLabirinto *pLab)
 {
+	//AE: Labirinto tem que existir
+	if(pLab==NULL)
+		return LAB_CondRetLabirintoNaoExiste;
+
 	if(MoveLeste(pLab->mat) == MAT_CondRetNaoPossuiVizinho)
 	{
-		printf("nao possui vizinho\n");
-		return;
+		
+		return LAB_CondRetNaoPossuiVizinho;
 	}
 
 	MAT_InsereValor(pLab->mat,(void*)CAMINHO);
 	
 	ImprimeLabirinto(pLab);
-	return;
+	return LAB_CondRetOK;
 }
 
-void LAB_ConstroiSul (tpLabirinto *pLab)
+LAB_tpCondRet LAB_ConstroiSul (tpLabirinto *pLab)
 {
+	//AE: Labirinto tem que existir
+	if(pLab==NULL)
+		return LAB_CondRetLabirintoNaoExiste;
+
 	if(MoveSul(pLab->mat) == MAT_CondRetNaoPossuiVizinho)
 	{
-		printf("nao possui vizinho\n");
-		return;
+		
+		return LAB_CondRetNaoPossuiVizinho;
 	}
 
 	MAT_InsereValor(pLab->mat,(void*)CAMINHO);
 	
 	ImprimeLabirinto(pLab);
-	return;
+	return LAB_CondRetOK;
 }
 
-void LAB_ConstroiNorte (tpLabirinto *pLab)
+LAB_tpCondRet LAB_ConstroiNorte (tpLabirinto *pLab)
 {
+	//AE: Labirinto tem que existir
+	if(pLab==NULL)
+		return LAB_CondRetLabirintoNaoExiste;
+
 	if(MoveNorte(pLab->mat) == MAT_CondRetNaoPossuiVizinho)
 	{
-		printf("nao possui vizinho\n");
-		return;
+		
+		return LAB_CondRetNaoPossuiVizinho;
 	}
 
 	MAT_InsereValor(pLab->mat,(void*)CAMINHO);
 	
 	ImprimeLabirinto(pLab);
-	return;
+	return LAB_CondRetOK;
 }
 
-void LAB_ConstroiOeste (tpLabirinto *pLab)
+LAB_tpCondRet LAB_ConstroiOeste (tpLabirinto *pLab)
 {
+	//AE: Labirinto tem que existir
+	if(pLab==NULL)
+		return LAB_CondRetLabirintoNaoExiste;
+
 	if(MoveOeste(pLab->mat) == MAT_CondRetNaoPossuiVizinho)
 	{
-		printf("nao possui vizinho\n");
-		return;
+		
+		return LAB_CondRetNaoPossuiVizinho;
 	}
 
 	MAT_InsereValor(pLab->mat,(void*)CAMINHO);
 	
 	ImprimeLabirinto(pLab);
-	return;
+	return LAB_CondRetOK;
 }
 
 void ImprimeLabirinto(tpLabirinto * pLab)
@@ -134,110 +154,133 @@ void ImprimeLabirinto(tpLabirinto * pLab)
 	//printf("%s\n",str);
 
 
-	printf("  ");
-	for(i=0; i<2*col-1; i++)
+	printf(" %c",218);
+	for(i=0; i<2*col+1; i++)
 	{
-		printf("_");
+		printf("%c",196);
 	}
+	printf("%c",191);
 
 	for(i=0; i<lin; i++)
 	{
 		printf("\n");
-		printf(" |");
+		printf(" | ");
 		for(j=0; j<col;j++)
 		{
 			printf("%c",str[i*col+j]);
 			if(j< col-1)
 				printf(" ");
 		}
-		printf("|");
+		printf(" |");
 	}
 
-	printf("\n  ");
-	for(i=0; i<2*col-1; i++)
+	printf("\n %c", 192);
+	for(i=0; i<2*col+1; i++)
 	{
-		printf("-");
+		printf("%c",196);
 	}
-	printf("\n");
+	printf("%c\n", 217);
 }
 
 
-void FinalizaConstrucao(tpLabirinto * pLab)
+LAB_tpCondRet LAB_FinalizaConstrucao(tpLabirinto * pLab)
 {
+	//AE: Labirinto tem que existir
+	if(pLab==NULL)
+		return LAB_CondRetLabirintoNaoExiste;
+
 	MAT_InsereValor(pLab->mat,(void*)FIM);
 	RetornaInicio(pLab);
 	ImprimeLabirinto(pLab);
+	return LAB_CondRetOK;
 }
 
-void LAB_PercorreLeste(tpLabirinto * pLab)
+LAB_tpCondRet LAB_PercorreLeste(tpLabirinto * pLab)
 {
+
 	char * ret = (char*)malloc(1);
+
+	if(pLab==NULL)
+		return LAB_CondRetLabirintoNaoExiste;
+
 	if(MoveLeste(pLab->mat) == MAT_CondRetNaoPossuiVizinho)
 	{
-		printf("nao possui vizinho\n");
-		return;
+		
+		return LAB_CondRetNaoPossuiVizinho;
 	}
 	LAB_ObterValor(pLab,ret);
 	if(*ret == PAREDE)
 	{
 		MoveOeste(pLab->mat);
-		return;
+		return LAB_CondRetParede;
 	}
 	ImprimeLabirinto(pLab);
-	return;
+	return LAB_CondRetOK;
 }
 
-void LAB_PercorreOeste(tpLabirinto * pLab)
+LAB_tpCondRet LAB_PercorreOeste(tpLabirinto * pLab)
 {
 	char * ret = (char*)malloc(1);
+
+	if(pLab==NULL)
+		return LAB_CondRetLabirintoNaoExiste;
+
 	if(MoveOeste(pLab->mat) == MAT_CondRetNaoPossuiVizinho)
 	{
-		printf("nao possui vizinho\n");
-		return;
+		
+		return LAB_CondRetNaoPossuiVizinho;
 	}
 	LAB_ObterValor(pLab,ret);
 	if(*ret == PAREDE)
 	{
 		MoveLeste(pLab->mat);
-		return;
+		return LAB_CondRetParede;
 	}
 	ImprimeLabirinto(pLab);
-	return;
+	return LAB_CondRetOK;
 }
 
-void LAB_PercorreSul(tpLabirinto * pLab)
+LAB_tpCondRet LAB_PercorreSul(tpLabirinto * pLab)
 {
 	char * ret = (char*)malloc(1);
+
+	if(pLab==NULL)
+		return LAB_CondRetLabirintoNaoExiste;
+
 	if(MoveSul(pLab->mat) == MAT_CondRetNaoPossuiVizinho)
 	{
-		printf("nao possui vizinho\n");
-		return;
+		
+		return LAB_CondRetNaoPossuiVizinho;
 	}
 	LAB_ObterValor(pLab,ret);
 	if(*ret == PAREDE)
 	{
 		MoveNorte(pLab->mat);
-		return;
+		return LAB_CondRetParede;
 	}
 	ImprimeLabirinto(pLab);
-	return;
+	return LAB_CondRetOK;
 }
 
-void LAB_PercorreNorte(tpLabirinto * pLab)
+LAB_tpCondRet LAB_PercorreNorte(tpLabirinto * pLab)
 {
 	char * ret = (char*)malloc(1);
+
+	if(pLab==NULL)
+		return LAB_CondRetLabirintoNaoExiste;
+
 	if(MoveNorte(pLab->mat) == MAT_CondRetNaoPossuiVizinho)
 	{
-		printf("nao possui vizinho\n");
-		return;
+		
+		return LAB_CondRetNaoPossuiVizinho;
 	}
 	LAB_ObterValor(pLab,ret);
 	if(*ret == PAREDE)
 	{
 		MoveSul(pLab->mat);
-		return;
+		return LAB_CondRetParede;
 	}
 	ImprimeLabirinto(pLab);
-	return;
+	return LAB_CondRetOK;
 }
 

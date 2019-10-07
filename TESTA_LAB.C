@@ -59,15 +59,15 @@
 
 #define		CRIAR_LAB_CMD		"=criar"
 #define		DESTRUIR_LAB_CMD	"=destruir"
-#define		CONSTRUIR_NORTE_CMD	"=LAB_Constroin"
+#define		CONSTRUIR_NORTE_CMD	"=constn"
 #define		CONSTRUIR_LESTE_CMD	"=constl"
 #define		CONSTRUIR_SUL_CMD	"=consts"
 #define		CONSTRUIR_OESTE_CMD	"=consto"
 #define		FIM_CONSTRUCAO_CMD	"=fimconst"
-#define		LAB_Percorre_NORTE_CMD	"=percn"
-#define		LAB_Percorre_LESTE_CMD	"=percl"
-#define		LAB_Percorre_SUL_CMD	"=percs"
-#define		LAB_Percorre_OESTE_CMD	"=perco"
+#define		PERCORRE_NORTE_CMD	"=percn"
+#define		PERCORRE_LESTE_CMD	"=percl"
+#define		PERCORRE_SUL_CMD	"=percs"
+#define		PERCORRE_OESTE_CMD	"=perco"
 #define		OBTER_VALOR_CMD		"=obtem"
 
 
@@ -112,14 +112,12 @@ tpLabirinto * pLab;
       char ValorDado     = '\0' ;
 	  //---------------------------
 
-	  int  NumLidos = -1 ;
-
+	  int  NumLidos = -1;
 	  int lin,col;
 
 
-
 	  if ( strcmp( ComandoTeste , CRIAR_LAB_CMD ) == 0 )
-         {
+      {
 
             NumLidos = LER_LerParametros( "iii" ,
                                &lin,&col,&CondRetEsperada ) ;
@@ -137,7 +135,7 @@ tpLabirinto * pLab;
             return TST_CompararInt( CondRetEsperada , CondRetObtido ,
                                     "Retorno errado ao criar matriz" );
          
-		 } /* fim ativa: Testar MAT Criar matriz */
+		} /* fim ativa: Testar MAT Criar matriz */
 
 	  if( strcmp( ComandoTeste , DESTRUIR_LAB_CMD ) == 0 )
 	  {
@@ -151,6 +149,150 @@ tpLabirinto * pLab;
 
 			return TST_CompararInt( CondRetEsperada , CondRetObtido ,
                                     "Retorno errado ao destruir labirinto" );
+	  }
+
+	  if( strcmp( ComandoTeste , CONSTRUIR_LESTE_CMD ) == 0 )
+	  {
+		  NumLidos = LER_LerParametros( "i" ,&CondRetEsperada ) ;
+            if ( NumLidos != 1 )
+            {
+               return TST_CondRetParm ;
+            } /* if */
+
+			CondRetObtido = LAB_ConstroiLeste(pLab);
+
+			return TST_CompararInt( CondRetEsperada , CondRetObtido ,
+                                    "Retorno errado ao construir leste" );
+	  }
+
+	  if( strcmp( ComandoTeste , CONSTRUIR_OESTE_CMD ) == 0 )
+	  {
+		  NumLidos = LER_LerParametros( "i" ,&CondRetEsperada ) ;
+            if ( NumLidos != 1 )
+            {
+               return TST_CondRetParm ;
+            } /* if */
+
+			CondRetObtido = LAB_ConstroiOeste(pLab);
+
+			return TST_CompararInt( CondRetEsperada , CondRetObtido ,
+                                    "Retorno errado ao construir oeste" );
+	  }
+
+	  if( strcmp( ComandoTeste , CONSTRUIR_NORTE_CMD ) == 0 )
+	  {
+		  NumLidos = LER_LerParametros( "i" ,&CondRetEsperada ) ;
+            if ( NumLidos != 1 )
+            {
+               return TST_CondRetParm ;
+            } /* if */
+
+			CondRetObtido = LAB_ConstroiNorte(pLab);
+
+			return TST_CompararInt( CondRetEsperada , CondRetObtido ,
+                                    "Retorno errado ao construir Norte" );
+	  }
+
+	  if( strcmp( ComandoTeste , CONSTRUIR_SUL_CMD ) == 0 )
+	  {
+		  NumLidos = LER_LerParametros( "i" ,&CondRetEsperada ) ;
+            if ( NumLidos != 1 )
+            {
+               return TST_CondRetParm ;
+            } /* if */
+
+			CondRetObtido = LAB_ConstroiSul(pLab);
+
+			return TST_CompararInt( CondRetEsperada , CondRetObtido ,
+                                    "Retorno errado ao construir oeste" );
+	  }
+
+	  if( strcmp( ComandoTeste , FIM_CONSTRUCAO_CMD ) == 0 )
+	  {
+		  NumLidos = LER_LerParametros( "i" ,&CondRetEsperada ) ;
+            if ( NumLidos != 1 )
+            {
+               return TST_CondRetParm ;
+            } /* if */
+
+			CondRetObtido = LAB_FinalizaConstrucao(pLab);
+
+			return TST_CompararInt( CondRetEsperada , CondRetObtido ,
+                                    "Retorno errado ao finalizar construcao" );
+	  }
+
+
+	  
+	  if( strcmp( ComandoTeste , PERCORRE_LESTE_CMD ) == 0 )
+	  {
+		  NumLidos = LER_LerParametros( "i" ,&CondRetEsperada ) ;
+            if ( NumLidos != 1 )
+            {
+               return TST_CondRetParm ;
+            } /* if */
+
+			CondRetObtido = LAB_PercorreLeste(pLab);
+
+			return TST_CompararInt( CondRetEsperada , CondRetObtido ,
+                                    "Retorno errado ao percorrer leste" );
+	  }
+
+	  if( strcmp( ComandoTeste , PERCORRE_NORTE_CMD ) == 0 )
+	  {
+		  NumLidos = LER_LerParametros( "i" ,&CondRetEsperada ) ;
+            if ( NumLidos != 1 )
+            {
+               return TST_CondRetParm ;
+            } /* if */
+
+			CondRetObtido = LAB_PercorreNorte(pLab);
+
+			return TST_CompararInt( CondRetEsperada , CondRetObtido ,
+                                    "Retorno errado ao percorrer leste" );
+	  }
+
+	  if( strcmp( ComandoTeste , PERCORRE_OESTE_CMD ) == 0 )
+	  {
+		  NumLidos = LER_LerParametros( "i" ,&CondRetEsperada ) ;
+            if ( NumLidos != 1 )
+            {
+               return TST_CondRetParm ;
+            } /* if */
+
+			CondRetObtido = LAB_PercorreOeste(pLab);
+
+			return TST_CompararInt( CondRetEsperada , CondRetObtido ,
+                                    "Retorno errado ao percorrer leste" );
+	  }
+
+	  if( strcmp( ComandoTeste , PERCORRE_SUL_CMD ) == 0 )
+	  {
+		  NumLidos = LER_LerParametros( "i" ,&CondRetEsperada ) ;
+            if ( NumLidos != 1 )
+            {
+               return TST_CondRetParm ;
+            } /* if */
+
+			CondRetObtido = LAB_PercorreSul(pLab);
+
+			return TST_CompararInt( CondRetEsperada , CondRetObtido ,
+                                    "Retorno errado ao percorrer leste" );
+	  }
+
+	  if( strcmp( ComandoTeste , OBTER_VALOR_CMD ) == 0 )
+	  {
+		  char ret;
+		  char valor;
+		  NumLidos = LER_LerParametros( "ci" , &valor, &CondRetEsperada ) ;
+            if ( NumLidos != 2 )
+            {
+               return TST_CondRetParm ;
+            } /* if */
+
+			CondRetObtido = LAB_ObterValor(pLab,&ret);
+
+			return TST_CompararChar( valor , ret ,
+                                    "Retorno errado ao obter valor" );
 	  }
 
       return TST_CondRetNaoConhec ;
