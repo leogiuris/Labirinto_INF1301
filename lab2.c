@@ -151,7 +151,6 @@ void ImprimeLabirinto(tpLabirinto * pLab)
 	int col = pLab->col;
 	system("cls");
 	str = ObtemMatrizString(pLab->mat);
-	//printf("%s\n",str);
 
 
 	printf(" %c",218);
@@ -214,7 +213,12 @@ LAB_tpCondRet LAB_PercorreLeste(tpLabirinto * pLab)
 		MoveOeste(pLab->mat);
 		return LAB_CondRetParede;
 	}
+
 	ImprimeLabirinto(pLab);
+	if(*ret== FIM)
+		return LAB_CondRetResolvido;
+
+	
 	return LAB_CondRetOK;
 }
 
@@ -236,7 +240,11 @@ LAB_tpCondRet LAB_PercorreOeste(tpLabirinto * pLab)
 		MoveLeste(pLab->mat);
 		return LAB_CondRetParede;
 	}
+
 	ImprimeLabirinto(pLab);
+	if(*ret== FIM)
+		return LAB_CondRetResolvido;
+
 	return LAB_CondRetOK;
 }
 
@@ -258,7 +266,13 @@ LAB_tpCondRet LAB_PercorreSul(tpLabirinto * pLab)
 		MoveNorte(pLab->mat);
 		return LAB_CondRetParede;
 	}
+
 	ImprimeLabirinto(pLab);
+
+	if(*ret== FIM)
+		return LAB_CondRetResolvido;
+
+	
 	return LAB_CondRetOK;
 }
 
@@ -280,7 +294,11 @@ LAB_tpCondRet LAB_PercorreNorte(tpLabirinto * pLab)
 		MoveSul(pLab->mat);
 		return LAB_CondRetParede;
 	}
+
 	ImprimeLabirinto(pLab);
+	if(*ret== FIM)
+		return LAB_CondRetResolvido;
+
+	
 	return LAB_CondRetOK;
 }
-

@@ -9,7 +9,8 @@ typedef enum{
 	LAB_CondRetFaltouMemoria = 1,
 	LAB_CondRetLabirintoNaoExiste = 2,
 	LAB_CondRetNaoPossuiVizinho = 3,
-	LAB_CondRetParede = 4
+	LAB_CondRetParede = 4,
+	LAB_CondRetResolvido = 5
 	
 }LAB_tpCondRet ;
 

@@ -107,23 +107,22 @@ MAT_tpCondRet MAT_CriarMatriz(tpMatriz ** pMat, int lin, int col)
 	int i,j;
 	tpNoMatriz ** mat;
 
-	//printf("[Cria Matriz]\n");
 	if(lin < 1 || col < 1)
 		return MAT_CondRetTamanhoInvalido;
-	//printf("b\n");
+	
     if ( *pMat != NULL )
     {
 		
         MAT_DestruirMatriz( *pMat ) ;
     } /* if */
-	//printf("c\n");
+	
 	*pMat = ( tpMatriz * ) malloc( sizeof( tpMatriz )) ;
     if ( pMat == NULL )
     {
 		
 		return MAT_CondRetFaltouMemoria ;
     } /* if */
-	//printf("d\n");
+	
 	mat = (tpNoMatriz**)malloc(lin*sizeof(tpNoMatriz*));
 	for(i=0; i<lin ;i++)
 	{
@@ -253,20 +252,20 @@ MAT_tpCondRet MAT_InsereValor(tpMatriz*pMatriz, void * Valor)
 *  Função: MAT Destruir Matriz
 *  ****/
 
-MAT_tpCondRet MAT_RetiraValor(tpMatriz*pMatriz)
+MAT_tpCondRet MAT_RetiraValor(tpMatriz**pMatriz)
 {
   //tratar matriz nao existente
-   if(pMatriz==NULL)
+   if(*pMatriz==NULL)
 	{
 
 		return MAT_CondRetMatrizNaoExiste;
 	}
   /*tratar falha no nó corrente*/
-  if(pMatriz->pNoCorr==NULL)
+  if((*pMatriz)->pNoCorr==NULL)
   {
     return MAT_CondRetErroEstrutura;
   }
-  pMatriz->pNoCorr->Valor = NULL;
+ (* pMatriz)->pNoCorr->Valor = NULL;
   return MAT_CondRetOK;
 }
 
@@ -275,7 +274,7 @@ MAT_tpCondRet MAT_RetiraValor(tpMatriz*pMatriz)
 *  Função: MAT Move Matriz
 *  ****/
 
-MAT_tpCondRet ObterValor(tpMatriz*pMatriz, void ** ValorCorrente)
+MAT_tpCondRet MAT_ObterValor(tpMatriz*pMatriz, void ** ValorCorrente)
 {
   if(pMatriz==NULL)
 	{
