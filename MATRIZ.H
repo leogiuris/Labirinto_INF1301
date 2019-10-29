@@ -122,7 +122,7 @@
 *
 ***********************************************************************/
 
-MAT_tpCondRet	ObterValor(tpMatriz*pMatriz, void **ValorCorrente);
+MAT_tpCondRet	MAT_ObterValor(tpMatriz*pMatriz, void **ValorCorrente);
 
 MAT_tpCondRet	MAT_RetiraValor(tpMatriz*pMatriz);
 /***********************************************************************
@@ -162,7 +162,7 @@ MAT_tpCondRet	MAT_RetiraValor(tpMatriz*pMatriz);
    MAT_tpCondRet MoveNoroeste(tpMatriz*pMatriz);
    MAT_tpCondRet MoveSudeste(tpMatriz*pMatriz);
    MAT_tpCondRet MoveSudoeste(tpMatriz*pMatriz);
-
+   MAT_tpCondRet MoveCoord(tpMatriz *pMatriz, int x, int y);
 	void MAT_RetornaOrigem(tpMatriz * pMat);
 
 
@@ -212,7 +212,7 @@ MAT_tpCondRet	MAT_RetiraValor(tpMatriz*pMatriz);
 *
 ***********************************************************************/
 
-   MAT_tpCondRet MAT_ObterValorCorr( char * ValorParm ) ;
+  
 
 #undef Matriz_EXT
 

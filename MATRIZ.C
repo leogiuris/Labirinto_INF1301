@@ -22,7 +22,7 @@
 
 #include	<malloc.h>
 #include	<stdio.h>
-
+#include	"LEA.H"
 #define MATRIZ_OWN
 #include "MATRIZ.H"
 #undef MATRIZ_OWN
@@ -116,18 +116,18 @@ MAT_tpCondRet MAT_CriarMatriz(tpMatriz ** pMat, int lin, int col)
         MAT_DestruirMatriz( *pMat ) ;
     } /* if */
 	
-	*pMat = ( tpMatriz * ) malloc( sizeof( tpMatriz )) ;
+	*pMat = ( tpMatriz * ) LEA_mallocTag( sizeof( tpMatriz ),"tpMatriz") ;
     if ( pMat == NULL )
     {
 		
 		return MAT_CondRetFaltouMemoria ;
     } /* if */
 	
-	mat = (tpNoMatriz**)malloc(lin*sizeof(tpNoMatriz*));
+	mat = (tpNoMatriz**)LEA_mallocTag(lin*sizeof(tpNoMatriz*),"linhas");
 	for(i=0; i<lin ;i++)
 	{
 		
-		mat[i] = (tpNoMatriz*)malloc(col*sizeof(tpNoMatriz));
+		mat[i] = (tpNoMatriz*)LEA_mallocTag(col*sizeof(tpNoMatriz),"colunas");
 		for(j=0; j<col; j++)
 		{
 			
@@ -179,6 +179,7 @@ MAT_tpCondRet MAT_CriarMatriz(tpMatriz ** pMat, int lin, int col)
 	(*pMat)->pNoCorr = &mat[0][0];
 	(*pMat)->linhas = lin;
 	(*pMat)->colunas = col;
+
 
     return MAT_CondRetOK ;
 
@@ -294,6 +295,7 @@ MAT_tpCondRet MAT_ObterValor(tpMatriz*pMatriz, void ** ValorCorrente)
   *ValorCorrente = pMatriz->pNoCorr->Valor;
   return MAT_CondRetOK;
 }
+
 
 
 
@@ -463,6 +465,40 @@ MAT_tpCondRet MoveNoroeste(tpMatriz*pMatriz)
   return MAT_CondRetOK;
 }
 
+MAT_tpCondRet MoveCoord(tpMatriz *pMatriz, int x, int y)
+{
+	MAT_tpCondRet ret;
+
+	if( x==0 && y==0 )
+		return;
+
+	if(x == 0 ^ y == 0){
+		if(x == 0)
+			if(y>0)
+				ret = MoveNorte(pMatriz);
+			else
+				ret = MoveSul(pMatriz);
+		else
+			if(x>0)
+				ret = MoveLeste(pMatriz);
+			else
+				ret = MoveOeste(pMatriz);
+	}
+	else{
+		if( x==y )
+			if(x>0)
+				ret = MoveNordeste(pMatriz);
+			else
+				ret = MoveSudoeste(pMatriz);
+		else
+			if(x>0)
+				ret = MoveNoroeste(pMatriz);
+			else
+				ret = MoveSudeste(pMatriz);
+	}
+
+	return ret;
+}
 
 
 /*****  Código das funções encapsuladas no módulo  *****/
@@ -570,6 +606,10 @@ void ImprimeMat(tpMatriz *pMat)
 	pMat->pNoCorr = temp;
 	printf("\n");
 }
+
+
+
+
 
 
 void DestroiMatriz(tpNoMatriz * pMat )
