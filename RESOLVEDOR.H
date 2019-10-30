@@ -13,7 +13,7 @@
 #endif
 
 #include<stdio.h>
-
+#include"labirinto.h"
 typedef enum {
 
 	RES_CondRetOK = 0,
@@ -25,9 +25,19 @@ typedef enum {
 	RES_CondRetArvoreNaoExiste = 6,
 	RES_CondRetArvoreVazia = 7,
 	RES_CondRetNoEhRaiz = 8,
-	RES_CondRetNaoPossuiFilho = 9
+	RES_CondRetNaoPossuiFilho = 9,
+	RES_CondRetResolvido = 10
 
 }RES_tpCondRet;
+
+
+
+
+
+	
+RES_tpCondRet RES_ResolverLabirinto(tpLabirinto * pLab);
+
+
 
 #undef Resolvedor_EXT
 

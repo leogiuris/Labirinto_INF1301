@@ -33,7 +33,7 @@
 #endif
 
 
-#include"MATRIZ.H"
+
 #include<stdio.h>
 #include<stdlib.h>
 
@@ -311,7 +311,11 @@ LAB_tpCondRet LAB_DestruirLabirinto(tpLabirinto * pLab);
 
 int LAB_VerificarVizinho(tpLabirinto * pLab, int x, int y);
 
+LAB_tpCondRet LAB_IrCoord(tpLabirinto * pLab, int x, int y);
+
 void LAB_RetornaInicio(tpLabirinto * pLab);
+
+void LAB_Resolver(tpLabirinto * pLab);
 /////////////////////////////////////////////////////
 
 #undef Labirinto_EXT

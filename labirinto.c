@@ -1,6 +1,8 @@
 #include"labirinto.h"
 #include "MATRIZ.H"
 #include	"LEA.H"
+#include"RESOLVEDOR.H"
+
 #define PAREDE	'@'
 #define CAMINHO ' '
 #define INICIO	'i'
@@ -50,7 +52,7 @@ LAB_tpCondRet LAB_DestruirLabirinto(tpLabirinto * pLab)
 int LAB_VerificarVizinho(tpLabirinto * pLab, int x, int y)
 {
 	void * temp;
-	char * valor;
+	char * valor = (char*)malloc(1);
 
 	if(pLab==NULL)
 		return LAB_CondRetLabirintoNaoExiste;
@@ -209,7 +211,7 @@ LAB_tpCondRet LAB_FinalizaConstrucao(tpLabirinto * pLab)
 		return LAB_CondRetLabirintoNaoExiste;
 
 	MAT_InsereValor(pLab->mat,(void*)FIM);
-	RetornaInicio(pLab);
+	LAB_RetornaInicio(pLab);
 	ImprimeLabirinto(pLab);
 	return LAB_CondRetOK;
 }
@@ -323,7 +325,7 @@ LAB_tpCondRet LAB_IrNorte(tpLabirinto * pLab)
 	return LAB_CondRetOK;
 }
 
-LAB_tpCondRet LAB_irCoord(tpLabirinto * pLab, int x, int y)
+LAB_tpCondRet LAB_IrCoord(tpLabirinto * pLab, int x, int y)
 {
 	char * ret = (char*)malloc(1);
 
@@ -358,4 +360,17 @@ LAB_tpCondRet LAB_irCoord(tpLabirinto * pLab, int x, int y)
 
 	
 	return LAB_CondRetOK;
+}
+
+
+
+
+void LAB_Resolver(tpLabirinto * pLab)
+{
+	RES_tpCondRet ret;
+	ret = RES_ResolverLabirinto(pLab);
+	if(ret == RES_CondRetResolvido)
+		printf("foi\n");
+	else
+		printf("nao foi\n");
 }

@@ -1,8 +1,10 @@
 #include<stdio.h>
 #include<stdlib.h>
-#include"lab2.h"
+#include"labirinto.h"
 #include"conio.h"
 #include<windows.h>
+#include"LEA.H"
+
 tpLabirinto * pLab;
 
 
@@ -25,15 +27,15 @@ void ConstroiLabirinto(tpLabirinto * pLab)
 	if(c == 's'){
 		LAB_ConstroiSul(pLab);
 	}
-	if(c=='f'){
-		FinalizaConstrucao(pLab);
+	if(c == 'f'){
+		LAB_FinalizaConstrucao(pLab);
 		return;
 	}
 
 	ConstroiLabirinto(pLab);
 }
 
-void PercorreLabirinto(tpLabirinto * pLab)
+void HUM_PercorreLabirinto(tpLabirinto * pLab)
 {
 	char c;
 	char * val = (char*)malloc(1);
@@ -41,34 +43,42 @@ void PercorreLabirinto(tpLabirinto * pLab)
 	c = _getch();
 
 	if(c == 'd'){
-		LAB_PercorreLeste(pLab);
+		LAB_IrCoord(pLab,1,0);
 	}
 	if(c == 'w'){
-		LAB_PercorreNorte(pLab);
+		LAB_IrCoord(pLab,0,1);
 	}
 	if(c == 'a'){
-		LAB_PercorreOeste(pLab);
+		LAB_IrCoord(pLab,-1,0);
 	}
 	if(c == 's'){
-		LAB_PercorreSul(pLab);
+		LAB_IrCoord(pLab,0,-1);
 	}
 	LAB_ObterValor(pLab,val);
-	if(*val=='f'){
+	if(*val == 'f'){
 		return;
 	}
-	PercorreLabirinto(pLab);
+	HUM_PercorreLabirinto(pLab);
 }
 	
 
 
 int main()
 {
-	char * b = (char *)malloc(1);
-
-	LAB_CriarLabirinto(&pLab,15,15);
+	
+	LAB_CriarLabirinto(&pLab,5,5);
 	ConstroiLabirinto(pLab);
-	PercorreLabirinto(pLab);
+	//HUM_PercorreLabirinto(pLab);
+	LAB_Resolver(pLab);
+	printf("aaaaaaaa\n");
+	
+	
+	//LAB_DestruirLabirinto(pLab);
+	printf("bbb\n");
 	printf("\nParabens! Voce chegou ao fim!\n");
+	
 	_getch();
 	return 0;
+
 }
+
