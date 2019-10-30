@@ -222,7 +222,7 @@ LAB_tpCondRet LAB_FinalizaConstrucao(tpLabirinto * pLab);
 //	Assertivas de saida:
 //		valor contido na posicao do jogador nao pode ser diferente de CAMINHO, INICIO E FIM
 
-LAB_tpCondRet LAB_PercorreLeste(tpLabirinto * pLab);
+LAB_tpCondRet LAB_IrLeste(tpLabirinto * pLab);
 /////////////////////////////////////////////////////////
 
 
@@ -244,7 +244,7 @@ LAB_tpCondRet LAB_PercorreLeste(tpLabirinto * pLab);
 //	Assertivas de saida:
 //		valor contido na posicao do jogador nao pode ser diferente de CAMINHO, INICIO E FIM
 //
-LAB_tpCondRet LAB_PercorreSul(tpLabirinto * pLab);
+LAB_tpCondRet LAB_IrSul(tpLabirinto * pLab);
 /////////////////////////////////////////////////////////
 
 
@@ -266,7 +266,7 @@ LAB_tpCondRet LAB_PercorreSul(tpLabirinto * pLab);
 //	Assertivas de saida:
 //		valor contido na posicao do jogador nao pode ser diferente de CAMINHO, INICIO E FIM
 //
-LAB_tpCondRet LAB_PercorreOeste(tpLabirinto * pLab);
+LAB_tpCondRet LAB_IrOeste(tpLabirinto * pLab);
 /////////////////////////////////////////////////////////
 
 
@@ -288,7 +288,7 @@ LAB_tpCondRet LAB_PercorreOeste(tpLabirinto * pLab);
 //	Assertivas de saida:
 //		valor contido na posicao do jogador nao pode ser diferente de CAMINHO, INICIO E FIM
 
-LAB_tpCondRet LAB_PercorreNorte(tpLabirinto * pLab);
+LAB_tpCondRet LAB_IrNorte(tpLabirinto * pLab);
 /////////////////////////////////////////////////////////
 
 
@@ -308,6 +308,12 @@ LAB_tpCondRet LAB_PercorreNorte(tpLabirinto * pLab);
 //		ponteiro para labirinto deve ser igual a NULL
 
 LAB_tpCondRet LAB_DestruirLabirinto(tpLabirinto * pLab);
+void LAB_Resolver(tpLabirinto * pLab);
+LAB_tpCondRet LAB_IrCoord(tpLabirinto * pLab, int x, int y);
+void LAB_RetornaInicio(tpLabirinto * pLab);
+int LAB_VerificarVizinho(tpLabirinto * pLab, int x, int y);
+void LAB_TestarResolvedor();
+void LAB_EscolheModo(int modo,tpLabirinto * pLab);
 /////////////////////////////////////////////////////
 
 #undef Labirinto_EXT

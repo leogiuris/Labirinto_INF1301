@@ -22,7 +22,7 @@
 
 #include	<malloc.h>
 #include	<stdio.h>
-#include	"LEA.H"
+
 #define MATRIZ_OWN
 #include "MATRIZ.H"
 #undef MATRIZ_OWN
@@ -116,18 +116,18 @@ MAT_tpCondRet MAT_CriarMatriz(tpMatriz ** pMat, int lin, int col)
         MAT_DestruirMatriz( *pMat ) ;
     } /* if */
 	
-	*pMat = ( tpMatriz * ) LEA_mallocTag( sizeof( tpMatriz ),"tpMatriz") ;
+	*pMat = ( tpMatriz * ) malloc( sizeof( tpMatriz )) ;
     if ( pMat == NULL )
     {
 		
 		return MAT_CondRetFaltouMemoria ;
     } /* if */
 	
-	mat = (tpNoMatriz**)LEA_mallocTag(lin*sizeof(tpNoMatriz*),"linhas");
+	mat = (tpNoMatriz**)malloc(lin*sizeof(tpNoMatriz*));
 	for(i=0; i<lin ;i++)
 	{
 		
-		mat[i] = (tpNoMatriz*)LEA_mallocTag(col*sizeof(tpNoMatriz),"colunas");
+		mat[i] = (tpNoMatriz*)malloc(col*sizeof(tpNoMatriz));
 		for(j=0; j<col; j++)
 		{
 			

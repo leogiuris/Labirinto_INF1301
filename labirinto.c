@@ -1,6 +1,6 @@
 #include"labirinto.h"
 #include "MATRIZ.H"
-#include	"LEA.H"
+#include"HUMANO.H"
 #include"RESOLVEDOR.H"
 
 #define PAREDE	'@'
@@ -16,6 +16,7 @@ typedef struct tgLabirinto{
 }tpLabirinto;
 
 
+
 void ImprimeLabirinto(tpLabirinto * pLab);
 
 LAB_tpCondRet LAB_CriarLabirinto(tpLabirinto ** pLab, int linhas, int colunas)
@@ -26,7 +27,7 @@ LAB_tpCondRet LAB_CriarLabirinto(tpLabirinto ** pLab, int linhas, int colunas)
 	if(*pLab!=NULL) 
 		LAB_DestruirLabirinto(*pLab);
 
-	*pLab = (tpLabirinto *) LEA_mallocTag(sizeof(tpLabirinto), "Labirinto.cabeca");
+	*pLab = (tpLabirinto *) malloc(sizeof(tpLabirinto));
 
 	ret = MAT_CriarMatriz(&pMat,linhas,colunas);
 
@@ -45,27 +46,38 @@ LAB_tpCondRet LAB_DestruirLabirinto(tpLabirinto * pLab)
 		return LAB_CondRetLabirintoNaoExiste;
 	
 	MAT_DestruirMatriz(pLab->mat);
-	LEA_free(pLab);
+	free(pLab);
 	return LAB_CondRetOK;
 }
 
 int LAB_VerificarVizinho(tpLabirinto * pLab, int x, int y)
 {
+	MAT_tpCondRet ret;
 	void * temp;
 	char * valor = (char*)malloc(1);
 
+	printf("\n>>[ VERIFIVA_VIZINHO ]");
 	if(pLab==NULL)
 		return LAB_CondRetLabirintoNaoExiste;
 
-	MoveCoord(pLab->mat,x,y);
+	if(MoveCoord(pLab->mat,x,y) != MAT_CondRetOK){
+		printf("--PAREDE\n");
+		return 0;
+	}
 	MAT_ObterValor(pLab->mat, &temp);
 	*valor = (char)temp;
 	MoveCoord(pLab->mat,-x,-y);
 
 	if(*valor == CAMINHO || *valor == FIM)
+	{
+		printf("--CAMINHO\n");
 		return 1;
+	}
 	else
+		{
+		printf("--PAREDE\n");
 		return 0;
+	}
 
 }
 
@@ -358,12 +370,26 @@ LAB_tpCondRet LAB_IrCoord(tpLabirinto * pLab, int x, int y)
 	if(*ret== FIM)
 		return LAB_CondRetResolvido;
 
-	
+	printf("andou\n");
 	return LAB_CondRetOK;
 }
 
+void LAB_EscolheModo(int modo,tpLabirinto * pLab)
+{
+	
+	if(modo == 1){
+		HUM_ConstroiLabirinto(pLab);
+		HUM_PercorreLabirinto(pLab);
+	}
+	if(modo == 2){
+		HUM_ConstroiLabirinto(pLab);
+		LAB_Resolver(pLab);
+	}
+}
 
-
+void LAB_TestarResolvedor(){
+	RES_Teste();
+}
 
 void LAB_Resolver(tpLabirinto * pLab)
 {
@@ -373,4 +399,10 @@ void LAB_Resolver(tpLabirinto * pLab)
 		printf("foi\n");
 	else
 		printf("nao foi\n");
+}
+
+
+void JogaHumano(tpLabirinto *pLab)
+{
+	HUM_PercorreLabirinto(pLab);
 }

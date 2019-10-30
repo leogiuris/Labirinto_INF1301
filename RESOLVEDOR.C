@@ -49,10 +49,10 @@
 #include   <stdio.h>
 
 #include "RESOLVEDOR.H"
-#include "LEA.H"
+
 #include <windows.h>
 #define SLEEP Sleep(200)
-
+#define LIM_PASSOS 10
 
    typedef struct tgNoArvore {
 
@@ -189,7 +189,7 @@
       tpNo * pNo ;
 
       /* Tratar vazio, esquerda */
-
+	  printf("[ INSERE SUL ]");
          CondRet = CriarNoRaiz( 0 ) ;
          if ( CondRet != RES_CondRetNaoCriouRaiz )
          {
@@ -215,6 +215,7 @@
             pCorr->pNoSul    = pNo ;
             //pResolvedor->pNoCorr = pNo ;
 
+			printf("--OK\n");
             return RES_CondRetOK ;
          } /* if */
 
@@ -238,7 +239,7 @@
       tpNo * pNo ;
 
       /* Tratar vazio, esquerda */
-
+	  printf("[ INSERE NORTE ]");
          CondRet = CriarNoRaiz( 0 ) ;
          if ( CondRet != RES_CondRetNaoCriouRaiz )
          {
@@ -264,6 +265,7 @@
             pCorr->pNoNorte    = pNo ;
             //pResolvedor->pNoCorr = pNo ;
 
+			printf("--OK\n");
             return RES_CondRetOK ;
          } /* if */
 
@@ -288,6 +290,7 @@
 
       /* Tratar vazio, esquerda */
 
+	  printf("[ INSERE OESTE ]");
          CondRet = CriarNoRaiz( 0 ) ;
          if ( CondRet != RES_CondRetNaoCriouRaiz )
          {
@@ -313,6 +316,7 @@
             pCorr->pNoOeste    = pNo ;
             //pResolvedor->pNoCorr = pNo ;
 
+			printf("--OK\n");
             return RES_CondRetOK ;
          } /* if */
 
@@ -335,6 +339,8 @@
       tpNo * pCorr ;
       tpNo * pNo ;
 
+
+	  printf("[ INSERE LESTE ]");
       /* Tratar vazio, direita */
 
          CondRet = CriarNoRaiz( 0 ) ;
@@ -362,6 +368,7 @@
             pCorr->pNoLeste    = pNo ;
             //pResolvedor->pNoCorr = pNo ;
 
+			printf("--OK\n");
             return RES_CondRetOK ;
          } /* if */
 
@@ -425,7 +432,8 @@
 
 	  ret = LAB_IrOeste(pLab);
       pResolvedor->pNoCorr = pResolvedor->pNoCorr->pNoOeste ;
-
+	  if(ret != LAB_CondRetOK)
+		  printf("ret LAB: %d\n", ret);
 	  if(ret == LAB_CondRetResolvido)
 		  return RES_CondRetResolvido;
 
@@ -458,7 +466,8 @@
 
 	  ret = LAB_IrLeste(pLab);
       pResolvedor->pNoCorr = pResolvedor->pNoCorr->pNoLeste ;
-
+	  if(ret != LAB_CondRetOK)
+		  printf("ret LAB: %d\n");
 	  if(ret == LAB_CondRetResolvido)
 		  return RES_CondRetResolvido;
 
@@ -494,7 +503,8 @@
 
 	  ret = LAB_IrNorte(pLab);
       pResolvedor->pNoCorr = pResolvedor->pNoCorr->pNoNorte ;
-
+	  if(ret != LAB_CondRetOK)
+		  printf("ret LAB: %d\n");
 	  if(ret == LAB_CondRetResolvido)
 		  return RES_CondRetResolvido;
 
@@ -529,6 +539,8 @@
 	  ret = LAB_IrSul(pLab);
       pResolvedor->pNoCorr = pResolvedor->pNoCorr->pNoSul ;
 
+	  if(ret != LAB_CondRetOK)
+		  printf("ret LAB: %d\n");
 	  if(ret == LAB_CondRetResolvido)
 		  return RES_CondRetResolvido;
 	  
@@ -565,7 +577,7 @@
 	   
 	   RES_tpCondRet ret;
 
-	   printf("[ IR_NO_COORDENADAS ]\n");
+	   printf("[ IR_NO_COORDENADAS ]");
 	   if(x==0)
 		   if(y>0)
 			   ret = RES_IrNoNorte(pLab);
@@ -579,6 +591,8 @@
 
 	   if(ret == LAB_CondRetResolvido)
 		  return RES_CondRetResolvido;
+
+	   printf("--OK\n");
 
 	   return RES_CondRetOK;
    }
@@ -600,72 +614,85 @@
 
    RES_tpCondRet SondaLabirinto(tpLabirinto *pLab)
    {
-
-	   printf("[ SONDA_LABIRINTO ]\n");
+	   tpNo * pNo = pResolvedor->pNoCorr;
+	   RES_tpCondRet ret = RES_CondRetNaoOK;
+	   printf("[ SONDA_LABIRINTO ]");
 	    if ( pResolvedor == NULL )
       {
          return RES_CondRetArvoreNaoExiste ;
       } /* if */
-      if ( pResolvedor->pNoCorr == NULL )
+      if ( pNo == NULL )
       {
          return RES_CondRetArvoreVazia ;
       } /* if */
 
-	  if( pResolvedor->pNoCorr->pNoLeste != pResolvedor->pNoCorr->pNoAnterior && LAB_VerificarVizinho(pLab,1,0) == 1)
-		  RES_InserirLeste(0);
-	  if(pResolvedor->pNoCorr->pNoOeste != pResolvedor->pNoCorr->pNoAnterior && LAB_VerificarVizinho(pLab,-1,0) == 1)
-		  RES_InserirOeste(0);
-	  if(pResolvedor->pNoCorr->pNoNorte != pResolvedor->pNoCorr->pNoAnterior && LAB_VerificarVizinho(pLab,0,1) == 1)
-		  RES_InserirNorte(0);
-	  if(pResolvedor->pNoCorr->pNoSul != pResolvedor->pNoCorr->pNoAnterior && LAB_VerificarVizinho(pLab,0,-1) == 1)
-		  RES_InserirSul(0);
+	  if( LAB_VerificarVizinho(pLab,1,0) == 1 && (pNo->pNoAnterior == NULL || pNo != pNo->pNoAnterior->pNoOeste))
+		  ret = RES_InserirLeste(0);
+	  if(LAB_VerificarVizinho(pLab,-1,0) == 1 && (pNo->pNoAnterior == NULL || pNo != pNo->pNoAnterior->pNoLeste))
+		  ret = RES_InserirOeste(0);
+	  if(LAB_VerificarVizinho(pLab,0,1) == 1 && (pNo->pNoAnterior == NULL || pNo != pNo->pNoAnterior->pNoSul))
+		  ret = RES_InserirNorte(0);
+	  if(LAB_VerificarVizinho(pLab,0,-1) == 1 && (pNo->pNoAnterior == NULL || pNo != pNo->pNoAnterior->pNoNorte))
+		  ret = RES_InserirSul(0);
 	  
+	  if(ret == RES_CondRetOK)
+		printf("--OK\n");
+	  else
+		  printf("--NAO OK, CondRet: %d\n",ret);
 	  return RES_CondRetOK;
    } 
 
-
+   //DECIDE QUAL CAMINHO TOMAR COM BASE NOS VALORES DOS NÓS VIZINHOS
    RES_tpCondRet DecideCaminho(int * x, int * y)
    {
 	   int maior=0;
 	   tpNo * pNo = pResolvedor->pNoCorr;
 
-	   printf("[ DECIDE_CAMINHO ]\n");
+	   printf("[ DECIDE_CAMINHO ]");
 	   if(pNo->pNoLeste != NULL)
-		   if(pNo->pNoLeste->Valor > maior){
+		   if(pNo->pNoLeste->Valor >= maior){
+			   printf("x");
 			   *x=1; *y=0;
 			   maior = pNo->pNoLeste->Valor;
 		   }
 	   if(pNo->pNoOeste != NULL)
 		   if(pNo->pNoOeste->Valor > maior){
+			   printf("x");
 			   *x=-1; *y=0;
 			   maior = pNo->pNoOeste->Valor;
 		   }
 	   if(pNo->pNoNorte != NULL)
 		   if(pNo->pNoNorte->Valor > maior){
+			   printf("x");
 			   *x=0; *y=1;
 			   maior = pNo->pNoNorte->Valor;
 		   }
 	   if(pNo->pNoSul != NULL)
 		   if(pNo->pNoSul->Valor > maior){
+			   printf("x");
 			   *x=0; *y=-1;
-			   maior = pNo->pNoSul->Valor;
+			   
 		   }
+		printf("--OK (x = %d, y = %d)\n",*x,*y);
 	   return RES_CondRetOK;
    }
 
+   //DIZ SE O NÓ CORRENTE ESTÁ NUM BECO SEM SAÍDA (N HÁ VIZINHOS EXCETO PAI)
    int Beco()
    {
-	   
 	   tpNo * pNo = pResolvedor->pNoCorr;
-
-	   if(pNo->pNoLeste == NULL && pNo->pNoOeste == NULL && pNo->pNoNorte == NULL && pNo->pNoSul == NULL)
+	   
+	   if(pNo->Valor > 0 && pNo->pNoLeste == NULL && pNo->pNoOeste == NULL && pNo->pNoNorte == NULL && pNo->pNoSul == NULL){
+		   printf("cu\n");
 		   return 1;
+	   }
 	   else
 		   return 0;
    }
 
 
-
+   //ANDA PELAS MENORES PONTUAÇÕES
+   //ASSIM QUE CHEGAR NUM NÓ C PONTUAÇÃO 0, COMEÇA A INSERIR MAIS NÓS NA ARVORE E ESCOLHE UM PRA ANDAR
    RES_tpCondRet PercorreLabirinto(tpLabirinto * pLab)
    {
 	   RES_tpCondRet ret = RES_CondRetOK;
@@ -682,26 +709,34 @@
          return RES_CondRetArvoreVazia ;
       } /* if */
 
-	  while(pNo->Valor>0 || Beco()==0)
+	  while(pNo->Valor>0 && Beco()==0)
 	  {
-		  int x,y;
-		  DecideCaminho(&x,&y);
-		  ret = RES_IrNoCoord(pLab,x,y);
+		  int * x = (int*)malloc(sizeof(int));
+		  int * y = (int*)malloc(sizeof(int));
+		  DecideCaminho(x,y);
+		  ret = RES_IrNoCoord(pLab,*x,*y);
 		  passos++;
 		  SLEEP;
-		  if(passos >20)
+		  if(passos >LIM_PASSOS)
 			  return RES_CondRetNaoOK;
 	  }
 
 	  
 	  while(Beco() == 0 && ret != RES_CondRetResolvido)
 	  {
-		  int x,y;
+		  int * x = (int*)malloc(sizeof(int));
+		  int * y = (int*)malloc(sizeof(int));
 		  SondaLabirinto(pLab);
-		  DecideCaminho(&x,&y);
-		  ret = RES_IrNoCoord(pLab,x,y);
+		  DecideCaminho(x,y);
+		  ret = RES_IrNoCoord(pLab,*x,*y);
 		  passos++;
+		  if(passos == LIM_PASSOS){
+			  printf("ret: %d, passos: %d\n",ret, passos);
+			  return RES_CondRetNaoOK;
+		  }
 		  SLEEP;
+		  if(passos >20)
+			  return RES_CondRetNaoOK;
 	  }
 
 	  if(Beco())
@@ -842,17 +877,37 @@
    //se(beco) -> voltar
    //andar(ate achar folha da arvore)
 
+
  RES_tpCondRet RES_ResolverLabirinto(tpLabirinto * pLab)
  {
 	 RES_tpCondRet ret = RES_CondRetOK;
 
 	 RES_CriarResolvedor();
+
 	 if(pResolvedor->pNoCorr->Valor == 0)
 		 printf("ok\n");
-	 while(ret != RES_CondRetResolvido && passos < 20)
+
+	 while(ret != RES_CondRetResolvido && passos < LIM_PASSOS)
 	 {
 		 ret = PercorreLabirinto(pLab);
 		 SLEEP;
 	 }
 	 return ret;
+ }
+
+
+
+
+
+
+ void RES_Teste(){
+	 RES_tpCondRet ret = RES_CondRetOK;
+
+	 RES_CriarResolvedor();
+	 RES_InserirNorte(0);
+	 RES_InserirSul(0);
+
+	 printf("valor raiz: %d\n", pResolvedor->pNoCorr->Valor);
+	 printf("valor norte: %d\n", pResolvedor->pNoCorr->pNoNorte->Valor);
+	 return;
  }
