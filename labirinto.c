@@ -9,12 +9,34 @@
 #define	FIM		'f'
 
 
+char * parede;
+char * caminho;
+char * inicio;
+char * fim;
+
+
+
 typedef struct tgLabirinto{
 	tpMatriz * mat;
 	int lin;
 	int col;
 }tpLabirinto;
 
+
+void Inicializa()
+{
+	parede = (char*)malloc(1);
+	caminho = (char*)malloc(1);
+	inicio = (char*)malloc(1);
+	fim = (char*)malloc(1);
+
+	*parede = PAREDE;
+	*caminho = CAMINHO;
+	*inicio = INICIO;
+	*fim = FIM;
+	
+	return;
+}
 
 
 void ImprimeLabirinto(tpLabirinto * pLab);
@@ -23,18 +45,19 @@ LAB_tpCondRet LAB_CriarLabirinto(tpLabirinto ** pLab, int linhas, int colunas)
 {
 	tpMatriz * pMat = NULL;
 	MAT_tpCondRet ret;
-
+	
 	if(*pLab!=NULL) 
 		LAB_DestruirLabirinto(*pLab);
 
+	Inicializa();
 	*pLab = (tpLabirinto *) malloc(sizeof(tpLabirinto));
 
-	ret = MAT_CriarMatriz(&pMat,linhas,colunas);
+	ret = MAT_CriarMatriz(&pMat,linhas,colunas,(void*)parede);
 
 	(*pLab)->mat = pMat;
 	(*pLab)->lin = linhas;
 	(*pLab)->col = colunas;
-	MAT_InsereValor((*pLab)->mat,(void*)INICIO);
+	MAT_InsereValor((*pLab)->mat,(void*)inicio);
 	ImprimeLabirinto(*pLab);
 
 	return LAB_CondRetOK;
@@ -56,26 +79,26 @@ int LAB_VerificarVizinho(tpLabirinto * pLab, int x, int y)
 	void * temp;
 	char * valor = (char*)malloc(1);
 
-	printf("\n>>[ VERIFIVA_VIZINHO ]");
+	//printf("\n>>[ VERIFIVA_VIZINHO ]");
 	if(pLab==NULL)
 		return LAB_CondRetLabirintoNaoExiste;
 
 	if(MoveCoord(pLab->mat,x,y) != MAT_CondRetOK){
-		printf("--PAREDE\n");
+		//printf("--PAREDE\n");
 		return 0;
 	}
 	MAT_ObterValor(pLab->mat, &temp);
-	*valor = (char)temp;
+	*valor = *(char*)temp;
 	MoveCoord(pLab->mat,-x,-y);
 
 	if(*valor == CAMINHO || *valor == FIM)
 	{
-		printf("--CAMINHO\n");
+		//printf("--CAMINHO\n");
 		return 1;
 	}
 	else
 		{
-		printf("--PAREDE\n");
+		//printf("--PAREDE\n");
 		return 0;
 	}
 
@@ -93,7 +116,7 @@ LAB_tpCondRet LAB_ObterValor(tpLabirinto * pLab, char * valor)
 
 	MAT_ObterValor(pLab->mat, &temp);
 	
-	*valor = (char)temp;
+	*valor = *(char*)temp;
 
 
 	return LAB_CondRetOK;
@@ -117,7 +140,7 @@ LAB_tpCondRet LAB_ConstroiLeste (tpLabirinto *pLab)
 		return LAB_CondRetNaoPossuiVizinho;
 	}
 
-	MAT_InsereValor(pLab->mat,(void*)CAMINHO);
+	MAT_InsereValor(pLab->mat,(void*)caminho);
 	
 	ImprimeLabirinto(pLab);
 	return LAB_CondRetOK;
@@ -135,7 +158,7 @@ LAB_tpCondRet LAB_ConstroiSul (tpLabirinto *pLab)
 		return LAB_CondRetNaoPossuiVizinho;
 	}
 
-	MAT_InsereValor(pLab->mat,(void*)CAMINHO);
+	MAT_InsereValor(pLab->mat,(void*)caminho);
 	
 	ImprimeLabirinto(pLab);
 	return LAB_CondRetOK;
@@ -153,7 +176,7 @@ LAB_tpCondRet LAB_ConstroiNorte (tpLabirinto *pLab)
 		return LAB_CondRetNaoPossuiVizinho;
 	}
 
-	MAT_InsereValor(pLab->mat,(void*)CAMINHO);
+	MAT_InsereValor(pLab->mat,(void*)caminho);
 	
 	ImprimeLabirinto(pLab);
 	return LAB_CondRetOK;
@@ -171,7 +194,7 @@ LAB_tpCondRet LAB_ConstroiOeste (tpLabirinto *pLab)
 		return LAB_CondRetNaoPossuiVizinho;
 	}
 
-	MAT_InsereValor(pLab->mat,(void*)CAMINHO);
+	MAT_InsereValor(pLab->mat,(void*)caminho);
 	
 	ImprimeLabirinto(pLab);
 	return LAB_CondRetOK;
@@ -222,11 +245,12 @@ LAB_tpCondRet LAB_FinalizaConstrucao(tpLabirinto * pLab)
 	if(pLab==NULL)
 		return LAB_CondRetLabirintoNaoExiste;
 
-	MAT_InsereValor(pLab->mat,(void*)FIM);
+	MAT_InsereValor(pLab->mat,(void*)fim);
 	LAB_RetornaInicio(pLab);
 	ImprimeLabirinto(pLab);
 	return LAB_CondRetOK;
 }
+
 
 LAB_tpCondRet LAB_IrLeste(tpLabirinto * pLab)
 {
@@ -370,7 +394,7 @@ LAB_tpCondRet LAB_IrCoord(tpLabirinto * pLab, int x, int y)
 	if(*ret== FIM)
 		return LAB_CondRetResolvido;
 
-	printf("andou\n");
+	
 	return LAB_CondRetOK;
 }
 

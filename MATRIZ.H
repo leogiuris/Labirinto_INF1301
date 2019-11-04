@@ -91,7 +91,7 @@
 *
 ***********************************************************************/
 
-   MAT_tpCondRet MAT_CriarMatriz(tpMatriz ** pMat, int lin, int col);
+   MAT_tpCondRet MAT_CriarMatriz(tpMatriz ** pMat, int lin, int col, void * valorInicial);
 
    MAT_tpCondRet MAT_InsereValor(tpMatriz*pMatriz, void * Valor);
 /***********************************************************************

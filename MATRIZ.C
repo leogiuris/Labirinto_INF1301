@@ -102,7 +102,7 @@ void MAT_RetornaOrigem(tpMatriz * pMat);
 *  Função: MAT Criar Matriz
 *  ****/
 
-MAT_tpCondRet MAT_CriarMatriz(tpMatriz ** pMat, int lin, int col)
+MAT_tpCondRet MAT_CriarMatriz(tpMatriz ** pMat, int lin, int col, void * valorInicial)
 {
 	int i,j;
 	tpNoMatriz ** mat;
@@ -131,7 +131,7 @@ MAT_tpCondRet MAT_CriarMatriz(tpMatriz ** pMat, int lin, int col)
 		for(j=0; j<col; j++)
 		{
 			
-			mat[i][j].Valor = (void*)('@');
+			mat[i][j].Valor = valorInicial;
 			mat[i][j].pNorte = NULL;
 			mat[i][j].pNordeste = NULL;
 			mat[i][j].pNoroeste = NULL;
@@ -563,7 +563,7 @@ char * ObtemMatrizString(tpMatriz * pMat)
 			}
 			else
 			{
-				str[i*col + j] = (char)pMat->pNoCorr->Valor;;
+				str[i*col + j] = *(char*)pMat->pNoCorr->Valor;
 			}
 			if(j < col-1)
 				 MoveLeste(pMat);

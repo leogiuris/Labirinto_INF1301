@@ -1,58 +1,16 @@
 //
 //#include "LEA.H"
 //#include"labirinto.h"
-//
-//
-//int ehInicio;
-//
-//typedef struct resolvedor{
-//
-//	tpNo * Origem;
-//	tpNo * Corrente;
-//
-//}tpResolvedor;
-//
-//
-//typedef struct noResolvedor{
-//
-//	tpNo * anterior;
-//	tpNo * norte;
-//	tpNo * leste;
-//	tpNo * sul;
-//	tpNo * oeste;
-//
-//	int valor;
-//
-//}tpNo;
-//
-//
-//void RES_AddCaminho(tpResolvedor * pRes, tpLabirinto * pLab)
-//{
-//	tpNo * no =(tpNo*)LEA_mallocTag(sizeof(tpNo),"tpNo");
-//	if(ehInicio)
-//		no->anterior = NULL;
-//	else
-//		no->anterior = pRes->Corrente;
-//
-//	if(no->
-//
-//	
-//
-//void RES_Criar(tpResolvedor ** pRes, tpLabirinto * pLab)
-//{
-//	*pRes = (tpResolvedor*)LEA_mallocTag(sizeof(tpResolvedor**),"RES_Cabeca");
-//}
-
 
 
 #include   <malloc.h>
 #include   <stdio.h>
-
+#include	<time.h>
 #include "RESOLVEDOR.H"
-
 #include <windows.h>
-#define SLEEP Sleep(200)
-#define LIM_PASSOS 10
+
+#define SLEEP Sleep(50)
+#define LIM_PASSOS 300
 
    typedef struct tgNoArvore {
 
@@ -103,7 +61,8 @@
 
       static tpResolvedor * pResolvedor = NULL ;
             /* Ponteiro para a cabe‡a da árvore */
-
+	  //void * balde[4];
+	  //int qtdBalde = 0;
 	  int passos = 0;
 
 /***** Protótipos das funções encapuladas no módulo *****/
@@ -589,8 +548,8 @@
 		   else
 			   ret = RES_IrNoOeste(pLab);
 
-	   if(ret == LAB_CondRetResolvido)
-		  return RES_CondRetResolvido;
+	   if(ret == RES_CondRetResolvido)
+		  return ret;
 
 	   printf("--OK\n");
 
@@ -599,7 +558,9 @@
 
    RES_tpCondRet RetornaInicio(tpLabirinto * pLab)
    {
+	   int x,y;
 	   printf("[ RETORNA_INICIO ]\n");
+	   
 	   pResolvedor->pNoCorr->Valor++;
 
 	   while(RES_IrAnterior() == RES_CondRetOK)
@@ -642,36 +603,63 @@
 	  return RES_CondRetOK;
    } 
 
+
+
+
+
+
+
+
+   //void baldePush(tpNo * no){
+	  // balde[qtdBalde] = no;
+	  // qtdBalde++;
+   //}
+
+   //void * baldePick(int qtd){
+	  // void * elem;
+	  // int num;
+	  // srand(time(0));
+	  // num = rand()%qtd;
+	  // elem = balde[num];
+	  // qtdBalde = 0;
+	  // return elem;
+   //}
+	  // 
+
+
+
+
+
+
    //DECIDE QUAL CAMINHO TOMAR COM BASE NOS VALORES DOS NÓS VIZINHOS
    RES_tpCondRet DecideCaminho(int * x, int * y)
    {
-	   int maior=0;
+	   int menor = LIM_PASSOS;
+	   int num;
 	   tpNo * pNo = pResolvedor->pNoCorr;
 
 	   printf("[ DECIDE_CAMINHO ]");
 	   if(pNo->pNoLeste != NULL)
-		   if(pNo->pNoLeste->Valor >= maior){
-			   printf("x");
-			   *x=1; *y=0;
-			   maior = pNo->pNoLeste->Valor;
-		   }
+	   {
+		   menor = pNo->pNoLeste->Valor;
+		   *x=1; *y=0;
+	   }
 	   if(pNo->pNoOeste != NULL)
-		   if(pNo->pNoOeste->Valor > maior){
-			   printf("x");
+		   if(pNo->pNoOeste->Valor <= menor)
+		   {
 			   *x=-1; *y=0;
-			   maior = pNo->pNoOeste->Valor;
+			   menor = pNo->pNoOeste->Valor;
 		   }
 	   if(pNo->pNoNorte != NULL)
-		   if(pNo->pNoNorte->Valor > maior){
-			   printf("x");
+		   if(pNo->pNoNorte->Valor < menor)
+		   {
 			   *x=0; *y=1;
-			   maior = pNo->pNoNorte->Valor;
+			   menor = pNo->pNoNorte->Valor;
 		   }
 	   if(pNo->pNoSul != NULL)
-		   if(pNo->pNoSul->Valor > maior){
-			   printf("x");
-			   *x=0; *y=-1;
-			   
+		   if(pNo->pNoSul->Valor < menor)
+		   {
+			   *x=0; *y=-1; 
 		   }
 		printf("--OK (x = %d, y = %d)\n",*x,*y);
 	   return RES_CondRetOK;
@@ -681,9 +669,10 @@
    int Beco()
    {
 	   tpNo * pNo = pResolvedor->pNoCorr;
-	   
-	   if(pNo->Valor > 0 && pNo->pNoLeste == NULL && pNo->pNoOeste == NULL && pNo->pNoNorte == NULL && pNo->pNoSul == NULL){
-		   printf("cu\n");
+	   if(pNo == pResolvedor->pNoInicio)
+		   return 0;
+	   if(pNo->pNoLeste == NULL && pNo->pNoOeste == NULL && pNo->pNoNorte == NULL && pNo->pNoSul == NULL){
+		   
 		   return 1;
 	   }
 	   else
@@ -708,38 +697,44 @@
       {
          return RES_CondRetArvoreVazia ;
       } /* if */
-
+	  
 	  while(pNo->Valor>0 && Beco()==0)
 	  {
-		  int * x = (int*)malloc(sizeof(int));
-		  int * y = (int*)malloc(sizeof(int));
-		  DecideCaminho(x,y);
-		  ret = RES_IrNoCoord(pLab,*x,*y);
+		  /*int * x = (int*)malloc(sizeof(int));
+		  int * y = (int*)malloc(sizeof(int));*/
+		  int x,y;
+		  DecideCaminho(&x,&y);
+		  ret = RES_IrNoCoord(pLab,x,y);
 		  passos++;
 		  SLEEP;
 		  if(passos >LIM_PASSOS)
 			  return RES_CondRetNaoOK;
 	  }
 
-	  
+	  SondaLabirinto(pLab);
 	  while(Beco() == 0 && ret != RES_CondRetResolvido)
 	  {
-		  int * x = (int*)malloc(sizeof(int));
-		  int * y = (int*)malloc(sizeof(int));
-		  SondaLabirinto(pLab);
-		  DecideCaminho(x,y);
-		  ret = RES_IrNoCoord(pLab,*x,*y);
+		  int x,y;
+		  
+		  SLEEP;
+		  DecideCaminho(&x,&y);
+		  SLEEP;
+		  ret = RES_IrNoCoord(pLab,x,y);
 		  passos++;
 		  if(passos == LIM_PASSOS){
 			  printf("ret: %d, passos: %d\n",ret, passos);
 			  return RES_CondRetNaoOK;
 		  }
 		  SLEEP;
-		  if(passos >20)
+		  if(ret == RES_CondRetResolvido)
+			  return ret;
+		  if(passos >LIM_PASSOS)
 			  return RES_CondRetNaoOK;
+
+		  SondaLabirinto(pLab);
 	  }
 
-	  if(Beco())
+	  if(Beco()==1)
 		  RetornaInicio(pLab);
 		  
 	  if(ret == RES_CondRetResolvido)
@@ -890,6 +885,8 @@
 	 while(ret != RES_CondRetResolvido && passos < LIM_PASSOS)
 	 {
 		 ret = PercorreLabirinto(pLab);
+		 if(ret == RES_CondRetResolvido)
+			  return ret;
 		 SLEEP;
 	 }
 	 return ret;
