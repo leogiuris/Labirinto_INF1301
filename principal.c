@@ -12,7 +12,7 @@ tpLabirinto * pLab;
 int main()
 {
 	
-	LAB_CriarLabirinto(&pLab,7,7);
+	LAB_CriarLabirinto(&pLab,10,10);
 	LAB_EscolheModo(2,pLab);
 	printf("\nParabens! Voce chegou ao fim!\n");
 	
@@ -20,4 +20,3 @@ int main()
 	return 0;
 
 }
-

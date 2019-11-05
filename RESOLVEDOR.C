@@ -1,16 +1,11 @@
-//
-//#include "LEA.H"
-//#include"labirinto.h"
-
-
 #include   <malloc.h>
 #include   <stdio.h>
 #include	<time.h>
 #include "RESOLVEDOR.H"
 #include <windows.h>
 
-#define SLEEP Sleep(50)
-#define LIM_PASSOS 300
+#define SLEEP Sleep(10)
+#define LIM_PASSOS 1000
 
    typedef struct tgNoArvore {
 

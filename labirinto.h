@@ -316,6 +316,8 @@ LAB_tpCondRet LAB_IrCoord(tpLabirinto * pLab, int x, int y);
 void LAB_RetornaInicio(tpLabirinto * pLab);
 
 void LAB_Resolver(tpLabirinto * pLab);
+
+void LAB_EscolheModo(int modo,tpLabirinto * pLab);
 /////////////////////////////////////////////////////
 
 #undef Labirinto_EXT
