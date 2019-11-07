@@ -334,6 +334,8 @@ void LAB_InsereRastro(tpLabirinto * pLab);
 void LAB_InsereCaminho(tpLabirinto * pLab);
 
 void LAB_LimpaRastro(tpLabirinto * pLab);
+
+LAB_tpCondRet LAB_ReiniciaLabirinto(tpLabirinto * pLab);
 /////////////////////////////////////////////////////
 
 #undef Labirinto_EXT

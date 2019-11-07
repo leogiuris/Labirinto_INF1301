@@ -33,6 +33,17 @@ typedef enum {
 	
 RES_tpCondRet RES_ResolverLabirinto(tpLabirinto * pLab);
 
+RES_tpCondRet RES_CriarResolvedor( void );
+
+void RES_DestruirResolvedor( void );
+
+RES_tpCondRet RES_InserirSul( int ValorParm );
+
+RES_tpCondRet RES_InserirNorte( int ValorParm );
+
+RES_tpCondRet RES_InserirLeste( int ValorParm );
+
+RES_tpCondRet RES_InserirOeste( int ValorParm );
 
 
 #undef Resolvedor_EXT

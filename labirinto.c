@@ -1,3 +1,10 @@
+
+
+
+
+
+
+
 #include"labirinto.h"
 #include "MATRIZ.H"
 #include"HUMANO.H"
@@ -77,7 +84,6 @@ LAB_tpCondRet LAB_DestruirLabirinto(tpLabirinto * pLab)
 
 int LAB_VerificarVizinho(tpLabirinto * pLab, int x, int y)
 {
-	MAT_tpCondRet ret;
 	void * temp;
 	char * valor = (char*)malloc(1);
 
@@ -236,7 +242,7 @@ void LAB_LimpaRastro(tpLabirinto * pLab)
 }
 
 
-void LAB_ReiniciaLabirinto(tpLabirinto * pLab)
+LAB_tpCondRet LAB_ReiniciaLabirinto(tpLabirinto * pLab)
 {
 	int i, j,cont = 0;
 	int lin = pLab->lin;
@@ -262,6 +268,8 @@ void LAB_ReiniciaLabirinto(tpLabirinto * pLab)
 	LAB_RetornaInicio(pLab);
 
 	MAT_InsereValor(pLab->mat, (void*)inicio);
+
+	return LAB_CondRetOK;
 
 }
 
