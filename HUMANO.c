@@ -7,7 +7,7 @@
 void HUM_Modifica(tpLabirinto * pLab)
 {
 	char c;
-	printf("construa seu labirinto usando as teclas WASD.\n[c] - Caminho\n[p] - Parede\n[f] - Final\n[q] - Voltar\n");
+	printf("   Construa seu labirinto usando as teclas WASD.\n [ESPACO] - Caminho\n [p] - Parede\n [r] - Reiniciar Labirinto\n [f] - Final\n [q] - Voltar\n");
 	c = _getch();
 
 	if(c == 'd'){
@@ -22,7 +22,7 @@ void HUM_Modifica(tpLabirinto * pLab)
 	if(c == 's'){
 		LAB_MoveLivre(pLab,0,-1);
 	}
-	if(c == 'c' || c == 'p' || c == 'f')
+	if(c == ' ' || c == 'p' || c == 'f' || c == 'r')
 	{
 		LAB_Constroi(pLab,c);
 	}
@@ -38,7 +38,7 @@ void HUM_Modifica(tpLabirinto * pLab)
 void HUM_ConstroiLabirinto(tpLabirinto * pLab)
 {
 	char c;
-	printf("construa seu labirinto usando as teclas WASD.\nPara finalizar digite 'f'.\n");
+	printf("  Construa seu labirinto usando as teclas WASD.\n  Para finalizar pressione 'f'.\n  Caso queira reiniciar, pressione 'r'\n");
 	c = _getch();
 
 	if(c == 'd'){
@@ -53,6 +53,9 @@ void HUM_ConstroiLabirinto(tpLabirinto * pLab)
 	if(c == 's'){
 		LAB_CavaSul(pLab);
 	}
+	if(c == 'r'){
+		LAB_Constroi(pLab,c);
+	}
 	if(c == 'f'){
 		LAB_FinalizaConstrucao(pLab);
 		return;
@@ -66,7 +69,7 @@ void HUM_PercorreLabirinto(tpLabirinto * pLab)
 {
 	char c;
 	char * val = (char*)malloc(1);
-	printf("  Percorra o labirinto usando as teclas WASD.\nTente chegar no final ('f').\n\n[q] - Sair\n[m] - Modificar\n");
+	printf("  Percorra o labirinto usando as teclas WASD.\n  Tente chegar no final ('f').\n\n [q] - Sair\n [m] - Modificar\n");
 	c = _getch();
 
 	if(c == 'd'){
@@ -93,7 +96,8 @@ void HUM_PercorreLabirinto(tpLabirinto * pLab)
 
 	LAB_ObterValor(pLab,val);
 	if(*val == 'f'){
-		printf("\nParabens! Voce chegou ao fim!\n");
+		printf("\n  Parabens! Voce chegou ao fim!\n\n  Aperte qualquer tecla para voltar ao menu.\n");
+		_getch();
 		return;
 	}
 

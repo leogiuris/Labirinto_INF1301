@@ -7,7 +7,7 @@
 #include	<math.h>
 
 #define SLEEP Sleep(10)
-#define LIM_PASSOS 100000
+#define LIM_PASSOS 10000
 
 
 
@@ -134,6 +134,8 @@
          } /* if */
          free( pResolvedor ) ;
          pResolvedor = NULL ;
+
+		 tentativas = 1; passos = 0;
       } /* if */
 
    } /* Fim função: ARV Destruir árvore */
@@ -928,16 +930,6 @@
    } /* Fim função: ARV Destruir a estrutura da árvore */
 
 
-   // void imprimeArvore !!!!!!!!!!
-
-
-   //criar resolvedor
-   //checar
-   //andar
-   //se(beco) -> voltar
-   //andar(ate achar folha da arvore)
-
-
  RES_tpCondRet RES_ResolverLabirinto(tpLabirinto * pLab)
  {
 	 RES_tpCondRet ret = RES_CondRetOK;
@@ -950,6 +942,7 @@
 		 if(ret == RES_CondRetResolvido)
 		 {
 			 printf("%d tentativas\n%d passos\n",tentativas,passos);
+			 
 			 RES_DestruirResolvedor();
 
 			  return ret;
@@ -963,19 +956,3 @@
 
 
 
-
-
-
- void RES_Teste(){
-	 RES_tpCondRet ret = RES_CondRetOK;
-
-
-
-	 RES_CriarResolvedor();
-	 RES_InserirNorte(0);
-	 RES_InserirSul(0);
-
-	 printf("valor raiz: %d\n", pResolvedor->pNoCorr->Valor);
-	 printf("valor norte: %d\n", pResolvedor->pNoCorr->pNoNorte->Valor);
-	 return;
- }

@@ -225,7 +225,7 @@ void LAB_LimpaRastro(tpLabirinto * pLab)
 			LAB_ObterValor(pLab, val);
 
 			if(*val == *rastro)
-				LAB_InsereCaminho(pLab);
+				MAT_InsereValor(pLab->mat,(void*)caminho);
 
 			MoveLeste(pLab->mat);
 
@@ -235,8 +235,35 @@ void LAB_LimpaRastro(tpLabirinto * pLab)
 
 }
 
-	
 
+void LAB_ReiniciaLabirinto(tpLabirinto * pLab)
+{
+	int i, j,cont = 0;
+	int lin = pLab->lin;
+	int col = pLab->col;
+	for(i = 0; i < lin; i++)
+	{
+		LAB_RetornaInicio(pLab);
+		while(cont < i)
+		{
+			MoveSul(pLab->mat);
+			cont++;
+		}
+		cont = 0;
+
+		for(j = 0; j < lin; j++)
+		{
+			MAT_InsereValor(pLab->mat, (void*)parede);
+
+			MoveLeste(pLab->mat);
+
+		}
+	}
+	LAB_RetornaInicio(pLab);
+
+	MAT_InsereValor(pLab->mat, (void*)inicio);
+
+}
 
 
 void ImprimeLabirinto(tpLabirinto * pLab)
@@ -248,8 +275,8 @@ void ImprimeLabirinto(tpLabirinto * pLab)
 	system("cls");
 	str = ObtemMatrizString(pLab->mat);
 
-
-	printf(" %c",218);
+	printf("\n\n           ===== LABIRINTO ======\n\n");
+	printf("           %c",218);
 	for(i=0; i<2*col+1; i++)
 	{
 		printf("%c",196);
@@ -259,7 +286,7 @@ void ImprimeLabirinto(tpLabirinto * pLab)
 	for(i=0; i<lin; i++)
 	{
 		printf("\n");
-		printf(" | ");
+		printf("           | ");
 		for(j=0; j<col;j++)
 		{
 			printf("%c",str[i*col+j]);
@@ -269,12 +296,12 @@ void ImprimeLabirinto(tpLabirinto * pLab)
 		printf(" |");
 	}
 
-	printf("\n %c", 192);
+	printf("\n           %c", 192);
 	for(i=0; i<2*col+1; i++)
 	{
 		printf("%c",196);
 	}
-	printf("%c\n", 217);
+	printf("%c\n\n", 217);
 }
 
 void LAB_InsereRastro(tpLabirinto * pLab){
@@ -451,10 +478,12 @@ void LAB_Constroi(tpLabirinto * pLab, char valor)
 {
 	if(valor == 'p')
 		MAT_InsereValor(pLab->mat, (void*)parede);
-	if(valor == 'c')
+	if(valor == ' ')
 		MAT_InsereValor(pLab->mat, (void*)caminho);
 	if(valor == 'f')
 		MAT_InsereValor(pLab->mat, (void*)fim);
+	if(valor == 'r')
+		LAB_ReiniciaLabirinto(pLab);
 }
 
 void JogaHumano(tpLabirinto *pLab)
@@ -471,7 +500,7 @@ void LAB_EscolheModo(char modo,tpLabirinto * pLab)
 {
 	if(modo == '1')
 	{
-		LAB_RetornaInicio(pLab);
+		LAB_LimpaRastro(pLab);
 		ImprimeLabirinto(pLab);
 		HUM_PercorreLabirinto(pLab);
 		
@@ -480,7 +509,6 @@ void LAB_EscolheModo(char modo,tpLabirinto * pLab)
 	if(modo == '2')
 	{
 		LAB_LimpaRastro(pLab);
-		LAB_RetornaInicio(pLab);
 		ImprimeLabirinto(pLab);
 		if(LAB_Resolver(pLab) == LAB_CondRetResolvido)
 			printf("\nParabens! Voce chegou ao fim!\n");
@@ -490,18 +518,22 @@ void LAB_EscolheModo(char modo,tpLabirinto * pLab)
 	
 	if(modo == 'm')
 	{
+		LAB_LimpaRastro(pLab);
 		ImprimeLabirinto(pLab);
 		HUM_Modifica(pLab);
 		LAB_RetornaInicio(pLab);
 		ImprimeLabirinto(pLab);
 	}
+
+	if(modo == 'r')
+	{
+		LAB_ReiniciaLabirinto(pLab);
+		ImprimeLabirinto(pLab);
+		LAB_Cava(pLab);
+	}
 	
 }
 
-void LAB_TestarResolvedor()
-{
-	RES_Teste();
-}
 
 LAB_tpCondRet LAB_Resolver(tpLabirinto * pLab)
 {

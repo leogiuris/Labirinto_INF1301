@@ -30,14 +30,8 @@ typedef enum {
 
 }RES_tpCondRet;
 
-
-
-
-
 	
 RES_tpCondRet RES_ResolverLabirinto(tpLabirinto * pLab);
-
-void RES_Teste();
 
 
 #undef Resolvedor_EXT
