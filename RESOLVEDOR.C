@@ -613,10 +613,10 @@
 
 
 
-
+   /**/
 
    //DECIDE QUAL CAMINHO TOMAR COM BASE NOS VALORES DOS NÓS VIZINHOS
-   /*RES_tpCondRet DecideCaminho(int * x, int * y)
+   RES_tpCondRet DecideCaminho(int * x, int * y)
    {
 	   int menor = LIM_PASSOS;
 	   int num;
@@ -649,43 +649,47 @@
 	   {
 		   if(pNo->pNoSul->Valor < menor)
 		   {
-			   menor = pNo->pNoNorte->Valor;
+			   menor = pNo->pNoSul->Valor;
 		   }
 	   }
 	   
-	   while(*x != 0 && *y != 0)
+	   while(1)
 	   {
 		   printf("aaaa");
 		   num = rand()%4;
-		   printf("bbbb");
-		   if(num == 0 && pNo->pNoLeste->Valor == menor)
-		   {
-			   *x = 1; *y = 0;
-			   
-			   break;
-		   }
-		   if(num == 1 && pNo->pNoOeste->Valor == menor)
-		   {
-			   *x = -1; *y = 0;
-			   break;
-		   }
-		   if(num == 2 && pNo->pNoNorte->Valor == menor)
-		   {
-			   *x = 0; *y = 1;
-			   break;
-		   }
-		   if(num == 3 && pNo->pNoSul->Valor == menor)
-		   {
-			   *x = 0; *y = -1;
-			   break;
-		   }
+		   printf("  %d",num);
+		   if(num == 0 && pNo->pNoLeste != NULL)
+			   if(pNo->pNoLeste->Valor == menor)
+			   {
+				   *x = 1; *y = 0;
+				   break;
+			   }
+		   if(num == 1 && pNo->pNoOeste != NULL)
+			   if(pNo->pNoOeste->Valor == menor)
+			   {
+				   *x = -1; *y = 0;
+				   break;
+			   }
+		   if(num == 2 && pNo->pNoNorte != NULL)
+			   if(pNo->pNoNorte->Valor == menor)
+			   {
+				   *x = 0; *y = 1;
+				   break;
+			   }
+		   if(num == 3 && pNo->pNoSul != NULL)
+			   if(pNo->pNoSul->Valor == menor)
+			   {
+				   *x = 0; *y = -1;
+				   break;
+			   }
+
 	   }
 
 		printf("--OK (x = %d, y = %d)\n",*x,*y);
 	   return RES_CondRetOK;
-   }*/
+   }
 
-
+   /*/
 
    RES_tpCondRet DecideCaminho(int * x, int * y)
    {
@@ -719,6 +723,8 @@
 		printf("--OK (x = %d, y = %d)\n",*x,*y);
 	   return RES_CondRetOK;
    }
+
+   /**/
 
    //DIZ SE O NÓ CORRENTE ESTÁ NUM BECO SEM SAÍDA (N HÁ VIZINHOS EXCETO PAI)
    int Beco()
@@ -935,9 +941,9 @@
  RES_tpCondRet RES_ResolverLabirinto(tpLabirinto * pLab)
  {
 	 RES_tpCondRet ret = RES_CondRetOK;
-	 srand(time(NULL));
+	 
 	 RES_CriarResolvedor();
-
+	 srand(time(0));
 	 while(ret != RES_CondRetResolvido && passos < LIM_PASSOS)
 	 {
 		 ret = PercorreLabirinto(pLab);
