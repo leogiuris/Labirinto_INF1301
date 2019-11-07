@@ -470,7 +470,7 @@ MAT_tpCondRet MoveCoord(tpMatriz *pMatriz, int x, int y)
 	MAT_tpCondRet ret;
 
 	if( x==0 && y==0 )
-		return;
+		return MAT_CondRetDirecaoInvalida;
 
 	if(x == 0 ^ y == 0){
 		if(x == 0)

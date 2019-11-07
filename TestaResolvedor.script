@@ -1,0 +1,23 @@
+
+
+//#define		CRIAR_LAB_CMD		"=criarLab"
+//#define		RESOLVE_LAB_CMD		"=resolver"
+//#define		CAVAR_NORTE_CMD		"=cavan"
+//#define		CAVAR_LESTE_CMD		"=caval"
+//#define		CAVAR_OESTE_CMD		"=cavao"
+//#define		CAVAR_SUL_CMD		"=cavas"
+//#define		REINICIA_LAB_CMD	"=reiniciaLab"
+
+//#define		CRIAR_RES_CMD		"=criarRes"
+//#define		INSERE_NORTE_CMD	"=insnorte"
+//#define		INSERE_SUL_CMD		"=inssul"
+//#define		INSERE_LESTE_CMD	"=insleste"
+//#define		INSERE_OESTE_CMD	"=insoeste"
+
+
+
+
+==Cria estrutura do resolvedor separadamente
+=criaRes 0
+
+

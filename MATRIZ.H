@@ -70,7 +70,8 @@
                /* Faltou mem�ria ao alocar dados */
 
 		 MAT_CondRetTamanhoInvalido = 9, 
-		 MAT_CondRetErroEstrutura = 10
+		 MAT_CondRetErroEstrutura = 10,
+		 MAT_CondRetDirecaoInvalida = 11
    } MAT_tpCondRet ;
 
 

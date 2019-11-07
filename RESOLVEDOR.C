@@ -1,16 +1,19 @@
 
+
+
+
+
+
 #include   <stdio.h>
 #include	<time.h>
 #include	<stdlib.h>
-#include "RESOLVEDOR.H"
+#include "RESOLVEDOR_TESTE.H"
+
 #include <windows.h>
 #include	<math.h>
 
 #define SLEEP Sleep(10)
 #define LIM_PASSOS 10000
-
-
-
 
 
 
@@ -255,7 +258,7 @@
 
       /* Tratar vazio, esquerda */
 
-	  printf("[ INSERE OESTE ]");
+
          CondRet = CriarNoRaiz( 0 ) ;
          if ( CondRet != RES_CondRetNaoCriouRaiz )
          {
@@ -281,7 +284,6 @@
             pCorr->pNoOeste    = pNo ;
             //pResolvedor->pNoCorr = pNo ;
 
-			printf("--OK\n");
             return RES_CondRetOK ;
          } /* if */
 
@@ -305,7 +307,6 @@
       tpNo * pNo ;
 
 
-	  printf("[ INSERE LESTE ]");
       /* Tratar vazio, direita */
 
          CondRet = CriarNoRaiz( 0 ) ;
@@ -333,7 +334,6 @@
             pCorr->pNoLeste    = pNo ;
             //pResolvedor->pNoCorr = pNo ;
 
-			printf("--OK\n");
             return RES_CondRetOK ;
          } /* if */
 
@@ -542,7 +542,6 @@
 	   
 	   RES_tpCondRet ret;
 
-	   printf("[ IR_NO_COORDENADAS ]");
 	   if(x==0)
 		   if(y>0)
 			   ret = RES_IrNoNorte(pLab);
@@ -566,7 +565,6 @@
    RES_tpCondRet RetornaInicio(tpLabirinto * pLab)
    {
 	   int x,y;
-	   printf("[ RETORNA_INICIO ]\n");
 	   
 	   pResolvedor->pNoCorr->Valor++;
 
@@ -587,7 +585,7 @@
    {
 	   tpNo * pNo = pResolvedor->pNoCorr;
 	   RES_tpCondRet ret = RES_CondRetNaoOK;
-	   printf("[ SONDA_LABIRINTO ]");
+
 	    if ( pResolvedor == NULL )
       {
          return RES_CondRetArvoreNaoExiste ;
@@ -605,11 +603,7 @@
 		  ret = RES_InserirNorte(0);
 	  if(LAB_VerificarVizinho(pLab,0,-1) == 1 && (pNo->pNoAnterior == NULL || pNo != pNo->pNoAnterior->pNoNorte))
 		  ret = RES_InserirSul(0);
-	  
-	  if(ret == RES_CondRetOK)
-		printf("--OK\n");
-	  else
-		  printf("--NAO OK, CondRet: %d\n",ret);
+
 	  return RES_CondRetOK;
    } 
 
@@ -627,8 +621,6 @@
 	   tpNo * pNo = pResolvedor->pNoCorr;
 
 
-	   
-	   printf("[ DECIDE_CAMINHO ]");
 	   if(pNo->pNoLeste != NULL)
 	   {
 		   menor = pNo->pNoLeste->Valor;
@@ -657,9 +649,9 @@
 	   
 	   while(1)
 	   {
-		   printf("aaaa");
+		   
 		   num = rand()%4;
-		   printf("  %d",num);
+		   
 		   if(num == 0 && pNo->pNoLeste != NULL)
 			   if(pNo->pNoLeste->Valor == menor)
 			   {
@@ -687,46 +679,11 @@
 
 	   }
 
-		printf("--OK (x = %d, y = %d)\n",*x,*y);
+		
 	   return RES_CondRetOK;
    }
 
-   /*/
 
-   RES_tpCondRet DecideCaminho(int * x, int * y)
-   {
-	   int menor = LIM_PASSOS;
-	   int num;
-	   tpNo * pNo = pResolvedor->pNoCorr;
-
-	   printf("[ DECIDE_CAMINHO ]");
-	   if(pNo->pNoLeste != NULL)
-	   {
-		   menor = pNo->pNoLeste->Valor;
-		   *x=1; *y=0;
-	   }
-	   if(pNo->pNoOeste != NULL)
-		   if(pNo->pNoOeste->Valor <= menor)
-		   {
-			   *x=-1; *y=0;
-			   menor = pNo->pNoOeste->Valor;
-		   }
-	   if(pNo->pNoNorte != NULL)
-		   if(pNo->pNoNorte->Valor < menor)
-		   {
-			   *x=0; *y=1;
-			   menor = pNo->pNoNorte->Valor;
-		   }
-	   if(pNo->pNoSul != NULL)
-		   if(pNo->pNoSul->Valor < menor)
-		   {
-			   *x=0; *y=-1; 
-		   }
-		printf("--OK (x = %d, y = %d)\n",*x,*y);
-	   return RES_CondRetOK;
-   }
-
-   /**/
 
    //DIZ SE O NÓ CORRENTE ESTÁ NUM BECO SEM SAÍDA (N HÁ VIZINHOS EXCETO PAI)
    int Beco()
@@ -751,7 +708,6 @@
 	   tpNo * pNo = pResolvedor->pNoCorr;
 	   int cont = 0;
 
-	   printf("[ PERCORRE_LABIRINTO ]\n");
 	  if ( pResolvedor == NULL )
       {
          return RES_CondRetArvoreNaoExiste ;
@@ -763,8 +719,7 @@
 	  
 	  while(pNo->Valor>0 && Beco()==0)
 	  {
-		  /*int * x = (int*)malloc(sizeof(int));
-		  int * y = (int*)malloc(sizeof(int));*/
+
 		  int x,y;
 		  DecideCaminho(&x,&y);
 		  ret = RES_IrNoCoord(pLab,x,y);
