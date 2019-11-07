@@ -1,11 +1,18 @@
-#include   <malloc.h>
+
 #include   <stdio.h>
 #include	<time.h>
+#include	<stdlib.h>
 #include "RESOLVEDOR.H"
 #include <windows.h>
+#include	<math.h>
 
 #define SLEEP Sleep(10)
-#define LIM_PASSOS 1000
+#define LIM_PASSOS 100000
+
+
+
+
+
 
    typedef struct tgNoArvore {
 
@@ -59,6 +66,8 @@
 	  //void * balde[4];
 	  //int qtdBalde = 0;
 	  int passos = 0;
+
+	  int tentativas = 1;
 
 /***** Protótipos das funções encapuladas no módulo *****/
 
@@ -387,7 +396,7 @@
 	  ret = LAB_IrOeste(pLab);
       pResolvedor->pNoCorr = pResolvedor->pNoCorr->pNoOeste ;
 	  if(ret != LAB_CondRetOK)
-		  printf("ret LAB: %d\n", ret);
+		  //printf("ret LAB: %d\n", ret);
 	  if(ret == LAB_CondRetResolvido)
 		  return RES_CondRetResolvido;
 
@@ -421,7 +430,7 @@
 	  ret = LAB_IrLeste(pLab);
       pResolvedor->pNoCorr = pResolvedor->pNoCorr->pNoLeste ;
 	  if(ret != LAB_CondRetOK)
-		  printf("ret LAB: %d\n");
+		  //printf("ret LAB: %d\n");
 	  if(ret == LAB_CondRetResolvido)
 		  return RES_CondRetResolvido;
 
@@ -458,7 +467,7 @@
 	  ret = LAB_IrNorte(pLab);
       pResolvedor->pNoCorr = pResolvedor->pNoCorr->pNoNorte ;
 	  if(ret != LAB_CondRetOK)
-		  printf("ret LAB: %d\n");
+		  //printf("ret LAB: %d\n");
 	  if(ret == LAB_CondRetResolvido)
 		  return RES_CondRetResolvido;
 
@@ -494,7 +503,7 @@
       pResolvedor->pNoCorr = pResolvedor->pNoCorr->pNoSul ;
 
 	  if(ret != LAB_CondRetOK)
-		  printf("ret LAB: %d\n");
+		  //printf("ret LAB: %d\n");
 	  if(ret == LAB_CondRetResolvido)
 		  return RES_CondRetResolvido;
 	  
@@ -546,7 +555,8 @@
 	   if(ret == RES_CondRetResolvido)
 		  return ret;
 
-	   printf("--OK\n");
+
+	   LAB_InsereRastro(pLab);
 
 	   return RES_CondRetOK;
    }
@@ -562,8 +572,11 @@
 	   {
 		   pResolvedor->pNoCorr->Valor++;
 	   }
-
+	   
+	   tentativas++;
+	   LAB_LimpaRastro(pLab);
 	   LAB_RetornaInicio(pLab);
+	   
 	   return RES_CondRetOK;
    }
 
@@ -602,31 +615,78 @@
 
 
 
-
-
-
-   //void baldePush(tpNo * no){
-	  // balde[qtdBalde] = no;
-	  // qtdBalde++;
-   //}
-
-   //void * baldePick(int qtd){
-	  // void * elem;
-	  // int num;
-	  // srand(time(0));
-	  // num = rand()%qtd;
-	  // elem = balde[num];
-	  // qtdBalde = 0;
-	  // return elem;
-   //}
-	  // 
-
-
-
-
-
-
    //DECIDE QUAL CAMINHO TOMAR COM BASE NOS VALORES DOS NÓS VIZINHOS
+   /*RES_tpCondRet DecideCaminho(int * x, int * y)
+   {
+	   int menor = LIM_PASSOS;
+	   int num;
+	   
+	   
+	   tpNo * pNo = pResolvedor->pNoCorr;
+
+
+	   
+	   printf("[ DECIDE_CAMINHO ]");
+	   if(pNo->pNoLeste != NULL)
+	   {
+		   menor = pNo->pNoLeste->Valor;
+	   }
+	   if(pNo->pNoOeste != NULL)
+	   {
+		   if(pNo->pNoOeste->Valor < menor)
+		   {
+			   menor = pNo->pNoOeste->Valor;
+		   }
+	   }
+	   if(pNo->pNoNorte != NULL)
+	   {
+		   if(pNo->pNoNorte->Valor < menor)
+		   {
+			   menor = pNo->pNoNorte->Valor;
+		   }
+	   }
+	   if(pNo->pNoSul != NULL)
+	   {
+		   if(pNo->pNoSul->Valor < menor)
+		   {
+			   menor = pNo->pNoNorte->Valor;
+		   }
+	   }
+	   
+	   while(*x != 0 && *y != 0)
+	   {
+		   printf("aaaa");
+		   num = rand()%4;
+		   printf("bbbb");
+		   if(num == 0 && pNo->pNoLeste->Valor == menor)
+		   {
+			   *x = 1; *y = 0;
+			   
+			   break;
+		   }
+		   if(num == 1 && pNo->pNoOeste->Valor == menor)
+		   {
+			   *x = -1; *y = 0;
+			   break;
+		   }
+		   if(num == 2 && pNo->pNoNorte->Valor == menor)
+		   {
+			   *x = 0; *y = 1;
+			   break;
+		   }
+		   if(num == 3 && pNo->pNoSul->Valor == menor)
+		   {
+			   *x = 0; *y = -1;
+			   break;
+		   }
+	   }
+
+		printf("--OK (x = %d, y = %d)\n",*x,*y);
+	   return RES_CondRetOK;
+   }*/
+
+
+
    RES_tpCondRet DecideCaminho(int * x, int * y)
    {
 	   int menor = LIM_PASSOS;
@@ -681,7 +741,7 @@
    {
 	   RES_tpCondRet ret = RES_CondRetOK;
 	   tpNo * pNo = pResolvedor->pNoCorr;
-
+	   int cont = 0;
 
 	   printf("[ PERCORRE_LABIRINTO ]\n");
 	  if ( pResolvedor == NULL )
@@ -711,6 +771,10 @@
 	  {
 		  int x,y;
 		  
+		  cont++;
+		  if(cont > 100)
+			  return RES_CondRetNaoOK;
+
 		  SLEEP;
 		  DecideCaminho(&x,&y);
 		  SLEEP;
@@ -871,19 +935,23 @@
  RES_tpCondRet RES_ResolverLabirinto(tpLabirinto * pLab)
  {
 	 RES_tpCondRet ret = RES_CondRetOK;
-
+	 srand(time(NULL));
 	 RES_CriarResolvedor();
-
-	 if(pResolvedor->pNoCorr->Valor == 0)
-		 printf("ok\n");
 
 	 while(ret != RES_CondRetResolvido && passos < LIM_PASSOS)
 	 {
 		 ret = PercorreLabirinto(pLab);
 		 if(ret == RES_CondRetResolvido)
+		 {
+			 printf("%d tentativas\n%d passos\n",tentativas,passos);
+			 RES_DestruirResolvedor();
+
 			  return ret;
+		 }
 		 SLEEP;
 	 }
+
+	 RES_DestruirResolvedor();
 	 return ret;
  }
 
@@ -894,6 +962,8 @@
 
  void RES_Teste(){
 	 RES_tpCondRet ret = RES_CondRetOK;
+
+
 
 	 RES_CriarResolvedor();
 	 RES_InserirNorte(0);

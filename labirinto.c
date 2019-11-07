@@ -7,12 +7,13 @@
 #define CAMINHO ' '
 #define INICIO	'i'
 #define	FIM		'f'
-
+#define RASTRO	'.'
 
 char * parede;
 char * caminho;
 char * inicio;
 char * fim;
+char * rastro;
 
 
 
@@ -29,12 +30,13 @@ void Inicializa()
 	caminho = (char*)malloc(1);
 	inicio = (char*)malloc(1);
 	fim = (char*)malloc(1);
+	rastro = (char*)malloc(1);
 
 	*parede = PAREDE;
 	*caminho = CAMINHO;
 	*inicio = INICIO;
 	*fim = FIM;
-	
+	*rastro = RASTRO;
 	return;
 }
 
@@ -122,13 +124,14 @@ LAB_tpCondRet LAB_ObterValor(tpLabirinto * pLab, char * valor)
 	return LAB_CondRetOK;
 }
 
+
 void LAB_RetornaInicio(tpLabirinto * pLab)
 {
 	MAT_RetornaOrigem(pLab->mat);
 }
 
 
-LAB_tpCondRet LAB_ConstroiLeste (tpLabirinto *pLab)
+LAB_tpCondRet LAB_CavaLeste (tpLabirinto *pLab)
 {
 	//AE: Labirinto tem que existir
 	if(pLab==NULL)
@@ -146,7 +149,8 @@ LAB_tpCondRet LAB_ConstroiLeste (tpLabirinto *pLab)
 	return LAB_CondRetOK;
 }
 
-LAB_tpCondRet LAB_ConstroiSul (tpLabirinto *pLab)
+
+LAB_tpCondRet LAB_CavaSul (tpLabirinto *pLab)
 {
 	//AE: Labirinto tem que existir
 	if(pLab==NULL)
@@ -164,7 +168,7 @@ LAB_tpCondRet LAB_ConstroiSul (tpLabirinto *pLab)
 	return LAB_CondRetOK;
 }
 
-LAB_tpCondRet LAB_ConstroiNorte (tpLabirinto *pLab)
+LAB_tpCondRet LAB_CavaNorte (tpLabirinto *pLab)
 {
 	//AE: Labirinto tem que existir
 	if(pLab==NULL)
@@ -182,7 +186,7 @@ LAB_tpCondRet LAB_ConstroiNorte (tpLabirinto *pLab)
 	return LAB_CondRetOK;
 }
 
-LAB_tpCondRet LAB_ConstroiOeste (tpLabirinto *pLab)
+LAB_tpCondRet LAB_CavaOeste (tpLabirinto *pLab)
 {
 	//AE: Labirinto tem que existir
 	if(pLab==NULL)
@@ -199,6 +203,41 @@ LAB_tpCondRet LAB_ConstroiOeste (tpLabirinto *pLab)
 	ImprimeLabirinto(pLab);
 	return LAB_CondRetOK;
 }
+
+void LAB_LimpaRastro(tpLabirinto * pLab)
+{
+	char * val;
+	int i, j,cont = 0;
+	int lin = pLab->lin;
+	int col = pLab->col;
+	for(i = 0; i < lin; i++)
+	{
+		LAB_RetornaInicio(pLab);
+		while(cont < i)
+		{
+			MoveSul(pLab->mat);
+			cont++;
+		}
+		cont = 0;
+
+		for(j = 0; j < lin; j++)
+		{
+			LAB_ObterValor(pLab, val);
+
+			if(*val == *rastro)
+				LAB_InsereCaminho(pLab);
+
+			MoveLeste(pLab->mat);
+
+		}
+	}
+	LAB_RetornaInicio(pLab);
+
+}
+
+	
+
+
 
 void ImprimeLabirinto(tpLabirinto * pLab)
 {
@@ -237,6 +276,16 @@ void ImprimeLabirinto(tpLabirinto * pLab)
 	}
 	printf("%c\n", 217);
 }
+
+void LAB_InsereRastro(tpLabirinto * pLab){
+	MAT_InsereValor(pLab->mat,(void*)rastro);
+}
+
+
+void LAB_InsereCaminho(tpLabirinto * pLab){
+	MAT_InsereValor(pLab->mat,(void*)caminho);
+}
+
 
 
 LAB_tpCondRet LAB_FinalizaConstrucao(tpLabirinto * pLab)
@@ -368,19 +417,13 @@ LAB_tpCondRet LAB_IrCoord(tpLabirinto * pLab, int x, int y)
 	if(pLab==NULL)
 		return LAB_CondRetLabirintoNaoExiste;
 
-
-
 	if(x == 0 && y == 0 ) return LAB_CondRetParede;
-
-
 
 	if(MoveCoord(pLab->mat,x,y) == MAT_CondRetNaoPossuiVizinho)
 	{
 		
 		return LAB_CondRetNaoPossuiVizinho;
 	}
-
-
 
 	LAB_ObterValor(pLab,ret);
 	if(*ret == PAREDE)
@@ -398,35 +441,74 @@ LAB_tpCondRet LAB_IrCoord(tpLabirinto * pLab, int x, int y)
 	return LAB_CondRetOK;
 }
 
-void LAB_EscolheModo(int modo,tpLabirinto * pLab)
+void LAB_MoveLivre(tpLabirinto * pLab, int x, int y)
 {
-	
-	if(modo == 1){
-		HUM_ConstroiLabirinto(pLab);
-		HUM_PercorreLabirinto(pLab);
-	}
-	if(modo == 2){
-		HUM_ConstroiLabirinto(pLab);
-		LAB_Resolver(pLab);
-	}
+	MoveCoord(pLab->mat,x,y);
+	ImprimeLabirinto(pLab);
 }
 
-void LAB_TestarResolvedor(){
-	RES_Teste();
-}
-
-void LAB_Resolver(tpLabirinto * pLab)
+void LAB_Constroi(tpLabirinto * pLab, char valor)
 {
-	RES_tpCondRet ret;
-	ret = RES_ResolverLabirinto(pLab);
-	if(ret == RES_CondRetResolvido)
-		printf("foi\n");
-	else
-		printf("nao foi\n");
+	if(valor == 'p')
+		MAT_InsereValor(pLab->mat, (void*)parede);
+	if(valor == 'c')
+		MAT_InsereValor(pLab->mat, (void*)caminho);
+	if(valor == 'f')
+		MAT_InsereValor(pLab->mat, (void*)fim);
 }
-
 
 void JogaHumano(tpLabirinto *pLab)
 {
 	HUM_PercorreLabirinto(pLab);
 }
+
+void LAB_Cava(tpLabirinto * pLab)
+{
+	HUM_ConstroiLabirinto(pLab);
+}
+
+void LAB_EscolheModo(char modo,tpLabirinto * pLab)
+{
+	if(modo == '1')
+	{
+		LAB_RetornaInicio(pLab);
+		ImprimeLabirinto(pLab);
+		HUM_PercorreLabirinto(pLab);
+		
+	}
+
+	if(modo == '2')
+	{
+		LAB_LimpaRastro(pLab);
+		LAB_RetornaInicio(pLab);
+		ImprimeLabirinto(pLab);
+		if(LAB_Resolver(pLab) == LAB_CondRetResolvido)
+			printf("\nParabens! Voce chegou ao fim!\n");
+		else
+			printf("\nEste labirinto nao tem solucao!\n");
+	}
+	
+	if(modo == 'm')
+	{
+		ImprimeLabirinto(pLab);
+		HUM_Modifica(pLab);
+		LAB_RetornaInicio(pLab);
+		ImprimeLabirinto(pLab);
+	}
+	
+}
+
+void LAB_TestarResolvedor()
+{
+	RES_Teste();
+}
+
+LAB_tpCondRet LAB_Resolver(tpLabirinto * pLab)
+{
+	if(RES_ResolverLabirinto(pLab) == RES_CondRetResolvido)
+		return LAB_CondRetResolvido;
+	else
+		return LAB_CondRetSemSolucao;
+}
+
+

@@ -58,7 +58,9 @@ typedef enum{
 	LAB_CondRetParede = 4,	/* no corrente nao pode mover para a direcao desejada
 							pois esta eh parede */ 
 
-	LAB_CondRetResolvido = 5	//chegou no fim do labirinto
+	LAB_CondRetResolvido = 5,	//chegou no fim do labirinto
+
+	LAB_CondRetSemSolucao = 6	//chegou no fim do labirinto
 	
 }LAB_tpCondRet ;
 
@@ -121,7 +123,7 @@ LAB_tpCondRet LAB_ObterValor(tpLabirinto * pLab, char * valor);
 //	Assertivas de saida:
 //		valor contido deve ser igual a CAMINHO
 //
-LAB_tpCondRet LAB_ConstroiLeste (tpLabirinto *pLab);
+LAB_tpCondRet LAB_CavaLeste (tpLabirinto *pLab);
 
 
 
@@ -142,7 +144,7 @@ LAB_tpCondRet LAB_ConstroiLeste (tpLabirinto *pLab);
 //	Assertivas de saida:
 //		valor contido deve ser igual a CAMINHO
 //
-LAB_tpCondRet LAB_ConstroiSul (tpLabirinto *pLab);
+LAB_tpCondRet LAB_CavaSul (tpLabirinto *pLab);
 
 
 
@@ -162,7 +164,7 @@ LAB_tpCondRet LAB_ConstroiSul (tpLabirinto *pLab);
 //	Assertivas de saida:
 //		valor contido deve ser igual a CAMINHO
 //
-LAB_tpCondRet LAB_ConstroiNorte (tpLabirinto *pLab);
+LAB_tpCondRet LAB_CavaNorte (tpLabirinto *pLab);
 
 
 
@@ -182,7 +184,7 @@ LAB_tpCondRet LAB_ConstroiNorte (tpLabirinto *pLab);
 //	Assertivas de saida:
 //		valor contido deve ser igual a CAMINHO
 //
-LAB_tpCondRet LAB_ConstroiOeste (tpLabirinto *pLab);
+LAB_tpCondRet LAB_CavaOeste (tpLabirinto *pLab);
 
 
 //	Funcao: LAB Finaliza Construção
@@ -315,9 +317,23 @@ LAB_tpCondRet LAB_IrCoord(tpLabirinto * pLab, int x, int y);
 
 void LAB_RetornaInicio(tpLabirinto * pLab);
 
-void LAB_Resolver(tpLabirinto * pLab);
+LAB_tpCondRet LAB_Resolver(tpLabirinto * pLab);
 
-void LAB_EscolheModo(int modo,tpLabirinto * pLab);
+void LAB_Cava(tpLabirinto * pLab);
+
+void LAB_Constroi(tpLabirinto * pLab, char valor);
+
+void LAB_MoveLivre(tpLabirinto * pLab, int x, int y);
+
+void LAB_EscolheModo(char modo,tpLabirinto * pLab);
+
+void ImprimeLabirinto(tpLabirinto * pLab);
+
+void LAB_InsereRastro(tpLabirinto * pLab);
+
+void LAB_InsereCaminho(tpLabirinto * pLab);
+
+void LAB_LimpaRastro(tpLabirinto * pLab);
 /////////////////////////////////////////////////////
 
 #undef Labirinto_EXT
