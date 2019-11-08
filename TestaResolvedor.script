@@ -1,23 +1,85 @@
+// Script:    TestaResolvedor.script
+// Autor:     Daniel Peralta, Leonardo Giuri, Rafael Serpa
+// Data:      07/11/2019
+// Propósito: Testa Resolvedor Automatico do Aplicativo Labirinto.
+//            Verifica se o Resolvedor consegue solucionar diferentes
+//			  tipos de labirinto.
 
 
-//#define		CRIAR_LAB_CMD		"=criarLab"
-//#define		RESOLVE_LAB_CMD		"=resolver"
-//#define		CAVAR_NORTE_CMD		"=cavan"
-//#define		CAVAR_LESTE_CMD		"=caval"
-//#define		CAVAR_OESTE_CMD		"=cavao"
-//#define		CAVAR_SUL_CMD		"=cavas"
-//#define		REINICIA_LAB_CMD	"=reiniciaLab"
+== Cria estrutura do resolvedor separadamente
+=criarRes 0
 
-//#define		CRIAR_RES_CMD		"=criarRes"
-//#define		INSERE_NORTE_CMD	"=insnorte"
-//#define		INSERE_SUL_CMD		"=inssul"
-//#define		INSERE_LESTE_CMD	"=insleste"
-//#define		INSERE_OESTE_CMD	"=insoeste"
+== Cria Labirinto 9x9
+=criarLab 0
+
+== Constroi labirinto simples com apenas um caminho
+=caval 0
+=caval 0
+=caval 0
+
+== Resolve labirinto simples
+=resolver 10
+
+== Reinicia Labirinto
+=reiniciaLab 0
 
 
+==Constroi Labirinto com uma bifurcacao
+=caval 0
+=caval 0
+=caval 0
+=cavao 0
+=cavao 0
+=cavas 0
+
+== Resolve Labirinto com uma bifurcacao
+=resolver 10
+
+== Resolve Labirinto com vasta area sem parede
+=reiniciaLab 0
+=caval 0
+=caval 0
+=caval 0
+=cavas 0
+=cavao 0
+=cavao 0
+=cavao 0
+=cavas 0
+=caval 0
+=caval 0
+=caval 0
+=cavao 0
+=cavao 0
+=cavas 0
+=cavas 0
+
+== Resolve Labirinto com vasta area sem parede
+=resolver 10
 
 
-==Cria estrutura do resolvedor separadamente
-=criaRes 0
+==Constroi Labirinto com duas bifurcacoes
+=reiniciaLab 0
+=caval 0
+=caval 0
+=caval 0
+=cavao 0
+=cavao 0
+=cavas 0
+=cavas 0
+=cavas 0
+=cavas 0
+=cavan 0
+=cavan 0
+=caval 0
+=caval 0
+=caval 0
+
+
+== Resolve Labirinto com duas bifurcacoes
+=resolver 10
+
+
+==Destroi estrutura do Resolvedor
+=destruir 6
 
 

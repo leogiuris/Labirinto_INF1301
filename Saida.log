@@ -1,0 +1,40 @@
+
+!!! Inicio dos testes
+!!!      Construto sob teste: TRAB3-2.exe
+!!!      Script de teste:     TestaResolvedor.script
+
+!!!    0  Linha:     3  //#define		CRIAR_LAB_CMD		"=criarLab" 
+!!!    0  Linha:     4  //#define		RESOLVE_LAB_CMD		"=resolver" 
+!!!    0  Linha:     5  //#define		CAVAR_NORTE_CMD		"=cavan" 
+!!!    0  Linha:     6  //#define		CAVAR_LESTE_CMD		"=caval" 
+!!!    0  Linha:     7  //#define		CAVAR_OESTE_CMD		"=cavao" 
+!!!    0  Linha:     8  //#define		CAVAR_SUL_CMD		"=cavas" 
+!!!    0  Linha:     9  //#define		REINICIA_LAB_CMD	"=reiniciaLab" 
+!!!    0  Linha:    11  //#define		CRIAR_RES_CMD		"=criarRes" 
+!!!    0  Linha:    12  //#define		DESTRUIR_RES_CMD	"=destruir" 
+!!!    0  Linha:    13  //#define		INSERE_NORTE_CMD	"=insnorte" 
+!!!    0  Linha:    14  //#define		INSERE_SUL_CMD		"=inssul" 
+!!!    0  Linha:    15  //#define		INSERE_LESTE_CMD	"=insleste" 
+!!!    0  Linha:    16  //#define		INSERE_OESTE_CMD	"=insoeste" 
+   21  == Cria estrutura do resolvedor separadamente
+   24  == Cria Labirinto 9x9
+   27  == Constroi labirinto simples com apenas um caminho
+   32  == Resolve labirinto simples
+   35  == Reinicia Labirinto
+   39  ==Constroi Labirinto com uma bifurcacao
+   47  == Resolve Labirinto com uma bifurcacao
+   50  == Resolve Labirinto com vasta area sem parede
+   68  == Resolve Labirinto com vasta area sem parede
+   72  ==Constroi Labirinto com duas bifurcacoes
+   90  == Resolve Labirinto com duas bifurcacoes
+   94  ==Destroi estrutura do Resolvedor
+
+!!! Número de linhas lidas:          97
+!!! Número de casos de teste:        12
+!!! Número comandos corretos:        48
+!!! Número de falhas encontradas:     0
+
+!!! Não foram encontrados problemas
+
+
+!!! Numero de espacos ainda alocados: 0
