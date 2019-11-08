@@ -45,6 +45,18 @@ RES_tpCondRet RES_InserirLeste( int ValorParm );
 
 RES_tpCondRet RES_InserirOeste( int ValorParm );
 
+RES_tpCondRet RES_ObterValorCorr( int * ValorParm );
+
+RES_tpCondRet RES_IrNoNorte( tpLabirinto * pLab );
+
+RES_tpCondRet RES_IrNoLeste( tpLabirinto * pLab );
+
+RES_tpCondRet RES_IrNoOeste( tpLabirinto * pLab );
+
+RES_tpCondRet RES_IrNoSul( tpLabirinto * pLab );
+
+RES_tpCondRet RES_IrAnterior( void);
+
 
 #undef Resolvedor_EXT
 

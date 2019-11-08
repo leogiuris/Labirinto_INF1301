@@ -66,8 +66,7 @@
 
       static tpResolvedor * pResolvedor = NULL ;
             /* Ponteiro para a cabe‡a da árvore */
-	  //void * balde[4];
-	  //int qtdBalde = 0;
+
 	  int passos = 0;
 
 	  int tentativas = 1;
@@ -157,7 +156,7 @@
       tpNo * pNo ;
 
       /* Tratar vazio, esquerda */
-	  printf("[ INSERE SUL ]");
+
          CondRet = CriarNoRaiz( 0 ) ;
          if ( CondRet != RES_CondRetNaoCriouRaiz )
          {
@@ -183,7 +182,6 @@
             pCorr->pNoSul    = pNo ;
             //pResolvedor->pNoCorr = pNo ;
 
-			printf("--OK\n");
             return RES_CondRetOK ;
          } /* if */
 
@@ -207,8 +205,8 @@
       tpNo * pNo ;
 
       /* Tratar vazio, esquerda */
-	  printf("[ INSERE NORTE ]");
-         CondRet = CriarNoRaiz( 0 ) ;
+
+         CondRet = CriarNoRaiz( ValorParm ) ;
          if ( CondRet != RES_CondRetNaoCriouRaiz )
          {
             return CondRet ;
@@ -224,7 +222,7 @@
                
          if ( pCorr->pNoNorte == NULL )
          {
-            pNo = CriarNo( 0 ) ;
+            pNo = CriarNo( ValorParm ) ;
             if ( pNo == NULL )
             {
                return RES_CondRetFaltouMemoria ;
@@ -233,7 +231,7 @@
             pCorr->pNoNorte    = pNo ;
             //pResolvedor->pNoCorr = pNo ;
 
-			printf("--OK\n");
+
             return RES_CondRetOK ;
          } /* if */
 
@@ -256,16 +254,16 @@
       tpNo * pCorr ;
       tpNo * pNo ;
 
-      /* Tratar vazio, esquerda */
+     
 
 
-         CondRet = CriarNoRaiz( 0 ) ;
+         CondRet = CriarNoRaiz( ValorParm ) ;
          if ( CondRet != RES_CondRetNaoCriouRaiz )
          {
             return CondRet ;
          } /* if */
 
-      /* Criar nó à esquerda de folha */
+      
 
          pCorr = pResolvedor->pNoCorr ;
          if ( pCorr == NULL )
@@ -275,7 +273,7 @@
                
          if ( pCorr->pNoOeste == NULL )
          {
-            pNo = CriarNo( 0 ) ;
+            pNo = CriarNo( ValorParm ) ;
             if ( pNo == NULL )
             {
                return RES_CondRetFaltouMemoria ;
@@ -309,7 +307,7 @@
 
       /* Tratar vazio, direita */
 
-         CondRet = CriarNoRaiz( 0 ) ;
+         CondRet = CriarNoRaiz( ValorParm ) ;
          if ( CondRet != RES_CondRetNaoCriouRaiz )
          {
             return CondRet ;
@@ -325,7 +323,7 @@
 
          if ( pCorr->pNoLeste == NULL )
          {
-            pNo = CriarNo( 0 ) ;
+            pNo = CriarNo( ValorParm ) ;
             if ( pNo == NULL )
             {
                return RES_CondRetFaltouMemoria ;

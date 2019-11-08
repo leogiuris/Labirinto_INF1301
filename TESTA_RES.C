@@ -65,6 +65,7 @@
 #define		CAVAR_SUL_CMD		"=cavas"
 #define		REINICIA_LAB_CMD	"=reiniciaLab"
 #define		CRIAR_RES_CMD		"=criarRes"
+#define		DESTRUIR_RES_CMD	"=destruir"
 #define		INSERE_NORTE_CMD	"=insnorte"
 #define		INSERE_SUL_CMD		"=inssul"
 #define		INSERE_LESTE_CMD	"=insleste"
@@ -97,6 +98,9 @@ tpLabirinto * pLab;
    TST_tpCondRet TST_EfetuarComando( char * ComandoTeste )
    {
 
+
+	   int valores[5];
+	   int i;
       RES_tpCondRet CondRetObtido   = RES_CondRetOK ;
 	  LAB_tpCondRet CondRetObtidoLAB = LAB_CondRetOK;
       RES_tpCondRet CondRetEsperada = RES_CondRetFaltouMemoria ;
@@ -111,6 +115,11 @@ tpLabirinto * pLab;
 
 	  int  NumLidos = -1;
 
+
+	  for( i = 0; i<5 ; i++)
+	  {
+			valores[i] = i;
+	  }
 
 	  if ( strcmp( ComandoTeste , CRIAR_LAB_CMD ) == 0 )
       {
@@ -130,7 +139,7 @@ tpLabirinto * pLab;
 
 
             return TST_CompararInt( CondRetEsperada , CondRetObtido ,
-                                     "Retorno errado ao criar matriz" );
+                                     "Retorno errado ao criar labirinto" );
          
 		} /* fim ativa: Testar MAT Criar matriz */
 
@@ -146,7 +155,7 @@ tpLabirinto * pLab;
 			CondRetObtidoLAB = LAB_CavaLeste(pLab);
 
 			return TST_CompararInt( CondRetEsperada , CondRetObtido ,
-                                    "Retorno errado ao CAVAR leste" );
+                                    "Retorno errado ao cavar leste" );
 	  }
 
 	  if( strcmp( ComandoTeste , CAVAR_OESTE_CMD ) == 0 )
@@ -160,7 +169,7 @@ tpLabirinto * pLab;
 			CondRetObtidoLAB = LAB_CavaOeste(pLab);
 
 			return TST_CompararInt( CondRetEsperada , CondRetObtido ,
-                                    "Retorno errado ao CAVAR oeste" );
+                                    "Retorno errado ao cavar oeste" );
 	  }
 
 	  if( strcmp( ComandoTeste , CAVAR_NORTE_CMD ) == 0 )
@@ -174,7 +183,7 @@ tpLabirinto * pLab;
 			CondRetObtidoLAB = LAB_CavaNorte(pLab);
 
 			return TST_CompararInt( CondRetEsperada , CondRetObtido ,
-                                    "Retorno errado ao CAVAR Norte" );
+                                    "Retorno errado ao cavar Norte" );
 	  }
 
 	  if( strcmp( ComandoTeste , CAVAR_SUL_CMD ) == 0 )
@@ -188,7 +197,7 @@ tpLabirinto * pLab;
 			CondRetObtidoLAB = LAB_CavaSul(pLab);
 
 			return TST_CompararInt( CondRetEsperada , CondRetObtido ,
-                                    "Retorno errado ao CAVAR oeste" );
+                                    "Retorno errado ao cavar sul" );
 	  }
 
 	  if( strcmp( ComandoTeste , REINICIA_LAB_CMD ) == 0 )
@@ -202,11 +211,164 @@ tpLabirinto * pLab;
 			CondRetObtidoLAB = LAB_ReiniciaLabirinto(pLab);
 
 			return TST_CompararInt( CondRetEsperada , CondRetObtido ,
-                                    "Retorno errado ao CAVAR oeste" );
+                                    "Retorno errado ao reiniciar labirinto."  );
+	  }
+
+	  if( strcmp( ComandoTeste , CRIAR_RES_CMD ) == 0 )
+	  {
+		  NumLidos = LER_LerParametros( "i" ,&CondRetEsperada ) ;
+            if ( NumLidos != 1 )
+            {
+               return TST_CondRetParm ;
+            } /* if */
+
+			CondRetObtido = RES_CriarResolvedor();
+
+			return TST_CompararInt( CondRetEsperada , CondRetObtido ,
+                                    "Retorno errado ao criar resolvedor"  );
+	  }
+
+	  if( strcmp( ComandoTeste , INSERE_NORTE_CMD ) == 0 )
+	  {
+		  int ind;
+		  int * valObt = (int*)malloc(sizeof(int));
+		  NumLidos = LER_LerParametros( "ii" ,&ind,&CondRetEsperada ) ;
+            if ( NumLidos != 2 )
+            {
+               return TST_CondRetParm ;
+            } /* if */
+
+
+			
+			CondRetObtido = RES_InserirNorte(valores[ind]);
+			
+
+			RES_ObterValorCorr(valObt);
+
+			if(*valObt != valores[ind]){
+				printf("\n( %d , %d )\n",*valObt,valores[ind]);
+				CondRetObtido = RES_CondRetErroEstrutura;
+			}
+
+			return TST_CompararInt( CondRetEsperada , CondRetObtido ,
+                                    "Retorno errado ao inserir norte."  );
+	  }
+
+	  if( strcmp( ComandoTeste , INSERE_SUL_CMD ) == 0 )
+	  {
+		  int ind;
+		  int * valObt = (int*)malloc(sizeof(int));
+		  NumLidos = LER_LerParametros( "ii" ,&ind,&CondRetEsperada ) ;
+            if ( NumLidos != 2 )
+            {
+               return TST_CondRetParm ;
+            } /* if */
+
+
+			
+			CondRetObtido = RES_InserirSul(valores[ind]);
+
+
+			RES_ObterValorCorr(valObt);
+
+			if(*valObt != valores[ind]){
+				printf("\n( %d , %d )\n",*valObt,valores[ind]);
+				CondRetObtido = RES_CondRetErroEstrutura;
+			}
+
+			return TST_CompararInt( CondRetEsperada , CondRetObtido ,
+                                    "Retorno errado ao inserir sul"  );
+	  }
+
+	  if( strcmp( ComandoTeste , INSERE_OESTE_CMD ) == 0 )
+	  {
+		  int ind;
+		  int * valObt = (int*)malloc(sizeof(int));
+		  NumLidos = LER_LerParametros( "ii" ,&ind,&CondRetEsperada ) ;
+            if ( NumLidos != 2 )
+            {
+               return TST_CondRetParm ;
+            } /* if */
+
+
+			
+			CondRetObtido = RES_InserirOeste(valores[ind]);
+
+
+			RES_ObterValorCorr(valObt);
+
+			if(*valObt != valores[ind]){
+				printf("\n( %d , %d )\n",*valObt,valores[ind]);
+				CondRetObtido = RES_CondRetErroEstrutura;
+			}
+
+			return TST_CompararInt( CondRetEsperada , CondRetObtido ,
+                                    "Retorno errado ao inserir oeste"  );
+	  }
+
+	  if( strcmp( ComandoTeste , INSERE_LESTE_CMD ) == 0 )
+	  {
+		  int ind;
+		  int * valObt = (int*)malloc(sizeof(int));
+		  NumLidos = LER_LerParametros( "ii" ,&ind,&CondRetEsperada ) ;
+
+
+            if ( NumLidos != 2 )
+            {
+               return TST_CondRetParm ;
+            } /* if */
+
+
+			
+			CondRetObtido = RES_InserirLeste(valores[ind]);
+
+
+			RES_ObterValorCorr(valObt);
+
+			if(*valObt != valores[ind]){
+				printf("\n( %d , %d )\n",*valObt,valores[ind]);
+				CondRetObtido = RES_CondRetErroEstrutura;
+			}
+
+			return TST_CompararInt( CondRetEsperada , CondRetObtido ,
+                                    "Retorno errado ao inserir leste"  );
 	  }
 
 
+	  if( strcmp( ComandoTeste , DESTRUIR_RES_CMD ) == 0 )
+	  {
+		  int * val = (int*)malloc(sizeof(int));
 
+		  NumLidos = LER_LerParametros( "i" ,&CondRetEsperada ) ;
+            if ( NumLidos != 1 )
+            {
+               return TST_CondRetParm ;
+            } /* if */
+
+			RES_DestruirResolvedor();
+
+
+			CondRetObtido = RES_ObterValorCorr(val);
+
+			return TST_CompararInt( CondRetEsperada , CondRetObtido ,
+                                    "Retorno errado ao destruir"  );
+	  }
+
+	  if( strcmp( ComandoTeste , RESOLVE_LAB_CMD ) == 0 )
+	  {
+		  NumLidos = LER_LerParametros( "i" ,&CondRetEsperada ) ;
+            if ( NumLidos != 1 )
+            {
+               return TST_CondRetParm ;
+            } /* if */
+
+			LAB_FinalizaConstrucao(pLab);
+			LAB_RetornaInicio(pLab);
+			CondRetObtido = RES_ResolverLabirinto(pLab);
+
+			return TST_CompararInt( CondRetEsperada , CondRetObtido ,
+                                    "Retorno errado ao reiniciar labirinto."  );
+	  }
 
       return TST_CondRetNaoConhec ;
 
