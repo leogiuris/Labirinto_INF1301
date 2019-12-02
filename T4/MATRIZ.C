@@ -131,6 +131,12 @@ MAT_tpCondRet MAT_CriarMatriz(tpMatriz ** pMat, int lin, int col, void * valorIn
     } /* if */
 	
 	*pMat = ( tpMatriz * ) malloc( sizeof( tpMatriz )) ;
+
+#ifdef _DEBUG
+	(*pMat)->tipo =MAT_TipoEspacoCabeca;
+	CED_DefinirTipoEspaco(pMat , MAT_TipoEspacoCabeca) ;
+#endif
+
     if ( pMat == NULL )
     {
 		
@@ -138,6 +144,14 @@ MAT_tpCondRet MAT_CriarMatriz(tpMatriz ** pMat, int lin, int col, void * valorIn
     } /* if */
 	
 	mat = (tpNoMatriz**)malloc(lin*sizeof(tpNoMatriz*));
+
+#ifdef _DEBUG
+	(*mat)->tipo = LIS_TipoEspacoVetorNos;
+	CED_DefinirTipoEspaco(mat , LIS_TipoEspacoVetorNos) ;
+#endif
+
+
+
 	for(i=0; i<lin ;i++)
 	{
 		
@@ -155,6 +169,12 @@ MAT_tpCondRet MAT_CriarMatriz(tpMatriz ** pMat, int lin, int col, void * valorIn
 			mat[i][j].pSul = NULL;
 			mat[i][j].pSudoeste = NULL;
 		}
+
+#ifdef _DEBUG
+	mat[i][j].tipo = MAT_TipoNo;
+	CED_DefinirTipoEspaco(mat , MAT_TipoNo) ;
+#endif
+		
 	}
 	
 	for(i=0; i<lin ;i++){
@@ -622,15 +642,9 @@ void ImprimeMat(tpMatriz *pMat)
 }
 
 
-
-
-
-
 void DestroiMatriz(tpNoMatriz * pMat )
 {
 	
 	free(pMat);	
 }
 /********** Fim do módulo de implementação: Módulo Matriz **********/
-
-////

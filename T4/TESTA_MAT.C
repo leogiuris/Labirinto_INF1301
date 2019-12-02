@@ -1,39 +1,39 @@
 /***************************************************************************
-*  $MCI M√≥dulo de implementa√ß√£o: M√≥dulo de teste espec√≠fico
+*  $MCI MÛdulo de implementaÁ„o: MÛdulo de teste especÌfico
 *
 *  Arquivo gerado:              TESTMAT.C
 *  Letras identificadoras:      TMAT
 *
 *  Autores: Daniel Peralta, Leonardo Santiago
 *
-*  $HA Hist√≥rico de evolu√ß√£o:
-*     Vers√£o  Autor    Data     Observa√ß√µes
+*  $HA HistÛrico de evoluÁ„o:
+*     Vers„o  Autor    Data     ObservaÁıes
 *     3.00   lgs,dp	26/09/2019	Inicio do desenvolvimento
 *
-*  $ED Descri√ß√£o do m√≥dulo
-*     Este modulo cont√©m as fun√ß√µes espec√≠ficas para o teste do
-*     m√≥dulo Matriz. Ilustra como redigir um interpretador de comandos
-*     de teste espec√≠ficos utilizando o arcabou√ßo de teste para C.
+*  $ED DescriÁ„o do mÛdulo
+*     Este modulo contÈm as funÁıes especÌficas para o teste do
+*     mÛdulo Matriz. Ilustra como redigir um interpretador de comandos
+*     de teste especÌficos utilizando o arcabouÁo de teste para C.
 *
-*  $EIU Interface com o usu√°rio pessoa
-*     Comandos de teste espec√≠ficos para testar o m√≥dulo matriz:
+*  $EIU Interface com o usu·rio pessoa
+*     Comandos de teste especÌficos para testar o mÛdulo matriz:
 *
-*     "=criar"        - chama a fun√ß√£o MAT_CriarMatriz( )
+*     "=criar"        - chama a funÁ„o MAT_CriarMatriz( )
 *     "=insval" <Char>
-*                   - chama a fun√ß√£o MAT_InsereValor( <Char> ) <-----------atualizar aqui
-*     "=retavl"	       -chama a fun√ß√£o RetiraMatriz( )
-*     "=iroeste"      - chama a fun√ß√£o MoveOeste( )
-*     "=irleste"      - chama a fun√ß√£o MoveLeste( )
-*     "=irnorte"      - chama a fun√ß√£o MoveNorte( )
-*     "=irsul"	      - chama a fun√ß√£o MoveSul( )
-*     "=irsudeste"    - chama a fun√ß√£o MoveSudeste( )
-*     "=irsudoeste"   - chama a fun√ß√£o MoveSudoeste( )
-*     "=irnordeste"   - chama a fun√ß√£o MoveNordeste( )
-*     "=irnoroeste"   - chama a fun√ß√£o MoveNoroeste( )
+*                   - chama a funÁ„o MAT_InsereValor( <Char> ) <-----------atualizar aqui
+*     "=retavl"	       -chama a funÁ„o RetiraMatriz( )
+*     "=iroeste"      - chama a funÁ„o MoveOeste( )
+*     "=irleste"      - chama a funÁ„o MoveLeste( )
+*     "=irnorte"      - chama a funÁ„o MoveNorte( )
+*     "=irsul"	      - chama a funÁ„o MoveSul( )
+*     "=irsudeste"    - chama a funÁ„o MoveSudeste( )
+*     "=irsudoeste"   - chama a funÁ„o MoveSudoeste( )
+*     "=irnordeste"   - chama a funÁ„o MoveNordeste( )
+*     "=irnoroeste"   - chama a funÁ„o MoveNoroeste( )
 *     "=obter" <Char>
-*                   - chama a fun√ß√£o MAT_ObterValorCorr( ) e compara
+*                   - chama a funÁ„o MAT_ObterValorCorr( ) e compara
 *                     o valor retornado com o valor <Char>
-*     "=destroi"    - chama a fun√ß√£o MAT_DestruirMatriz( )
+*     "=destroi"    - chama a funÁ„o MAT_DestruirMatriz( )
 *
 ***************************************************************************/
 
@@ -48,12 +48,17 @@
 
 #include    "MATRIZ.H"
 
-/* Tabela dos nomes dos comandos de teste espec√≠ficos */
+#ifdef _DEBUG
+	#include   "CESPDIN.H"
+	#include   "IdTiposEspaco.def"
+#endif
+
+/* Tabela dos nomes dos comandos de teste especÌficos */
 
 #define     CRIAR_MAT_CMD		"=criar"    //recebe 3 parametros: (condret,indice,tamanho)
 #define		INS_VAL_CMD			"=insval"	//recebe 2 parametros: (condret,
 
-#define		RET_VAL_CMD			"=retval"	//<------------------ pq tem esse comando se j√° existe o "obbter valor"??? 
+#define		RET_VAL_CMD			"=retval"	//<------------------ pq tem esse comando se j· existe o "obbter valor"??? 
 
 #define     IR_OESTE_CMD		"=iroeste"
 #define     IR_LESTE_CMD		"=irleste"
@@ -66,7 +71,7 @@
 #define     OBTER_VAL_CMD		"=obter"
 #define     DESTROI_CMD			"=destruir"
 
-/*****  C√≥digo das fun√ß√µes exportadas pelo m√≥dulo  *****/
+/*****  CÛdigo das funÁıes exportadas pelo mÛdulo  *****/
 
 
 #define QTD_MAT 6
@@ -74,13 +79,13 @@
 tpMatriz * pontMat [QTD_MAT];
 //***********************************************************************
 //*
-//*  $FC Fun√ß√£o: TMAT Efetuar opera√ß√µes de teste espec√≠ficas para Matriz
+//*  $FC FunÁ„o: TMAT Efetuar operaÁıes de teste especÌficas para Matriz
 //*
-//*  $ED Descri√ß√£o da fun√ß√£o
-//*     Efetua os diversos comandos de teste espec√≠ficos para o m√≥dulo
+//*  $ED DescriÁ„o da funÁ„o
+//*     Efetua os diversos comandos de teste especÌficos para o mÛdulo
 //*     Matriz sendo testado.
 //*
-//*  $EP Par√¢metros
+//*  $EP Par‚metros
 //*     $P ComandoTeste - String contendo o comando
 //*
 //*  $FV Valor retornado
@@ -224,7 +229,7 @@ void ExcluirValor(void * pValor);
 
 
 #pragma region Mover
-      /* Testar MAT Ir para n√≥ oeste */ //<------------ todos os comandos de movimento precisam ser atualizados pra como o Rafael fizer
+      /* Testar MAT Ir para nÛ oeste */ //<------------ todos os comandos de movimento precisam ser atualizados pra como o Rafael fizer
 
          else if ( strcmp( ComandoTeste , IR_OESTE_CMD ) == 0 )
          {
@@ -243,10 +248,10 @@ void ExcluirValor(void * pValor);
             return TST_CompararInt( CondRetEsperada , CondRetObtido ,
                                     "Retorno errado ao ir para oeste." );
 
-         } /* fim ativa: Testar MAT Ir para n√≥ oeste */
+         } /* fim ativa: Testar MAT Ir para nÛ oeste */
 
 
-      /* Testar MAT Ir para n√≥ leste */
+      /* Testar MAT Ir para nÛ leste */
 
          else if ( strcmp( ComandoTeste , IR_LESTE_CMD ) == 0 )
          {
@@ -268,7 +273,7 @@ void ExcluirValor(void * pValor);
             return TST_CompararInt( CondRetEsperada , CondRetObtido ,
                                     "Retorno errado ao ir para leste." );
 
-         } /* fim ativa: Testar MAT Ir para n√≥ leste */
+         } /* fim ativa: Testar MAT Ir para nÛ leste */
 
       /* Testar MAT Obter valor corrente */
 
@@ -289,11 +294,11 @@ void ExcluirValor(void * pValor);
             return TST_CompararInt( CondRetEsperada , CondRetObtido ,
                                     "Retorno errado ao ir para norte." );
 
-         } /* fim ativa: Testar MAT Ir para n√≥ norte */
+         } /* fim ativa: Testar MAT Ir para nÛ norte */
 
 
 
-		 /* Testar MAT Ir para n√≥ sul */
+		 /* Testar MAT Ir para nÛ sul */
 
          else if ( strcmp( ComandoTeste , IR_SUL_CMD ) == 0 )
          {
@@ -311,11 +316,11 @@ void ExcluirValor(void * pValor);
             return TST_CompararInt( CondRetEsperada , CondRetObtido ,
                                     "Retorno errado ao ir para sul." );
 
-         } /* fim ativa: Testar MAT Ir para n√≥ sul */
+         } /* fim ativa: Testar MAT Ir para nÛ sul */
 
 
 
-		 /* Testar MAT Ir para n√≥ sudeste */
+		 /* Testar MAT Ir para nÛ sudeste */
 
          else if ( strcmp( ComandoTeste , IR_SUDESTE_CMD ) == 0 )
          {
@@ -333,12 +338,12 @@ void ExcluirValor(void * pValor);
             return TST_CompararInt( CondRetEsperada , CondRetObtido ,
                                     "Retorno errado ao ir para sudeste." );
 
-         } /* fim ativa: Testar MAT Ir para n√≥ sudeste */
+         } /* fim ativa: Testar MAT Ir para nÛ sudeste */
 
 
 
 
-		 /* Testar MAT Ir para n√≥ sudoeste */
+		 /* Testar MAT Ir para nÛ sudoeste */
 
          else if ( strcmp( ComandoTeste , IR_SUDOESTE_CMD ) == 0 )
          {
@@ -355,11 +360,11 @@ void ExcluirValor(void * pValor);
             return TST_CompararInt( CondRetEsperada , CondRetObtido ,
                                     "Retorno errado ao ir para sudoeste." );
 
-         } /* fim ativa: Testar MAT Ir para n√≥ sudoeste */
+         } /* fim ativa: Testar MAT Ir para nÛ sudoeste */
 
 
 
-		 /* Testar MAT Ir para n√≥ nordeste */
+		 /* Testar MAT Ir para nÛ nordeste */
 
          else if ( strcmp( ComandoTeste , IR_NORDESTE_CMD ) == 0 )
          {
@@ -378,11 +383,11 @@ void ExcluirValor(void * pValor);
             return TST_CompararInt( CondRetEsperada , CondRetObtido ,
                                     "Retorno errado ao ir para nordeste." );
 
-         } /* fim ativa: Testar MAT Ir para n√≥ nordeste */
+         } /* fim ativa: Testar MAT Ir para nÛ nordeste */
 
 
 
-		 /* Testar MAT Ir para n√≥ noroeste */
+		 /* Testar MAT Ir para nÛ noroeste */
 
          else if ( strcmp( ComandoTeste , IR_NOROESTE_CMD ) == 0 )
          {
@@ -401,7 +406,7 @@ void ExcluirValor(void * pValor);
             return TST_CompararInt( CondRetEsperada , CondRetObtido ,
                                     "Retorno errado ao ir para noroeste." );
 
-         } /* fim ativa: Testar MAT Ir para n√≥ noroeste */
+         } /* fim ativa: Testar MAT Ir para nÛ noroeste */
 
 #pragma endregion
 
@@ -424,9 +429,6 @@ void ExcluirValor(void * pValor);
 
       return TST_CondRetNaoConhec ;
 
-   } /* Fim fun√ß√£o: TMAT Efetuar opera√ß√µes de teste espec√≠ficas para Matriz */
+   } /* Fim funÁ„o: TMAT Efetuar operaÁıes de teste especÌficas para Matriz */
 
-/********** Fim do m√≥dulo de implementa√ß√£o: M√≥dulo de teste espec√≠fico **********/
-
-
-   
+/********** Fim do mÛdulo de implementaÁ„o: MÛdulo de teste especÌfico **********/

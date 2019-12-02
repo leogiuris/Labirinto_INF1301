@@ -1,4 +1,4 @@
-#if ! defined( Matriz_ )
+﻿#if ! defined( Matriz_ )
 #define Matriz_
 /***************************************************************************
 *
@@ -37,6 +37,17 @@
 #else
    #define MATRIZ_EXT extern
 #endif
+
+
+
+
+#ifdef _DEBUG
+    #include   "GENERICO.H"
+    #include   "CONTA.H"
+    #include   "CESPDIN.H"
+	#include   "IdTiposEspaco.def"
+#endif
+
 
 
 /***********************************************************************
