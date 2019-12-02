@@ -1,0 +1,46 @@
+// Script:    TestaMatriz.script
+// Autor:     Daniel Peralta, Leonardo Giuri, Rafael Serpa
+// Data:      09/09/2019
+// Propósito: Testa a construção de uma matriz usando parâmetros literais
+//            Verifica se as operações modificaram corretamente as referências
+//
+
+==inserir
+=insval 'a'	0
+=recuperar
+
+==retirar
+=retval	0
+=recuperar
+
+==destroi antes de criar
+=destruir 0
+
+==cria matriz
+=criar	0 3 3 0
+
+==cria matriz novamente
+=criar	0 3 3 0
+
+==inserir
+=insval 'f'	0
+
+==obter
+=obter 'a'	0
+
+==retirar
+=retval	0
+
+== Verificar se o nó corrente possui algum vizinho
+=irleste      0
+=iroeste      0
+=irnorte      0
+=irsul        0
+=irsudeste    0
+=irsudoeste   0
+=irnoroeste   0
+=irnordeste   0
+
+
+==destruir
+=destruir 0
